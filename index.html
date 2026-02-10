@@ -1,0 +1,3664 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vliv frézování půdy po těžbě dřeva | Monitoring 2026-2027</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Source+Sans+3:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <style>
+        :root {
+            --forest-dark: #1a2f1a;
+            --forest-deep: #243524;
+            --forest-mid: #2d4a2d;
+            --bark-brown: #4a3728;
+            --bark-light: #6b5344;
+            --moss: #4a6741;
+            --leaf-fresh: #5d8a4a;
+            --leaf-light: #8cb369;
+            --cream: #f5f1e8;
+            --cream-dark: #e8e2d5;
+            --amber: #d4a574;
+            --amber-light: #e8c9a0;
+            --soil: #3d2914;
+            --water: #5a8fa8;
+            --fire-warning: #c45c3b;
+            --shadow: rgba(26, 47, 26, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Source Sans 3', sans-serif;
+            background: var(--cream);
+            color: var(--forest-dark);
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+
+        /* Noise texture overlay */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+            opacity: 0.03;
+            pointer-events: none;
+            z-index: 1000;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: linear-gradient(180deg, var(--forest-dark) 0%, var(--forest-deep) 100%);
+            padding: 1rem 2rem;
+            z-index: 100;
+            box-shadow: 0 4px 30px var(--shadow);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--cream);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .logo-icon {
+            width: 36px;
+            height: 36px;
+            fill: var(--leaf-light);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 0.5rem;
+            list-style: none;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+        }
+
+        .nav-links a {
+            color: var(--cream-dark);
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .nav-links a:hover {
+            background: var(--moss);
+            color: var(--cream);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            background: linear-gradient(135deg, var(--forest-dark) 0%, var(--forest-deep) 40%, var(--forest-mid) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            padding: 6rem 2rem 4rem;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%234a6741' fill-opacity='0.15'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            opacity: 0.5;
+        }
+
+        /* Floating leaves animation */
+        .floating-leaf {
+            position: absolute;
+            opacity: 0.15;
+            animation: floatLeaf 20s ease-in-out infinite;
+        }
+
+        .floating-leaf:nth-child(1) { top: 10%; left: 10%; animation-delay: 0s; }
+        .floating-leaf:nth-child(2) { top: 20%; right: 15%; animation-delay: -5s; }
+        .floating-leaf:nth-child(3) { bottom: 30%; left: 20%; animation-delay: -10s; }
+        .floating-leaf:nth-child(4) { bottom: 20%; right: 10%; animation-delay: -15s; }
+
+        @keyframes floatLeaf {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-30px) rotate(10deg); }
+        }
+
+        .hero-content {
+            text-align: center;
+            max-width: 900px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            background: var(--moss);
+            color: var(--cream);
+            padding: 0.5rem 1.5rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 2rem;
+            animation: fadeInDown 1s ease-out;
+        }
+
+        .hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            font-weight: 700;
+            color: var(--cream);
+            line-height: 1.2;
+            margin-bottom: 1.5rem;
+            animation: fadeInUp 1s ease-out 0.2s both;
+        }
+
+        .hero h1 span {
+            color: var(--leaf-light);
+        }
+
+        .hero-subtitle {
+            font-size: 1.25rem;
+            color: var(--cream-dark);
+            max-width: 700px;
+            margin: 0 auto 3rem;
+            animation: fadeInUp 1s ease-out 0.4s both;
+        }
+
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            flex-wrap: wrap;
+            animation: fadeInUp 1s ease-out 0.6s both;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--amber);
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--cream-dark);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Sections */
+        section {
+            padding: 6rem 2rem;
+            position: relative;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-tag {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            color: var(--moss);
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 1rem;
+        }
+
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2rem, 4vw, 3rem);
+            color: var(--forest-dark);
+            margin-bottom: 1rem;
+        }
+
+        .section-subtitle {
+            font-size: 1.1rem;
+            color: var(--bark-light);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* Objectives Section */
+        #cile {
+            background: linear-gradient(180deg, var(--cream) 0%, var(--cream-dark) 100%);
+        }
+
+        .objectives-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .objective-card {
+            background: white;
+            border-radius: 16px;
+            padding: 2.5rem;
+            box-shadow: 0 10px 40px rgba(26, 47, 26, 0.08);
+            border: 1px solid var(--cream-dark);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .objective-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(180deg, var(--leaf-fresh) 0%, var(--moss) 100%);
+        }
+
+        .objective-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 60px rgba(26, 47, 26, 0.15);
+        }
+
+        .objective-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--forest-deep) 0%, var(--moss) 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .objective-icon svg {
+            width: 30px;
+            height: 30px;
+            fill: var(--cream);
+        }
+
+        .objective-card h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.4rem;
+            color: var(--forest-dark);
+            margin-bottom: 1rem;
+        }
+
+        .objective-card p {
+            color: var(--bark-light);
+            font-size: 1rem;
+        }
+
+        /* Experimental Design Section */
+        #design {
+            background: var(--forest-dark);
+            color: var(--cream);
+        }
+
+        #design .section-tag {
+            color: var(--leaf-light);
+        }
+
+        #design .section-title {
+            color: var(--cream);
+        }
+
+        #design .section-subtitle {
+            color: var(--cream-dark);
+        }
+
+        .plots-table-wrapper {
+            background: var(--forest-deep);
+            border-radius: 20px;
+            padding: 2rem;
+            overflow-x: auto;
+            margin-bottom: 3rem;
+        }
+
+        .plots-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.95rem;
+        }
+
+        .plots-table th {
+            background: var(--moss);
+            color: var(--cream);
+            padding: 1rem 1.5rem;
+            text-align: left;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.8rem;
+        }
+
+        .plots-table th:first-child {
+            border-radius: 10px 0 0 0;
+        }
+
+        .plots-table th:last-child {
+            border-radius: 0 10px 0 0;
+        }
+
+        .plots-table td {
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid var(--forest-mid);
+            color: var(--cream-dark);
+        }
+
+        .plots-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .plots-table tr:hover td {
+            background: var(--forest-mid);
+        }
+
+        .variant-badge {
+            display: inline-block;
+            padding: 0.35rem 0.75rem;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .variant-freza {
+            background: var(--leaf-fresh);
+            color: white;
+        }
+
+        .variant-nefreza {
+            background: var(--bark-brown);
+            color: var(--cream);
+        }
+
+        .variant-nova {
+            background: var(--amber);
+            color: var(--forest-dark);
+        }
+
+        .design-features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .feature-box {
+            background: var(--forest-deep);
+            border: 1px solid var(--forest-mid);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .feature-box-value {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            color: var(--amber);
+            margin-bottom: 0.5rem;
+        }
+
+        .feature-box-label {
+            font-size: 0.9rem;
+            color: var(--cream-dark);
+        }
+
+        /* Parameters Sections */
+        #parametry {
+            background: linear-gradient(180deg, var(--cream-dark) 0%, var(--cream) 100%);
+        }
+
+        .tabs-container {
+            margin-bottom: 3rem;
+        }
+
+        .tabs {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-bottom: 2rem;
+        }
+
+        .tab-btn {
+            background: white;
+            border: 2px solid var(--cream-dark);
+            padding: 1rem 2rem;
+            font-family: 'Source Sans 3', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--forest-dark);
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .tab-btn:hover {
+            border-color: var(--moss);
+        }
+
+        .tab-btn.active {
+            background: var(--forest-dark);
+            border-color: var(--forest-dark);
+            color: var(--cream);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .params-table-wrapper {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(26, 47, 26, 0.1);
+        }
+
+        .params-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+
+        .params-table th {
+            background: linear-gradient(135deg, var(--forest-dark) 0%, var(--forest-deep) 100%);
+            color: var(--cream);
+            padding: 1.25rem 1rem;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            position: sticky;
+            top: 0;
+        }
+
+        .params-table td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--cream-dark);
+            vertical-align: top;
+        }
+
+        .params-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .params-table tr:hover td {
+            background: var(--cream);
+        }
+
+        .param-name {
+            font-weight: 600;
+            color: var(--forest-dark);
+        }
+
+        .param-unit {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            color: var(--moss);
+        }
+
+        .effect-positive {
+            color: var(--leaf-fresh);
+            font-weight: 600;
+        }
+
+        .effect-negative {
+            color: var(--fire-warning);
+            font-weight: 600;
+        }
+
+        .effect-neutral {
+            color: var(--bark-light);
+        }
+
+        .method-tag {
+            display: inline-block;
+            background: var(--cream-dark);
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            margin: 0.15rem;
+        }
+
+        /* Causal Map Section */
+        #kauzality {
+            background: var(--forest-deep);
+            color: var(--cream);
+        }
+
+        #kauzality .section-tag {
+            color: var(--leaf-light);
+        }
+
+        #kauzality .section-title {
+            color: var(--cream);
+        }
+
+        #kauzality .section-subtitle {
+            color: var(--cream-dark);
+        }
+
+        .causal-diagram {
+            background: var(--forest-dark);
+            border-radius: 20px;
+            padding: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        .causal-flow {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .causal-level {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .causal-node {
+            background: linear-gradient(135deg, var(--moss) 0%, var(--forest-mid) 100%);
+            border-radius: 12px;
+            padding: 1.25rem 1.75rem;
+            text-align: center;
+            position: relative;
+            min-width: 180px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+
+        .causal-node.primary {
+            background: linear-gradient(135deg, var(--amber) 0%, var(--bark-brown) 100%);
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .causal-node.outcome {
+            background: linear-gradient(135deg, var(--leaf-fresh) 0%, var(--leaf-light) 100%);
+            color: var(--forest-dark);
+        }
+
+        .causal-node.warning {
+            background: linear-gradient(135deg, var(--fire-warning) 0%, #a04030 100%);
+        }
+
+        .causal-arrow {
+            display: flex;
+            justify-content: center;
+            color: var(--leaf-light);
+            font-size: 1.5rem;
+        }
+
+        .correlations-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .correlation-card {
+            background: var(--forest-dark);
+            border-radius: 12px;
+            padding: 1.5rem;
+            border: 1px solid var(--forest-mid);
+        }
+
+        .correlation-pair {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .correlation-var {
+            background: var(--forest-mid);
+            padding: 0.5rem 0.75rem;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            flex: 1;
+            text-align: center;
+        }
+
+        .correlation-arrow {
+            font-size: 1.25rem;
+        }
+
+        .correlation-arrow.positive {
+            color: var(--leaf-light);
+        }
+
+        .correlation-arrow.negative {
+            color: var(--fire-warning);
+        }
+
+        /* Harmonogram Section */
+        #harmonogram {
+            background: var(--cream);
+        }
+
+        .timeline {
+            position: relative;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(180deg, var(--moss) 0%, var(--leaf-fresh) 50%, var(--amber) 100%);
+            border-radius: 2px;
+        }
+
+        .timeline-item {
+            display: flex;
+            justify-content: flex-end;
+            padding-right: calc(50% + 30px);
+            position: relative;
+            margin-bottom: 2rem;
+        }
+
+        .timeline-item:nth-child(even) {
+            justify-content: flex-start;
+            padding-right: 0;
+            padding-left: calc(50% + 30px);
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 20px;
+            height: 20px;
+            background: var(--leaf-fresh);
+            border: 4px solid var(--cream);
+            border-radius: 50%;
+            box-shadow: 0 0 0 4px var(--moss);
+        }
+
+        .timeline-content {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 10px 30px rgba(26, 47, 26, 0.1);
+            max-width: 400px;
+            border: 1px solid var(--cream-dark);
+        }
+
+        .timeline-date {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            color: var(--moss);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.2rem;
+            color: var(--forest-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-desc {
+            font-size: 0.95rem;
+            color: var(--bark-light);
+        }
+
+        /* Protocols Section */
+        #protokoly {
+            background: linear-gradient(180deg, var(--cream-dark) 0%, var(--cream) 100%);
+        }
+
+        .protocols-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .protocol-card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(26, 47, 26, 0.08);
+            transition: all 0.4s ease;
+        }
+
+        .protocol-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 50px rgba(26, 47, 26, 0.15);
+        }
+
+        .protocol-header {
+            background: linear-gradient(135deg, var(--forest-dark) 0%, var(--forest-deep) 100%);
+            padding: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .protocol-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--moss);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .protocol-icon svg {
+            width: 26px;
+            height: 26px;
+            fill: var(--cream);
+        }
+
+        .protocol-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.2rem;
+            color: var(--cream);
+        }
+
+        .protocol-body {
+            padding: 1.5rem;
+        }
+
+        .protocol-method {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--cream-dark);
+        }
+
+        .protocol-method:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+
+        .method-bullet {
+            width: 8px;
+            height: 8px;
+            background: var(--leaf-fresh);
+            border-radius: 50%;
+            margin-top: 0.5rem;
+            flex-shrink: 0;
+        }
+
+        .method-text {
+            font-size: 0.95rem;
+            color: var(--bark-light);
+        }
+
+        /* Risks Section */
+        #rizika {
+            background: var(--forest-dark);
+            color: var(--cream);
+        }
+
+        #rizika .section-tag {
+            color: var(--fire-warning);
+        }
+
+        #rizika .section-title {
+            color: var(--cream);
+        }
+
+        #rizika .section-subtitle {
+            color: var(--cream-dark);
+        }
+
+        .risks-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .risk-card {
+            background: var(--forest-deep);
+            border-radius: 16px;
+            padding: 2rem;
+            border: 1px solid var(--forest-mid);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .risk-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+        }
+
+        .risk-card.high::before {
+            background: var(--fire-warning);
+        }
+
+        .risk-card.medium::before {
+            background: var(--amber);
+        }
+
+        .risk-card.low::before {
+            background: var(--leaf-fresh);
+        }
+
+        .risk-level {
+            display: inline-block;
+            padding: 0.35rem 0.75rem;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 1rem;
+        }
+
+        .risk-card.high .risk-level {
+            background: rgba(196, 92, 59, 0.3);
+            color: var(--fire-warning);
+        }
+
+        .risk-card.medium .risk-level {
+            background: rgba(212, 165, 116, 0.3);
+            color: var(--amber);
+        }
+
+        .risk-card.low .risk-level {
+            background: rgba(93, 138, 74, 0.3);
+            color: var(--leaf-light);
+        }
+
+        .risk-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.3rem;
+            color: var(--cream);
+            margin-bottom: 0.75rem;
+        }
+
+        .risk-desc {
+            color: var(--cream-dark);
+            font-size: 0.95rem;
+            margin-bottom: 1rem;
+        }
+
+        .risk-mitigation {
+            background: var(--forest-dark);
+            border-radius: 8px;
+            padding: 1rem;
+        }
+
+        .risk-mitigation-label {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--leaf-light);
+            margin-bottom: 0.5rem;
+        }
+
+        .risk-mitigation-text {
+            font-size: 0.9rem;
+            color: var(--cream-dark);
+        }
+
+        /* Technology Section */
+        #technologie {
+            background: var(--cream);
+        }
+
+        .tech-categories {
+            display: flex;
+            flex-direction: column;
+            gap: 3rem;
+        }
+
+        .tech-category {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(26, 47, 26, 0.08);
+        }
+
+        .tech-category-header {
+            background: linear-gradient(135deg, var(--forest-dark) 0%, var(--moss) 100%);
+            padding: 1.5rem 2rem;
+        }
+
+        .tech-category-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            color: var(--cream);
+        }
+
+        .tech-items {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1px;
+            background: var(--cream-dark);
+        }
+
+        .tech-item {
+            background: white;
+            padding: 1.5rem;
+        }
+
+        .tech-item-name {
+            font-weight: 600;
+            color: var(--forest-dark);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .tech-item-name::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: var(--leaf-fresh);
+            border-radius: 50%;
+        }
+
+        .tech-item-desc {
+            font-size: 0.9rem;
+            color: var(--bark-light);
+        }
+
+        /* Algorithms Section */
+        #algoritmy {
+            background: linear-gradient(180deg, var(--cream-dark) 0%, var(--cream) 100%);
+        }
+
+        .algo-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 2rem;
+        }
+
+        .algo-card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(26, 47, 26, 0.1);
+        }
+
+        .algo-header {
+            background: linear-gradient(135deg, var(--forest-dark) 0%, var(--forest-deep) 100%);
+            padding: 1.5rem 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .algo-number {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--amber);
+        }
+
+        .algo-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.3rem;
+            color: var(--cream);
+        }
+
+        .algo-body {
+            padding: 2rem;
+        }
+
+        .algo-purpose {
+            font-size: 0.95rem;
+            color: var(--bark-light);
+            margin-bottom: 1.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--cream-dark);
+        }
+
+        .algo-steps {
+            list-style: none;
+        }
+
+        .algo-step {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .algo-step-num {
+            width: 28px;
+            height: 28px;
+            background: var(--moss);
+            color: var(--cream);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+
+        .algo-step-text {
+            font-size: 0.95rem;
+            color: var(--forest-dark);
+        }
+
+        .algo-formula {
+            background: var(--forest-dark);
+            color: var(--amber);
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            margin-top: 1.5rem;
+            overflow-x: auto;
+        }
+
+        /* Map Section */
+        #mapa {
+            background: var(--forest-dark);
+            color: var(--cream);
+            padding: 6rem 2rem;
+        }
+
+        #mapa .section-tag {
+            color: var(--leaf-light);
+        }
+
+        #mapa .section-title {
+            color: var(--cream);
+        }
+
+        #mapa .section-subtitle {
+            color: var(--cream-dark);
+        }
+
+        .map-wrapper {
+            position: relative;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 80px rgba(0,0,0,0.5);
+            margin-bottom: 2rem;
+        }
+
+        .map-perspective-container {
+            perspective: 1200px;
+            perspective-origin: 50% 30%;
+        }
+
+        .map-3d {
+            transform: rotateX(25deg) scale(1.05);
+            transform-origin: center center;
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        .map-3d:hover {
+            transform: rotateX(0deg) scale(1);
+        }
+
+        .map-3d.flat-view {
+            transform: rotateX(0deg) scale(1);
+        }
+
+        #satellite-map {
+            width: 100%;
+            height: 600px;
+            z-index: 1;
+        }
+
+        .map-controls {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .map-btn {
+            background: var(--forest-deep);
+            border: 1px solid var(--forest-mid);
+            color: var(--cream);
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            font-family: 'Source Sans 3', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .map-btn:hover, .map-btn.active {
+            background: var(--moss);
+            border-color: var(--leaf-light);
+        }
+
+        .map-legend {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            color: var(--cream-dark);
+        }
+
+        .legend-color {
+            width: 16px;
+            height: 16px;
+            border-radius: 3px;
+        }
+
+        .map-info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .map-info-card {
+            background: var(--forest-deep);
+            border: 1px solid var(--forest-mid);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .map-info-value {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.1rem;
+            color: var(--amber);
+            margin-bottom: 0.5rem;
+        }
+
+        .map-info-label {
+            font-size: 0.85rem;
+            color: var(--cream-dark);
+        }
+
+        /* Multispectral Monitoring Section */
+        #monitoring {
+            background: linear-gradient(180deg, var(--cream) 0%, var(--cream-dark) 100%);
+        }
+
+        .monitoring-arch {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0;
+            margin-bottom: 3rem;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(26, 47, 26, 0.1);
+        }
+
+        .arch-layer {
+            padding: 2rem;
+            text-align: center;
+            position: relative;
+        }
+
+        .arch-layer:nth-child(1) {
+            background: linear-gradient(135deg, #2d5a3d 0%, #3a7a52 100%);
+            color: var(--cream);
+        }
+
+        .arch-layer:nth-child(2) {
+            background: linear-gradient(135deg, #6b2d5a 0%, #8a3a7a 100%);
+            color: var(--cream);
+        }
+
+        .arch-layer:nth-child(3) {
+            background: linear-gradient(135deg, #5a3d2d 0%, #7a523a 100%);
+            color: var(--cream);
+        }
+
+        .arch-layer-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .arch-layer-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.3rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .arch-layer-device {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            background: rgba(255,255,255,0.15);
+            padding: 0.4rem 0.8rem;
+            border-radius: 4px;
+            display: inline-block;
+            margin-bottom: 1rem;
+        }
+
+        .arch-layer-desc {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            line-height: 1.5;
+        }
+
+        .indices-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .index-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 20px rgba(26, 47, 26, 0.08);
+            border-left: 4px solid var(--leaf-fresh);
+        }
+
+        .index-card.nir {
+            border-left-color: #8a3a7a;
+        }
+
+        .index-card.soil {
+            border-left-color: var(--bark-brown);
+        }
+
+        .index-name {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--forest-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .index-formula {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            background: var(--cream);
+            padding: 0.4rem 0.75rem;
+            border-radius: 6px;
+            margin-bottom: 0.75rem;
+            display: inline-block;
+            color: var(--moss);
+        }
+
+        .index-desc {
+            font-size: 0.9rem;
+            color: var(--bark-light);
+            line-height: 1.5;
+        }
+
+        .soil-profile {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(26, 47, 26, 0.1);
+        }
+
+        .soil-profile-header {
+            background: linear-gradient(135deg, var(--bark-brown) 0%, var(--soil) 100%);
+            padding: 1.5rem 2rem;
+            color: var(--cream);
+        }
+
+        .soil-profile-header h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.4rem;
+        }
+
+        .soil-layers {
+            padding: 2rem;
+        }
+
+        .soil-layer-row {
+            display: flex;
+            gap: 1.5rem;
+            padding: 1.5rem 0;
+            border-bottom: 1px solid var(--cream-dark);
+            align-items: flex-start;
+        }
+
+        .soil-layer-row:last-child {
+            border-bottom: none;
+        }
+
+        .soil-depth-badge {
+            background: var(--soil);
+            color: var(--cream);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            font-weight: 600;
+            min-width: 80px;
+            text-align: center;
+            flex-shrink: 0;
+        }
+
+        .soil-layer-info h4 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.1rem;
+            color: var(--forest-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .soil-layer-info p {
+            font-size: 0.9rem;
+            color: var(--bark-light);
+            line-height: 1.6;
+        }
+
+        .stress-detection-box {
+            background: var(--forest-dark);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-top: 3rem;
+            color: var(--cream);
+        }
+
+        .stress-detection-box h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.4rem;
+            color: var(--amber);
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .stress-flow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .stress-step {
+            background: var(--forest-deep);
+            border: 1px solid var(--forest-mid);
+            border-radius: 12px;
+            padding: 1rem 1.25rem;
+            text-align: center;
+            min-width: 160px;
+        }
+
+        .stress-step-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--leaf-light);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.5rem;
+        }
+
+        .stress-step-text {
+            font-size: 0.9rem;
+            color: var(--cream);
+        }
+
+        .stress-arrow {
+            font-size: 1.5rem;
+            color: var(--amber);
+        }
+
+        @media (max-width: 768px) {
+            .monitoring-arch {
+                grid-template-columns: 1fr;
+            }
+            .stress-flow {
+                flex-direction: column;
+            }
+            .stress-arrow {
+                transform: rotate(90deg);
+            }
+            .soil-layer-row {
+                flex-direction: column;
+            }
+            #satellite-map {
+                height: 400px;
+            }
+            .map-3d {
+                transform: rotateX(15deg) scale(1.02);
+            }
+        }
+
+        /* Footer */
+        footer {
+            background: var(--forest-dark);
+            color: var(--cream);
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+
+        .footer-logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--leaf-light);
+        }
+
+        .footer-text {
+            color: var(--cream-dark);
+            font-size: 0.95rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-copy {
+            font-size: 0.85rem;
+            color: var(--bark-light);
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--forest-mid);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            nav {
+                padding: 0.75rem 1rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .hero {
+                padding: 5rem 1rem 3rem;
+            }
+
+            .hero-stats {
+                gap: 2rem;
+            }
+
+            .stat-number {
+                font-size: 2.5rem;
+            }
+
+            section {
+                padding: 4rem 1rem;
+            }
+
+            .timeline::before {
+                left: 20px;
+            }
+
+            .timeline-item,
+            .timeline-item:nth-child(even) {
+                padding-left: 50px;
+                padding-right: 0;
+                justify-content: flex-start;
+            }
+
+            .timeline-item::before {
+                left: 20px;
+            }
+
+            .causal-diagram {
+                padding: 1.5rem;
+            }
+
+            .algo-cards {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Scroll animations */
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease-out;
+        }
+
+        .animate-on-scroll.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Image Gallery Section */
+        #galerie {
+            background: linear-gradient(180deg, var(--cream) 0%, var(--cream-dark) 100%);
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 2rem;
+        }
+
+        .gallery-card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(26, 47, 26, 0.1);
+            transition: all 0.4s ease;
+        }
+
+        .gallery-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 60px rgba(26, 47, 26, 0.15);
+        }
+
+        .gallery-card img {
+            width: 100%;
+            height: 280px;
+            object-fit: cover;
+            display: block;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .gallery-card img:hover {
+            transform: scale(1.02);
+        }
+
+        .gallery-card-body {
+            padding: 1.5rem;
+        }
+
+        .gallery-card-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.2rem;
+            color: var(--forest-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .gallery-card-desc {
+            font-size: 0.9rem;
+            color: var(--bark-light);
+            line-height: 1.6;
+        }
+
+        .gallery-card-tag {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 0.75rem;
+        }
+
+        .tag-nir { background: rgba(138, 58, 122, 0.15); color: #8a3a7a; }
+        .tag-ndvi { background: rgba(93, 138, 74, 0.15); color: var(--leaf-fresh); }
+        .tag-cir { background: rgba(90, 143, 168, 0.15); color: var(--water); }
+        .tag-coverage { background: rgba(212, 165, 116, 0.15); color: var(--bark-brown); }
+
+        /* Lightbox */
+        .lightbox-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.9);
+            z-index: 2000;
+            cursor: pointer;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .lightbox-overlay.active {
+            display: flex;
+        }
+
+        .lightbox-overlay img {
+            max-width: 92%;
+            max-height: 90vh;
+            border-radius: 8px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+        }
+
+        .lightbox-close {
+            position: absolute;
+            top: 1.5rem; right: 2rem;
+            color: var(--cream);
+            font-size: 2rem;
+            cursor: pointer;
+            z-index: 2001;
+            background: rgba(26,47,26,0.7);
+            width: 48px; height: 48px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: none;
+            transition: background 0.3s;
+        }
+
+        .lightbox-close:hover {
+            background: var(--moss);
+        }
+
+        @media (max-width: 768px) {
+            .gallery-grid {
+                grid-template-columns: 1fr;
+            }
+            .gallery-card img {
+                height: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <div class="logo">
+                <svg class="logo-icon" viewBox="0 0 24 24">
+                    <path d="M12 2C9.5 2 8 5 8 7c0 1.5 0.5 2.5 1 3.5C7.5 11 6 12.5 6 14c0 2 1.5 3.5 3 4.5V22h6v-3.5c1.5-1 3-2.5 3-4.5 0-1.5-1.5-3-3-3.5 0.5-1 1-2 1-3.5 0-2-1.5-5-4-5zm0 2c1.5 0 2 2 2 3s-0.5 2-1 2.5c-0.5-0.5-1-1.5-1-2.5s0.5-3 0-3zm-2 8c1 0 2 0.5 2 1.5s-0.5 2-1 2.5V18H9v-2c-0.5-0.5-1-1.5-1-2.5s1-1.5 2-1.5zm4 0c1 0 2 0.5 2 1.5s-0.5 2-1 2.5V18h-2v-2c-0.5-0.5-1-1.5-1-2.5s1-1.5 2-1.5z"/>
+                </svg>
+                Lesnický monitoring
+            </div>
+            <ul class="nav-links">
+                <li><a href="#cile">Cíle</a></li>
+                <li><a href="#design">Design</a></li>
+                <li><a href="#mapa">Mapa</a></li>
+                <li><a href="#monitoring">Monitoring</a></li>
+                <li><a href="#parametry">Parametry</a></li>
+                <li><a href="#kauzality">Kauzality</a></li>
+                <li><a href="#harmonogram">Harmonogram</a></li>
+                <li><a href="#protokoly">Protokoly</a></li>
+                <li><a href="#rizika">Rizika</a></li>
+                <li><a href="#technologie">Technologie</a></li>
+                <li><a href="#algoritmy">Algoritmy</a></li>
+                <li><a href="#galerie">Galerie</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <svg class="floating-leaf" width="80" height="80" viewBox="0 0 24 24" fill="#4a6741">
+            <path d="M17,8C8,10 5.9,16.17 3.82,21.34L5.71,22L6.66,19.7C7.14,19.87 7.64,20 8,20C19,20 22,3 22,3C21,5 14,5.25 9,6.25C4,7.25 2,11.5 2,13.5C2,15.5 3.75,17.25 3.75,17.25C7,8 17,8 17,8Z"/>
+        </svg>
+        <svg class="floating-leaf" width="60" height="60" viewBox="0 0 24 24" fill="#5d8a4a">
+            <path d="M17,8C8,10 5.9,16.17 3.82,21.34L5.71,22L6.66,19.7C7.14,19.87 7.64,20 8,20C19,20 22,3 22,3C21,5 14,5.25 9,6.25C4,7.25 2,11.5 2,13.5C2,15.5 3.75,17.25 3.75,17.25C7,8 17,8 17,8Z"/>
+        </svg>
+        <svg class="floating-leaf" width="70" height="70" viewBox="0 0 24 24" fill="#8cb369">
+            <path d="M17,8C8,10 5.9,16.17 3.82,21.34L5.71,22L6.66,19.7C7.14,19.87 7.64,20 8,20C19,20 22,3 22,3C21,5 14,5.25 9,6.25C4,7.25 2,11.5 2,13.5C2,15.5 3.75,17.25 3.75,17.25C7,8 17,8 17,8Z"/>
+        </svg>
+        <svg class="floating-leaf" width="50" height="50" viewBox="0 0 24 24" fill="#4a6741">
+            <path d="M17,8C8,10 5.9,16.17 3.82,21.34L5.71,22L6.66,19.7C7.14,19.87 7.64,20 8,20C19,20 22,3 22,3C21,5 14,5.25 9,6.25C4,7.25 2,11.5 2,13.5C2,15.5 3.75,17.25 3.75,17.25C7,8 17,8 17,8Z"/>
+        </svg>
+        
+        <div class="hero-content">
+            <div class="hero-badge">Výzkumný projekt 2026–2027</div>
+            <h1>Vliv <span>frézování půdy</span> po těžbě dřeva na růst sazenic</h1>
+            <p class="hero-subtitle">Komplexní monitoring fyzikálně-mechanických a biologických vlastností lesní půdy, dekompozice dřevních zbytků a vitality výsadby</p>
+            <div class="hero-stats">
+                <div class="stat-item">
+                    <span class="stat-number">9</span>
+                    <span class="stat-label">Lokalit</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">27</span>
+                    <span class="stat-label">Ploch</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">35+</span>
+                    <span class="stat-label">Parametrů</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">2</span>
+                    <span class="stat-label">Roky</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Objectives Section -->
+    <section id="cile">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-tag">01 / Cíle projektu</div>
+                <h2 class="section-title">Výzkumné cíle a očekávané výstupy</h2>
+                <p class="section-subtitle">Projekt si klade za cíl systematicky ověřit přínosy frézování půdy pro obnovu lesa a snížení požárního rizika</p>
+            </div>
+            
+            <div class="objectives-grid">
+                <div class="objective-card animate-on-scroll">
+                    <div class="objective-icon">
+                        <svg viewBox="0 0 24 24"><path d="M12,3L2,12H5V20H19V12H22L12,3M12,8.75A2.25,2.25 0 0,1 14.25,11A2.25,2.25 0 0,1 12,13.25A2.25,2.25 0 0,1 9.75,11A2.25,2.25 0 0,1 12,8.75M12,15C13.5,15 16.5,15.75 16.5,17.25V18H7.5V17.25C7.5,15.75 10.5,15 12,15Z"/></svg>
+                    </div>
+                    <h3>Vliv na ujímání sazenic</h3>
+                    <p>Ověřit, zda frézování půdy po těžbě včetně zapravení těžebních zbytků vytváří příznivější podmínky pro ujímání, růst a vitalitu vysazených stromků.</p>
+                </div>
+                
+                <div class="objective-card animate-on-scroll">
+                    <div class="objective-icon">
+                        <svg viewBox="0 0 24 24"><path d="M11.99,2C6.47,2 2,6.48 2,12C2,17.52 6.47,22 11.99,22C17.52,22 22,17.52 22,12C22,6.48 17.52,2 11.99,2ZM18.92,8H15.97C15.65,6.75 15.19,5.55 14.59,4.44C16.43,5.07 17.96,6.35 18.92,8ZM12,4.04C12.83,5.24 13.48,6.57 13.91,8H10.09C10.52,6.57 11.17,5.24 12,4.04ZM4.26,14C4.1,13.36 4,12.69 4,12C4,11.31 4.1,10.64 4.26,10H7.64C7.56,10.66 7.5,11.32 7.5,12C7.5,12.68 7.56,13.34 7.64,14H4.26ZM5.08,16H8.03C8.35,17.25 8.81,18.45 9.41,19.56C7.57,18.93 6.04,17.66 5.08,16ZM8.03,8H5.08C6.04,6.34 7.57,5.07 9.41,4.44C8.81,5.55 8.35,6.75 8.03,8ZM12,19.96C11.17,18.76 10.52,17.43 10.09,16H13.91C13.48,17.43 12.83,18.76 12,19.96ZM14.34,14H9.66C9.57,13.34 9.5,12.68 9.5,12C9.5,11.32 9.57,10.65 9.66,10H14.34C14.43,10.65 14.5,11.32 14.5,12C14.5,12.68 14.43,13.34 14.34,14ZM14.59,19.56C15.19,18.45 15.65,17.25 15.97,16H18.92C17.96,17.65 16.43,18.93 14.59,19.56ZM16.36,14C16.44,13.34 16.5,12.68 16.5,12C16.5,11.32 16.44,10.66 16.36,10H19.74C19.9,10.64 20,11.31 20,12C20,12.69 19.9,13.36 19.74,14H16.36Z"/></svg>
+                    </div>
+                    <h3>Fyzikálně-mechanické vlastnosti</h3>
+                    <p>Porovnat klíčové parametry půdy (hutnost, pórovitost, infiltrace, penetrační odpor) mezi frézovanými a nefrézovanými plochami.</p>
+                </div>
+                
+                <div class="objective-card animate-on-scroll">
+                    <div class="objective-icon">
+                        <svg viewBox="0 0 24 24"><path d="M6,22A3,3 0 0,1 3,19C3,18.4 3.18,17.84 3.5,17.37L9,7.81V6A1,1 0 0,1 8,5V4A2,2 0 0,1 10,2H14A2,2 0 0,1 16,4V5A1,1 0 0,1 15,6V7.81L20.5,17.37C20.82,17.84 21,18.4 21,19A3,3 0 0,1 18,22H6M5,19A1,1 0 0,0 6,20H18A1,1 0 0,0 19,19C19,18.79 18.93,18.59 18.82,18.43L16.53,14.47L14,17L8.93,11.93L5.18,18.43C5.07,18.59 5,18.79 5,19M13,10A1,1 0 0,0 12,11A1,1 0 0,0 13,12A1,1 0 0,0 14,11A1,1 0 0,0 13,10Z"/></svg>
+                    </div>
+                    <h3>Biologické procesy</h3>
+                    <p>Sledovat mikrobiální aktivitu, dekompozici organické hmoty, kolonizaci dřevních zbytků houbami a bakteriemi a jejich vliv na tvorbu humusu.</p>
+                </div>
+                
+                <div class="objective-card animate-on-scroll">
+                    <div class="objective-icon">
+                        <svg viewBox="0 0 24 24"><path d="M17.66 11.2C17.43 10.9 17.15 10.64 16.89 10.38C16.22 9.78 15.46 9.35 14.82 8.72C13.33 7.26 13 4.85 13.95 3C13 3.23 12.17 3.75 11.46 4.32C8.87 6.4 7.85 10.07 9.07 13.22C9.11 13.32 9.15 13.42 9.15 13.55C9.15 13.77 9 13.97 8.8 14.05C8.57 14.15 8.33 14.09 8.14 13.93C8.08 13.88 8.04 13.83 8 13.76C6.87 12.33 6.69 10.28 7.45 8.64C5.78 10 4.87 12.3 5 14.47C5.06 14.97 5.12 15.47 5.29 15.97C5.43 16.57 5.7 17.17 6 17.7C7.08 19.43 8.95 20.67 10.96 20.92C13.1 21.19 15.39 20.8 17.03 19.32C18.86 17.66 19.5 15 18.56 12.72L18.43 12.46C18.22 12 17.66 11.2 17.66 11.2M14.5 17.5C14.22 17.74 13.76 18 13.4 18.1C12.28 18.5 11.16 17.94 10.5 17.28C11.69 17 12.4 16.12 12.61 15.23C12.78 14.43 12.46 13.77 12.33 13C12.21 12.26 12.23 11.63 12.5 10.94C12.69 11.32 12.89 11.7 13.13 12C13.9 13 15.11 13.44 15.37 14.8C15.41 14.94 15.43 15.08 15.43 15.23C15.46 16.05 15.1 16.95 14.5 17.5H14.5Z"/></svg>
+                    </div>
+                    <h3>Požární riziko</h3>
+                    <p>Kvantifikovat vliv frézování na snížení objemu suchého paliva a vytvořit syntetický požární rizikový index pro lesnickou praxi.</p>
+                </div>
+                
+                <div class="objective-card animate-on-scroll">
+                    <div class="objective-icon">
+                        <svg viewBox="0 0 24 24"><path d="M19,3H14.82C14.4,1.84 13.3,1 12,1C10.7,1 9.6,1.84 9.18,3H5A2,2 0 0,0 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5A2,2 0 0,0 19,3M12,3A1,1 0 0,1 13,4A1,1 0 0,1 12,5A1,1 0 0,1 11,4A1,1 0 0,1 12,3M7,7H17V5H19V19H5V5H7V7M12,9C10.56,9 9.33,10.06 9.06,11.44C8.5,11.16 7.9,11 7.25,11A4.75,4.75 0 0,0 2.5,15.75V17H21.5V15.75A4.75,4.75 0 0,0 16.75,11C16.1,11 15.5,11.16 14.94,11.44C14.67,10.06 13.44,9 12,9Z"/></svg>
+                    </div>
+                    <h3>Časosběrná dokumentace</h3>
+                    <p>Pomocí automatických kamer dokumentovat dynamiku růstu sazenic a vizuálně porovnat vývoj vegetace mezi variantami.</p>
+                </div>
+                
+                <div class="objective-card animate-on-scroll">
+                    <div class="objective-icon">
+                        <svg viewBox="0 0 24 24"><path d="M16,11.78L20.24,4.45L21.97,5.45L16.74,14.5L10.23,10.75L5.46,19H22V21H2V3H4V17.54L9.5,8L16,11.78Z"/></svg>
+                    </div>
+                    <h3>Kauzální analýza</h3>
+                    <p>Statisticky ověřit vztahy mezi proměnnými a vytvořit kauzální mapu pro pochopení mechanismů působení frézování.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Experimental Design Section -->
+    <section id="design">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-tag">02 / Experimentální design</div>
+                <h2 class="section-title">Přehled pokusných ploch</h2>
+                <p class="section-subtitle">Monitoring zahrnuje 9 lokalit s různým stářím výsadby a způsobem přípravy půdy, každá ve třech replikacích</p>
+            </div>
+            
+            <div class="plots-table-wrapper">
+                <table class="plots-table">
+                    <thead>
+                        <tr>
+                            <th>Lokalita</th>
+                            <th>Varianta</th>
+                            <th>Věk od výsadby (roky k 1.1.2026)</th>
+                            <th>Rozměr plochy</th>
+                            <th>Replikace</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>L1</strong></td>
+                            <td><span class="variant-badge variant-freza">Fréza</span></td>
+                            <td>4</td>
+                            <td>30 × 30 m</td>
+                            <td>3</td>
+                        </tr>
+                        <tr>
+                            <td><strong>L2</strong></td>
+                            <td><span class="variant-badge variant-nefreza">Nefréza</span></td>
+                            <td>4</td>
+                            <td>30 × 30 m</td>
+                            <td>3</td>
+                        </tr>
+                        <tr>
+                            <td><strong>L3</strong></td>
+                            <td><span class="variant-badge variant-freza">Fréza</span></td>
+                            <td>3</td>
+                            <td>30 × 30 m</td>
+                            <td>3</td>
+                        </tr>
+                        <tr>
+                            <td><strong>L4</strong></td>
+                            <td><span class="variant-badge variant-nefreza">Nefréza</span></td>
+                            <td>3</td>
+                            <td>30 × 30 m</td>
+                            <td>3</td>
+                        </tr>
+                        <tr>
+                            <td><strong>L5</strong></td>
+                            <td><span class="variant-badge variant-freza">Fréza</span></td>
+                            <td>2</td>
+                            <td>20 × 20 m</td>
+                            <td>3</td>
+                        </tr>
+                        <tr>
+                            <td><strong>L6</strong></td>
+                            <td><span class="variant-badge variant-nefreza">Nefréza</span></td>
+                            <td>2</td>
+                            <td>20 × 20 m</td>
+                            <td>3</td>
+                        </tr>
+                        <tr>
+                            <td><strong>L7</strong></td>
+                            <td><span class="variant-badge variant-freza">Fréza</span></td>
+                            <td>1</td>
+                            <td>20 × 20 m</td>
+                            <td>3</td>
+                        </tr>
+                        <tr>
+                            <td><strong>L8</strong></td>
+                            <td><span class="variant-badge variant-nefreza">Nefréza</span></td>
+                            <td>1</td>
+                            <td>20 × 20 m</td>
+                            <td>3</td>
+                        </tr>
+                        <tr>
+                            <td><strong>L9</strong></td>
+                            <td><span class="variant-badge variant-nova">Nová frézace + výsadba (leden 2026)</span></td>
+                            <td>0</td>
+                            <td>30 × 30 m</td>
+                            <td>3</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="design-features">
+                <div class="feature-box">
+                    <div class="feature-box-value">400+ m²</div>
+                    <div class="feature-box-label">Minimální plocha na variantu</div>
+                </div>
+                <div class="feature-box">
+                    <div class="feature-box-value">5 × 5 m</div>
+                    <div class="feature-box-label">Vzorkovací rastr</div>
+                </div>
+                <div class="feature-box">
+                    <div class="feature-box-value">10+</div>
+                    <div class="feature-box-label">Vzorkovacích bodů na plochu</div>
+                </div>
+                <div class="feature-box">
+                    <div class="feature-box-value">2× ročně</div>
+                    <div class="feature-box-label">Frekvence půdních měření</div>
+                </div>
+                <div class="feature-box">
+                    <div class="feature-box-value">1× měsíčně</div>
+                    <div class="feature-box-label">Měření sazenic (duben–říjen)</div>
+                </div>
+                <div class="feature-box">
+                    <div class="feature-box-value">1 snímek/h</div>
+                    <div class="feature-box-label">Časosběrné kamery</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Map Section -->
+    <section id="mapa">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-tag">02b / Lokalizace</div>
+                <h2 class="section-title">Satelitní mapa experimentálních ploch</h2>
+                <p class="section-subtitle">ESRI Maxar World Imagery – polygon pokusných ploch s vysokým rozlišením</p>
+            </div>
+
+            <div class="map-wrapper">
+                <div class="map-perspective-container">
+                    <div class="map-3d" id="map3dContainer">
+                        <div id="satellite-map"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="map-controls">
+                <button class="map-btn active" onclick="toggleView(this, 'perspective')" title="Semi-3D pohled">🗺️ Semi-3D pohled</button>
+                <button class="map-btn" onclick="toggleView(this, 'flat')" title="Plochý pohled">📐 Plochý pohled</button>
+                <button class="map-btn" onclick="zoomToPolygon()" title="Zoom na polygon">🔍 Zoom na polygon</button>
+                <button class="map-btn" onclick="zoomStep(-0.1)" title="Zoom out">➖ Zoom −0.1</button>
+                <button class="map-btn" onclick="zoomStep(+0.1)" title="Zoom in">➕ Zoom +0.1</button>
+            </div>
+
+            <div class="map-legend">
+                <div class="legend-item">
+                    <div class="legend-color" style="background: rgba(140, 179, 105, 0.5); border: 2px solid #8cb369;"></div>
+                    <span>Polygon pokusných ploch</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #d4a574; border-radius: 50%;"></div>
+                    <span>Střed pozemků</span>
+                </div>
+            </div>
+
+            <div class="map-info-grid">
+                <div class="map-info-card">
+                    <div class="map-info-value">49.3631°N, 14.2989°E</div>
+                    <div class="map-info-label">GPS střed pozemků</div>
+                </div>
+                <div class="map-info-card">
+                    <div class="map-info-value">~8.5 ha</div>
+                    <div class="map-info-label">Celková plocha polygonu</div>
+                </div>
+                <div class="map-info-card">
+                    <div class="map-info-value">Zoom 19–23</div>
+                    <div class="map-info-label">Rozsah přiblížení (krok 0.1)</div>
+                </div>
+                <div class="map-info-card">
+                    <div class="map-info-value">ESRI Maxar</div>
+                    <div class="map-info-label">Satelitní podklad</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Multispectral Monitoring Section -->
+    <section id="monitoring">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-tag">02c / Měřicí technologie</div>
+                <h2 class="section-title">Multispektrální monitorovací systém</h2>
+                <p class="section-subtitle">Čtyřvrstvá architektura: RGB časosběr (Brinno TLC 2020) + NIR kamera (MAPIR Survey3W OCN) + půdní senzory vlhkosti a teploty</p>
+            </div>
+
+            <!-- Architecture diagram -->
+            <div class="monitoring-arch animate-on-scroll">
+                <div class="arch-layer">
+                    <div class="arch-layer-icon">📷</div>
+                    <div class="arch-layer-title">RGB vrstva</div>
+                    <div class="arch-layer-device">Brinno TLC 2020</div>
+                    <div class="arch-layer-desc">Časosběrné RGB snímky pro extrakci vegetačních indexů (GCC, RCC, ExG, VARI, GLI, RGBVI). Fenologický monitoring a povrchová dynamika půdy.</div>
+                </div>
+                <div class="arch-layer">
+                    <div class="arch-layer-icon">🛰️</div>
+                    <div class="arch-layer-title">NIR vrstva</div>
+                    <div class="arch-layer-device">MAPIR Survey3W OCN</div>
+                    <div class="arch-layer-desc">Blízkoinfračervená kamera (850 nm) pro výpočet NDVI. Konfigurce Orange/Cyan/NIR pro fyziologickou detekci stresu.</div>
+                </div>
+                <div class="arch-layer">
+                    <div class="arch-layer-icon">🌡️</div>
+                    <div class="arch-layer-title">Půdní senzory</div>
+                    <div class="arch-layer-device">VWC + T @ 10/20/60 cm</div>
+                    <div class="arch-layer-desc">Kontinuální monitoring vlhkosti (VWC) a teploty v hloubkách 10, 20 a 60 cm + povrchová teplota 10 cm nad půdou.</div>
+                </div>
+            </div>
+
+            <!-- RGB Indices -->
+            <h3 style="font-family: 'Playfair Display', serif; font-size: 1.5rem; margin-bottom: 1.5rem; color: var(--forest-dark);">Vegetační indexy z RGB a NIR kamery</h3>
+            <div class="indices-grid">
+                <div class="index-card animate-on-scroll">
+                    <div class="index-name">GCC – Green Chromatic Coordinate</div>
+                    <div class="index-formula">G / (R + G + B)</div>
+                    <div class="index-desc">Nejsilnější korelace s obsahem chlorofylu. Standard sítě PhenoCam pro fenologické přechody (SOS, EOS).</div>
+                </div>
+                <div class="index-card animate-on-scroll">
+                    <div class="index-name">ExG – Excess Green Index</div>
+                    <div class="index-formula">2G − R − B</div>
+                    <div class="index-desc">Zvýrazňuje zelenou vegetaci oproti pozadí. Vhodný pro kvantifikaci fractional green cover.</div>
+                </div>
+                <div class="index-card animate-on-scroll">
+                    <div class="index-name">VARI – Visible Atm. Resistance Index</div>
+                    <div class="index-formula">(G − R) / (G + R − B)</div>
+                    <div class="index-desc">Částečně koriguje atmosférický rozptyl. Robustní za proměnlivého osvětlení.</div>
+                </div>
+                <div class="index-card nir animate-on-scroll">
+                    <div class="index-name">NDVI – z MAPIR Survey3W OCN</div>
+                    <div class="index-formula">(NIR − R) / (NIR + R)</div>
+                    <div class="index-desc">Standardní metrika fyziologického stavu. NIR pásmo (850 nm) reaguje na stres o 2–5 dnů dříve než GCC.</div>
+                </div>
+                <div class="index-card nir animate-on-scroll">
+                    <div class="index-name">SAVI – Soil Adjusted Vegetation Index</div>
+                    <div class="index-formula">((NIR − R) / (NIR + R + L)) × (1 + L)</div>
+                    <div class="index-desc">Alternativa k NDVI pro mladé sazenice s pokryvem &lt; 30 %. Koriguje vliv půdního pozadí (L = 0.5).</div>
+                </div>
+                <div class="index-card soil animate-on-scroll">
+                    <div class="index-name">GDD – Growing Degree Days</div>
+                    <div class="index-formula">Σ max(T_avg − T_base, 0)</div>
+                    <div class="index-desc">Akumulace tepelných jednotek (báze 5°C) z půdních senzorů. Korelace s fenologickými přechody z GCC.</div>
+                </div>
+            </div>
+
+            <!-- Soil Profile -->
+            <div class="soil-profile animate-on-scroll">
+                <div class="soil-profile-header">
+                    <h3>🪴 Hloubkový profil půdních senzorů</h3>
+                </div>
+                <div class="soil-layers">
+                    <div class="soil-layer-row">
+                        <div class="soil-depth-badge">+10 cm</div>
+                        <div class="soil-layer-info">
+                            <h4>Povrchová teplota (10 cm nad půdou)</h4>
+                            <p>Měří mikroklima v zóně sazenic. Klíčové pro detekci přízemních mrazů (může být o 3–8°C nižší než ve 2 m). Frézovaná plocha = větší teplotní extrémy (méně pokryvné vegetace). Letní povrchová teplota nad 40°C může poškodit výhony.</p>
+                        </div>
+                    </div>
+                    <div class="soil-layer-row">
+                        <div class="soil-depth-badge">−10 cm</div>
+                        <div class="soil-layer-info">
+                            <h4>Povrchová zóna – nejdynamičtější vrstva</h4>
+                            <p>Reaguje okamžitě na dešť a výpar. Pro sazenice v 1. roce často jediná zóna s kořeny. Vysoká korelace VWC(10cm) vs. NDVI = závislost na povrchové vodě. T(10cm) určuje začátek vegetační sezóny (kořenový růst při ~5–8°C). Frézování zlepšuje infiltraci.</p>
+                        </div>
+                    </div>
+                    <div class="soil-layer-row">
+                        <div class="soil-depth-badge">−20 cm</div>
+                        <div class="soil-layer-info">
+                            <h4>Kořenová zóna – cíl od 2. vegetačního období</h4>
+                            <p>Reaguje na srážky se zpožděním hodin až 1–2 dní za 10cm vrstvou. Porovnání VWC(10) vs. VWC(20) = infiltrační rychlost. Pokud NDVI koreluje lépe s VWC(20) než VWC(10), kořeny dosáhly 20 cm = sazenice dobře zakořeněna.</p>
+                        </div>
+                    </div>
+                    <div class="soil-layer-row">
+                        <div class="soil-depth-badge">−60 cm</div>
+                        <div class="soil-layer-info">
+                            <h4>Hluboká zásobní zóna – strategická rezerva</h4>
+                            <p>Reaguje s výrazným zpožděním (dny až týdny), ale drží vodu dlouho. Pro 1–2leté sazenice slabá korelace s NDVI. Pozitivní lag-korelace s posunem 2–4 týdny indikuje kapilární vzlínání. S věkem sazenic korelace roste = kořeny prorůstají hlouběji.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Early Warning System -->
+            <div class="stress-detection-box animate-on-scroll">
+                <h3>⚡ Dvoukanálová stresová detekce (Early Warning System)</h3>
+                <p style="text-align: center; color: var(--cream-dark); margin-bottom: 1.5rem; font-size: 0.95rem;">
+                    Kombinací GCC (Brinno) a NDVI (MAPIR) lze identifikovat stresové epizody dříve, než by byly detekovány jedním senzorem.
+                </p>
+                <div class="stress-flow">
+                    <div class="stress-step">
+                        <div class="stress-step-label">Fáze 1</div>
+                        <div class="stress-step-text">Pokles NDVI<br>(fyziologický stres)</div>
+                    </div>
+                    <div class="stress-arrow">→</div>
+                    <div class="stress-step">
+                        <div class="stress-step-label">Δt &gt; 3 dny</div>
+                        <div class="stress-step-text">Stres reverzibilní<br>(pouze NIR reaguje)</div>
+                    </div>
+                    <div class="stress-arrow">→</div>
+                    <div class="stress-step">
+                        <div class="stress-step-label">Fáze 2</div>
+                        <div class="stress-step-text">Pokles GCC<br>(viditelné poškození)</div>
+                    </div>
+                    <div class="stress-arrow">→</div>
+                    <div class="stress-step">
+                        <div class="stress-step-label">Δt ≈ 0</div>
+                        <div class="stress-step-text">Akutní poškození<br>(oba klesají současně)</div>
+                    </div>
+                </div>
+                <p style="text-align: center; color: var(--leaf-light); margin-top: 1.5rem; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem;">
+                    Hypotéza: Sazenice na frézované ploše budou mít kratší lag VWC→NDVI (lepší kontakt kořenů s minerální půdou)
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Parameters Section -->
+    <section id="parametry">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-tag">03 / Monitorované parametry</div>
+                <h2 class="section-title">Komplexní sada měřených ukazatelů</h2>
+                <p class="section-subtitle">Projekt sleduje fyzikálně-mechanické vlastnosti půdy, stav dřevních zbytků a vývoj sazenic</p>
+            </div>
+            
+            <div class="tabs-container">
+                <div class="tabs">
+                    <button class="tab-btn active" data-tab="puda">Parametry půdy</button>
+                    <button class="tab-btn" data-tab="zbytky">Dřevní zbytky</button>
+                    <button class="tab-btn" data-tab="sazenice">Sazenice</button>
+                </div>
+                
+                <!-- Půda Tab -->
+                <div class="tab-content active" id="puda">
+                    <div class="params-table-wrapper">
+                        <table class="params-table">
+                            <thead>
+                                <tr>
+                                    <th>Parametr</th>
+                                    <th>Jednotka</th>
+                                    <th>Efekt frézy</th>
+                                    <th>Kauzální role</th>
+                                    <th>Metoda</th>
+                                    <th>Frekvence</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span class="param-name">Objemová hmotnost půdy</span></td>
+                                    <td><span class="param-unit">g/cm³</span></td>
+                                    <td><span class="effect-negative">− nižší</span></td>
+                                    <td>Lepší prorůstání kořenů, ↑ pórovitost</td>
+                                    <td><span class="method-tag">Kopeckého válec</span><span class="method-tag">sušení</span></td>
+                                    <td>2× ročně</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="param-name">Celková pórovitost</span></td>
+                                    <td><span class="param-unit">% obj.</span></td>
+                                    <td><span class="effect-positive">+ vyšší</span></td>
+                                    <td>Výměna plynů, infiltrace</td>
+                                    <td><span class="method-tag">Výpočet z obj. hmotnosti</span></td>
+                                    <td>2× ročně</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="param-name">Kapilární vs. nekapilární póry</span></td>
+                                    <td><span class="param-unit">% obj.</span></td>
+                                    <td><span class="effect-positive">+ více nekapilárních</span></td>
+                                    <td>Aerační kapacita, difúze O₂/CO₂</td>
+                                    <td><span class="method-tag">pF křivka</span><span class="method-tag">retence vody</span></td>
+                                    <td>1× ročně</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="param-name">Penetrační odpor</span></td>
+                                    <td><span class="param-unit">MPa</span></td>
+                                    <td><span class="effect-negative">− nižší</span></td>
+                                    <td>Mechanická bariéra kořenů</td>
+                                    <td><span class="method-tag">Elektronický penetrometr</span></td>
+                                    <td>2× ročně + po suchu</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="param-name">Infiltrační rychlost (Ks)</span></td>
+                                    <td><span class="param-unit">mm/h</span></td>
+                                    <td><span class="effect-positive">+ vyšší</span></td>
+                                    <td>Dostupnost vody po dešti</td>
+                                    <td><span class="method-tag">Dvojitý infiltrometr</span></td>
+                                    <td>2× ročně</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="param-name">Vodní retenční křivka (pF)</span></td>
+                                    <td><span class="param-unit">–</span></td>
+                                    <td><span class="effect-positive">+ více využitelné vody</span></td>
+                                    <td>Stabilita zásoby vody</td>
+                                    <td><span class="method-tag">Tlakové desky</span></td>
+                                    <td>1× ročně</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="param-name">Plynopropustnost</span></td>
+                                    <td><span class="param-unit">µm² / m/s</span></td>
+                                    <td><span class="effect-positive">+ vyšší</span></td>
+                                    <td>Výměna plynů, dýchání kořenů</td>
+                                    <td><span class="method-tag">Permeametr</span><span class="method-tag">difuzní měření</span></td>
+                                    <td>1× ročně</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="param-name">Měrná povrchová plocha (BET)</span></td>
+                                    <td><span class="param-unit">m²/g</span></td>
+                                    <td><span class="effect-positive">+ vyšší</span></td>
+                                    <td>Sorpce vody/živin, mikrobiální habitat</td>
+                                    <td><span class="method-tag">Adsorpce N₂</span><span class="method-tag">methylenová modř</span></td>
+                                    <td>1× ročně</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="param-name">Obsah organické hmoty (Corg)</span></td>
+                                    <td><span class="param-unit">% hm.</span></td>
+                                    <td><span class="effect-positive">+ vyšší</span></td>
+                                    <td>Energie pro mikroby, tvorba humusu</td>
+                                    <td><span class="method-tag">CHNS</span><span class="method-tag">ztráta žíháním</span></td>
+                                    <td>1× ročně</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="param-name">Mikrobiální biomasa C</span></td>
+                                    <td><span class="param-unit">mg C/kg</span></td>
+                                    <td><span class="effect-positive">+ vyšší</span></td>
+                                    <td>Rychlejší dekompozice</td>
+                                    <td><span class="method-tag">Fumigace-extrakce</span></td>
+                                    <td>1× ročně</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="param-name">Respirace půdy</span></td>
+                                    <td><span class="param-unit">mg CO₂-C/m²/h</span></td>
+                                    <td><span class="effect-positive">+ vyšší</span></td>
+                                    <td>Intenzita rozkladu</td>
+                                    <td><span class="method-tag">Inkubace</span><span class="method-tag">komory</span></td>
+                                    <td>2× ročně</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="param-name">pH (H₂O/KCl)</span></td>
+                                    <td><span class="param-unit">–</span></td>
+                                    <td><span class="effect-neutral">± mírná změna</span></td>
+                                    <td>Dostupnost živin</td>
+                                    <td><span class="method-tag">Elektroda</span></td>
+                                    <td>1× ročně</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="param-name">Dostupný N, P, K</span></td>
+                                    <td><span class="param-unit">mg/kg</span></td>
+                                    <td><span class="effect-positive">+ vyšší</span></td>
+                                    <td>Růst sazenic</td>
+                                    <td><span class="method-tag">Kjeldahl</span><span class="method-tag">spektrofotometrie</span><span class="method-tag">AAS</span></td>
+                                    <td>1× ročně</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="param-name">Mykorhiza (kolonizace)</span></td>
+                                    <td><span class="param-unit">%</span></td>
+                                    <td><span class="effect-positive">+ vyšší</span></td>
+                                    <td>Příjem vody/živin</td>
+                                    <td><span class="method-tag">Mikroskopie</span><span class="method-tag">PCR</span></td>
+                                    <td>1× ročně (léto)</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <!-- Dřevní zbytky Tab -->
+                <div class="tab-content" id="zbytky">
+                    <div class="params-table-wrapper">
+                        <table class="params-table">
+                            <thead>
+                                <tr>
+                                    <th>Parametr</th>
+                                    <th>Jednotka</th>
+                                    <th>Efekt frézy</th>
+                                    <th>Kauzální role</th>
+                                    <th>Metoda</th>
+                                    <th>Frekvence</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span class="param-name">Velikostní distribuce zbytků</span></td>
+                                    <td><span class="param-unit">třídy (cm)</span></td>
+                                    <td><span class="effect-positive">menší frakce</span></td>
+                                    <td>↑ plocha/objem → ↑ kolonizace houbami</td>
+                                    <td><span class="method-tag">Transekty</span><span class="method-tag">měření kusů</span></td>
+                                    <td>1× ročně</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="param-name">Poškození povrchu velkých kusů</span></td>
+                                    <td><span class="param-unit">% porušené kůry</span></td>
+                                    <td><span class="effect-positive">+ více porušení</span></td>
+                                    <td>Vstupní brány pro houby/bakterie</td>
+                                    <td><span class="method-tag">Vizuální skóre</span><span class="method-tag">fotodokumentace</span></td>
+                                    <td>1× ročně</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="param-name">Kolonizace dřevními houbami</span></td>
+                                    <td><span class="param-unit">% kusů / diverzita</span></td>
+                                    <td><span class="effect-positive">+ vyšší</span></td>
+                                    <td>Rychlejší dekompozice</td>
+                                    <td><span class="method-tag">Mykologie</span><span class="method-tag">DNA barcoding</span></td>
+                                    <td>1× ročně</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="param-name">Rychlost dekompozice</span></td>
+                                    <td><span class="param-unit">% hmotnosti/rok</span></td>
+                                    <td><span class="effect-positive">+ rychlejší</span></td>
+                                    <td>Pokles požárního paliva</td>
+                                    <td><span class="method-tag">Litter-bagy</span></td>
+                                    <td>6–12–18–24 měs.</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="param-name">Vlhkost zbytků</span></td>
+                                    <td><span class="param-unit">% hm.</span></td>
+                                    <td><span class="effect-positive">+ vyšší</span></td>
+                                    <td>Delší čas do vznícení</td>
+                                    <td><span class="method-tag">Vlhkoměr</span><span class="method-tag">sušení</span></td>
+                                    <td>Sezónně (3×)</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="param-name">Čas do vznícení (proxy)</span></td>
+                                    <td><span class="param-unit">s při std. žáru</span></td>
+                                    <td><span class="effect-positive">+ delší</span></td>
+                                    <td>Nižší požární riziko</td>
+                                    <td><span class="method-tag">Laboratorní pec</span></td>
+                                    <td>1× ročně</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="param-name">Požární rizikový index</span></td>
+                                    <td><span class="param-unit">0–1</span></td>
+                                    <td><span class="effect-negative">− nižší</span></td>
+                                    <td>Syntetický ukazatel paliva a sucha</td>
+                                    <td><span class="method-tag">Kombinace vlhkosti, CWD, teploty</span></td>
+                                    <td>Měsíčně</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <!-- Sazenice Tab -->
+                <div class="tab-content" id="sazenice">
+                    <div class="params-table-wrapper">
+                        <table class="params-table">
+                            <thead>
+                                <tr>
+                                    <th>Parametr</th>
+                                    <th>Jednotka</th>
+                                    <th>Efekt frézy</th>
+                                    <th>Kauzální role</th>
+                                    <th>Metoda</th>
+                                    <th>Frekvence</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span class="param-name">Výška sazenic</span></td>
+                                    <td><span class="param-unit">cm</span></td>
+                                    <td><span class="effect-positive">+ vyšší</span></td>
+                                    <td>Cílová proměnná</td>
+                                    <td><span class="method-tag">Měřítko/tyč</span></td>
+                                    <td>Měsíčně (IV–X)</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="param-name">Průměr kmínku u báze</span></td>
+                                    <td><span class="param-unit">mm</span></td>
+                                    <td><span class="effect-positive">+ větší</span></td>
+                                    <td>Cílová proměnná</td>
+                                    <td><span class="method-tag">Posuvné měřítko</span></td>
+                                    <td>Měsíčně (IV–X)</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="param-name">Přežívání sazenic</span></td>
+                                    <td><span class="param-unit">%</span></td>
+                                    <td><span class="effect-positive">+ vyšší</span></td>
+                                    <td>Cílová proměnná</td>
+                                    <td><span class="method-tag">Sčítání označených jedinců</span></td>
+                                    <td>Měsíčně</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="param-name">Barva listů / chlorofyl</span></td>
+                                    <td><span class="param-unit">SPAD</span></td>
+                                    <td><span class="effect-positive">+ lepší</span></td>
+                                    <td>Stav živin/vody</td>
+                                    <td><span class="method-tag">SPAD metr</span></td>
+                                    <td>Měsíčně</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="param-name">Obsah živin v listech (N/P)</span></td>
+                                    <td><span class="param-unit">% / mg g⁻¹</span></td>
+                                    <td><span class="effect-positive">+ vyšší</span></td>
+                                    <td>Živinový stav</td>
+                                    <td><span class="method-tag">Laboratorní analýza</span></td>
+                                    <td>1–2× ročně</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Causal Map Section -->
+    <section id="kauzality">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-tag">04 / Kauzální vztahy</div>
+                <h2 class="section-title">Mapa příčin a následků</h2>
+                <p class="section-subtitle">Vizualizace očekávaných kauzálních vztahů mezi frézováním, půdními procesy a růstem sazenic</p>
+            </div>
+            
+            <div class="causal-diagram">
+                <div class="causal-flow">
+                    <div class="causal-level">
+                        <div class="causal-node primary">🔄 FRÉZOVÁNÍ PŮDY</div>
+                    </div>
+                    
+                    <div class="causal-arrow">↓ ↓ ↓</div>
+                    
+                    <div class="causal-level">
+                        <div class="causal-node">↓ Objemová hmotnost</div>
+                        <div class="causal-node">↑ Pórovitost</div>
+                        <div class="causal-node">↑ BET (m²/g)</div>
+                        <div class="causal-node">↑ Poškození povrchů CWD</div>
+                    </div>
+                    
+                    <div class="causal-arrow">↓ ↓ ↓</div>
+                    
+                    <div class="causal-level">
+                        <div class="causal-node">↑ Infiltrace vody</div>
+                        <div class="causal-node">↑ Plynopropustnost</div>
+                        <div class="causal-node">↓ Penetrační odpor</div>
+                        <div class="causal-node">↑ Kolonizace houbami</div>
+                    </div>
+                    
+                    <div class="causal-arrow">↓ ↓ ↓</div>
+                    
+                    <div class="causal-level">
+                        <div class="causal-node">↑ Dostupnost vody + O₂</div>
+                        <div class="causal-node">↑ Mikrobiální aktivita</div>
+                        <div class="causal-node">↑ Rychlost dekompozice</div>
+                    </div>
+                    
+                    <div class="causal-arrow">↓ ↓ ↓</div>
+                    
+                    <div class="causal-level">
+                        <div class="causal-node outcome">🌱 ↑ Růst sazenic</div>
+                        <div class="causal-node outcome">🌱 ↑ Přežívání sazenic</div>
+                        <div class="causal-node warning">🔥 ↓ Požární riziko</div>
+                    </div>
+                </div>
+            </div>
+            
+            <h3 style="color: var(--cream); text-align: center; margin-bottom: 2rem; font-family: 'Playfair Display', serif;">Očekávané korelace mezi proměnnými</h3>
+            
+            <div class="correlations-grid">
+                <div class="correlation-card">
+                    <div class="correlation-pair">
+                        <span class="correlation-var">Frézování</span>
+                        <span class="correlation-arrow negative">→ −</span>
+                        <span class="correlation-var">Obj. hmotnost</span>
+                    </div>
+                    <div class="correlation-pair">
+                        <span class="correlation-var">Frézování</span>
+                        <span class="correlation-arrow positive">→ +</span>
+                        <span class="correlation-var">Pórovitost</span>
+                    </div>
+                    <div class="correlation-pair">
+                        <span class="correlation-var">Frézování</span>
+                        <span class="correlation-arrow negative">→ −</span>
+                        <span class="correlation-var">Penetr. odpor</span>
+                    </div>
+                </div>
+                
+                <div class="correlation-card">
+                    <div class="correlation-pair">
+                        <span class="correlation-var">Frézování</span>
+                        <span class="correlation-arrow positive">→ +</span>
+                        <span class="correlation-var">Infiltrace</span>
+                    </div>
+                    <div class="correlation-pair">
+                        <span class="correlation-var">Frézování</span>
+                        <span class="correlation-arrow positive">→ +</span>
+                        <span class="correlation-var">BET (m²/g)</span>
+                    </div>
+                    <div class="correlation-pair">
+                        <span class="correlation-var">Frézování</span>
+                        <span class="correlation-arrow positive">→ +</span>
+                        <span class="correlation-var">Corg</span>
+                    </div>
+                </div>
+                
+                <div class="correlation-card">
+                    <div class="correlation-pair">
+                        <span class="correlation-var">Pórovitost</span>
+                        <span class="correlation-arrow positive">→ +</span>
+                        <span class="correlation-var">Infiltrace</span>
+                    </div>
+                    <div class="correlation-pair">
+                        <span class="correlation-var">Pórovitost</span>
+                        <span class="correlation-arrow positive">→ +</span>
+                        <span class="correlation-var">Plynopropust.</span>
+                    </div>
+                    <div class="correlation-pair">
+                        <span class="correlation-var">Obj. hmotnost</span>
+                        <span class="correlation-arrow positive">→ +</span>
+                        <span class="correlation-var">Penetr. odpor</span>
+                    </div>
+                </div>
+                
+                <div class="correlation-card">
+                    <div class="correlation-pair">
+                        <span class="correlation-var">Corg</span>
+                        <span class="correlation-arrow positive">→ +</span>
+                        <span class="correlation-var">Mikrob. biomasa</span>
+                    </div>
+                    <div class="correlation-pair">
+                        <span class="correlation-var">Mikrob. biomasa</span>
+                        <span class="correlation-arrow positive">→ +</span>
+                        <span class="correlation-var">Respirace půdy</span>
+                    </div>
+                    <div class="correlation-pair">
+                        <span class="correlation-var">Dekompozice</span>
+                        <span class="correlation-arrow positive">→ +</span>
+                        <span class="correlation-var">Corg</span>
+                    </div>
+                </div>
+                
+                <div class="correlation-card">
+                    <div class="correlation-pair">
+                        <span class="correlation-var">Penetr. odpor</span>
+                        <span class="correlation-arrow negative">→ −</span>
+                        <span class="correlation-var">Růst sazenic</span>
+                    </div>
+                    <div class="correlation-pair">
+                        <span class="correlation-var">Infiltrace</span>
+                        <span class="correlation-arrow positive">→ +</span>
+                        <span class="correlation-var">Růst sazenic</span>
+                    </div>
+                    <div class="correlation-pair">
+                        <span class="correlation-var">Růst sazenic</span>
+                        <span class="correlation-arrow positive">→ +</span>
+                        <span class="correlation-var">Přežívání</span>
+                    </div>
+                </div>
+                
+                <div class="correlation-card">
+                    <div class="correlation-pair">
+                        <span class="correlation-var">Frézování</span>
+                        <span class="correlation-arrow positive">→ +</span>
+                        <span class="correlation-var">Kolonizace CWD</span>
+                    </div>
+                    <div class="correlation-pair">
+                        <span class="correlation-var">Dekompozice</span>
+                        <span class="correlation-arrow negative">→ −</span>
+                        <span class="correlation-var">Požární index</span>
+                    </div>
+                    <div class="correlation-pair">
+                        <span class="correlation-var">Frézování</span>
+                        <span class="correlation-arrow negative">→ −</span>
+                        <span class="correlation-var">Požární index</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Timeline Section -->
+    <section id="harmonogram">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-tag">05 / Harmonogram projektu</div>
+                <h2 class="section-title">Časový plán 2026–2027</h2>
+                <p class="section-subtitle">Dvouletý projekt s pravidelným monitoringem a závěrečnou analýzou</p>
+            </div>
+            
+            <div class="timeline">
+                <div class="timeline-item animate-on-scroll">
+                    <div class="timeline-content">
+                        <div class="timeline-date">Leden 2026</div>
+                        <div class="timeline-title">Založení nové plochy L9</div>
+                        <div class="timeline-desc">Frézace půdy a výsadba sazenic na nové experimentální ploše pro sledování od času T0</div>
+                    </div>
+                </div>
+                
+                <div class="timeline-item animate-on-scroll">
+                    <div class="timeline-content">
+                        <div class="timeline-date">Únor–Březen 2026</div>
+                        <div class="timeline-title">Instalace a mapování</div>
+                        <div class="timeline-desc">Základní terénní mapování všech ploch, instalace časosběrných kamer (1 snímek/hod)</div>
+                    </div>
+                </div>
+                
+                <div class="timeline-item animate-on-scroll">
+                    <div class="timeline-content">
+                        <div class="timeline-date">Březen–Duben 2026</div>
+                        <div class="timeline-title">Výchozí odběry</div>
+                        <div class="timeline-desc">Kompletní odběr půdních vzorků a dřevních zbytků, stanovení výchozího stavu všech parametrů</div>
+                    </div>
+                </div>
+                
+                <div class="timeline-item animate-on-scroll">
+                    <div class="timeline-content">
+                        <div class="timeline-date">Duben–Říjen 2026</div>
+                        <div class="timeline-title">Měsíční monitoring sazenic</div>
+                        <div class="timeline-desc">Pravidelné měření výšky, průměru kmínku, přežívání a SPAD hodnot na min. 30 jedincích/plocha</div>
+                    </div>
+                </div>
+                
+                <div class="timeline-item animate-on-scroll">
+                    <div class="timeline-content">
+                        <div class="timeline-date">Květen + Září 2026</div>
+                        <div class="timeline-title">Sezónní půdní měření</div>
+                        <div class="timeline-desc">Infiltrometrie, penetrace, respirace půdy ve vlhkém období</div>
+                    </div>
+                </div>
+                
+                <div class="timeline-item animate-on-scroll">
+                    <div class="timeline-content">
+                        <div class="timeline-date">Říjen–Listopad 2026</div>
+                        <div class="timeline-title">Laboratorní analýzy</div>
+                        <div class="timeline-desc">BET, pF křivky, Corg, mikrobiální biomasa C a další laboratorní stanovení</div>
+                    </div>
+                </div>
+                
+                <div class="timeline-item animate-on-scroll">
+                    <div class="timeline-content">
+                        <div class="timeline-date">Leden–Únor 2027</div>
+                        <div class="timeline-title">Průběžná analýza</div>
+                        <div class="timeline-desc">Vyhodnocení prvního roku dat, analýza korelací a kauzalit, roční zpráva</div>
+                    </div>
+                </div>
+                
+                <div class="timeline-item animate-on-scroll">
+                    <div class="timeline-content">
+                        <div class="timeline-date">Březen–Říjen 2027</div>
+                        <div class="timeline-title">Opakování monitoringu</div>
+                        <div class="timeline-desc">Kompletní opakování všech měření podle protokolu prvního roku</div>
+                    </div>
+                </div>
+                
+                <div class="timeline-item animate-on-scroll">
+                    <div class="timeline-content">
+                        <div class="timeline-date">Listopad–Prosinec 2027</div>
+                        <div class="timeline-title">Závěrečné vyhodnocení</div>
+                        <div class="timeline-desc">Souhrnná analýza, statistické testování hypotéz, doporučení pro lesnickou praxi</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Protocols Section -->
+    <section id="protokoly">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-tag">06 / Měřicí protokoly</div>
+                <h2 class="section-title">Standardizované postupy měření</h2>
+                <p class="section-subtitle">Přehled vybavení a metodik pro jednotlivé oblasti monitoringu</p>
+            </div>
+            
+            <div class="protocols-grid">
+                <div class="protocol-card animate-on-scroll">
+                    <div class="protocol-header">
+                        <div class="protocol-icon">
+                            <svg viewBox="0 0 24 24"><path d="M12,3C7.58,3 4,4.79 4,7C4,9.21 7.58,11 12,11C16.42,11 20,9.21 20,7C20,4.79 16.42,3 12,3M4,9V12C4,14.21 7.58,16 12,16C16.42,16 20,14.21 20,12V9C20,11.21 16.42,13 12,13C7.58,13 4,11.21 4,9M4,14V17C4,19.21 7.58,21 12,21C16.42,21 20,19.21 20,17V14C20,16.21 16.42,18 12,18C7.58,18 4,16.21 4,14Z"/></svg>
+                        </div>
+                        <div class="protocol-title">Půda – hutnost a pórovitost</div>
+                    </div>
+                    <div class="protocol-body">
+                        <div class="protocol-method">
+                            <div class="method-bullet"></div>
+                            <div class="method-text">Kopeckého válec pro odběr neporušených vzorků o známém objemu</div>
+                        </div>
+                        <div class="protocol-method">
+                            <div class="method-bullet"></div>
+                            <div class="method-text">Sušení při 105°C do konstantní hmotnosti</div>
+                        </div>
+                        <div class="protocol-method">
+                            <div class="method-bullet"></div>
+                            <div class="method-text">Výpočet pórovitosti z objemové hmotnosti a hustoty skeletu</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="protocol-card animate-on-scroll">
+                    <div class="protocol-header">
+                        <div class="protocol-icon">
+                            <svg viewBox="0 0 24 24"><path d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4M12,6A6,6 0 0,0 6,12A6,6 0 0,0 12,18A6,6 0 0,0 18,12A6,6 0 0,0 12,6M12,8A4,4 0 0,1 16,12A4,4 0 0,1 12,16A4,4 0 0,1 8,12A4,4 0 0,1 12,8Z"/></svg>
+                        </div>
+                        <div class="protocol-title">Penetrační odpor</div>
+                    </div>
+                    <div class="protocol-body">
+                        <div class="protocol-method">
+                            <div class="method-bullet"></div>
+                            <div class="method-text">Elektronický penetrometr s automatickým záznamem profilů</div>
+                        </div>
+                        <div class="protocol-method">
+                            <div class="method-bullet"></div>
+                            <div class="method-text">Min. 10 měření na plochu v pravidelném rastru</div>
+                        </div>
+                        <div class="protocol-method">
+                            <div class="method-bullet"></div>
+                            <div class="method-text">Dodatečná měření po období silného vyschnutí půdy</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="protocol-card animate-on-scroll">
+                    <div class="protocol-header">
+                        <div class="protocol-icon">
+                            <svg viewBox="0 0 24 24"><path d="M12,20A6,6 0 0,1 6,14C6,10 12,3.25 12,3.25C12,3.25 18,10 18,14A6,6 0 0,1 12,20Z"/></svg>
+                        </div>
+                        <div class="protocol-title">Infiltrace vody</div>
+                    </div>
+                    <div class="protocol-body">
+                        <div class="protocol-method">
+                            <div class="method-bullet"></div>
+                            <div class="method-text">Dvojitý infiltrometr (double-ring) standardního průměru</div>
+                        </div>
+                        <div class="protocol-method">
+                            <div class="method-bullet"></div>
+                            <div class="method-text">Měření ustáleného toku v terénu</div>
+                        </div>
+                        <div class="protocol-method">
+                            <div class="method-bullet"></div>
+                            <div class="method-text">4–6 měření na plochu ve vlhkém období</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="protocol-card animate-on-scroll">
+                    <div class="protocol-header">
+                        <div class="protocol-icon">
+                            <svg viewBox="0 0 24 24"><path d="M7,2V4H8V18A4,4 0 0,0 12,22A4,4 0 0,0 16,18V4H17V2H7M11,16C10.4,16 10,15.6 10,15C10,14.4 10.4,14 11,14C11.6,14 12,14.4 12,15C12,15.6 11.6,16 11,16M13,12C12.4,12 12,11.6 12,11C12,10.4 12.4,10 13,10C13.6,10 14,10.4 14,11C14,11.6 13.6,12 13,12M14,7H10V4H14V7Z"/></svg>
+                        </div>
+                        <div class="protocol-title">Retence vody (pF křivka)</div>
+                    </div>
+                    <div class="protocol-body">
+                        <div class="protocol-method">
+                            <div class="method-bullet"></div>
+                            <div class="method-text">Tlakové desky pro stanovení matricového potenciálu</div>
+                        </div>
+                        <div class="protocol-method">
+                            <div class="method-bullet"></div>
+                            <div class="method-text">Laboratorní protokol na neporušených vzorcích</div>
+                        </div>
+                        <div class="protocol-method">
+                            <div class="method-bullet"></div>
+                            <div class="method-text">Konstrukce pF křivky pro výpočet využitelné vody</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="protocol-card animate-on-scroll">
+                    <div class="protocol-header">
+                        <div class="protocol-icon">
+                            <svg viewBox="0 0 24 24"><path d="M19.36,2.72L20.78,4.14L15.06,9.85C16.13,11.39 16.28,13.24 15.38,14.44L9.06,8.12C10.26,7.22 12.11,7.37 13.65,8.44L19.36,2.72M5.93,17.57C3.92,15.56 2.69,13.16 2.35,10.92L7.23,8.83L14.67,16.27L12.58,21.15C10.34,20.81 7.94,19.58 5.93,17.57Z"/></svg>
+                        </div>
+                        <div class="protocol-title">BET – měrná plocha</div>
+                    </div>
+                    <div class="protocol-body">
+                        <div class="protocol-method">
+                            <div class="method-bullet"></div>
+                            <div class="method-text">Adsorpce N₂ metodou BET (Brunauer–Emmett–Teller)</div>
+                        </div>
+                        <div class="protocol-method">
+                            <div class="method-bullet"></div>
+                            <div class="method-text">Alternativně orientační stanovení methylenovou modří</div>
+                        </div>
+                        <div class="protocol-method">
+                            <div class="method-bullet"></div>
+                            <div class="method-text">Kompozitní vzorek z min. 5 bodů na ploše</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="protocol-card animate-on-scroll">
+                    <div class="protocol-header">
+                        <div class="protocol-icon">
+                            <svg viewBox="0 0 24 24"><path d="M7,2H17A2,2 0 0,1 19,4V20A2,2 0 0,1 17,22H7A2,2 0 0,1 5,20V4A2,2 0 0,1 7,2M7,4V8H17V4H7M7,10V12H9V10H7M11,10V12H13V10H11M15,10V12H17V10H15M7,14V16H9V14H7M11,14V16H13V14H11M15,14V16H17V14H15M7,18V20H9V18H7M11,18V20H13V18H11M15,18V20H17V18H15Z"/></svg>
+                        </div>
+                        <div class="protocol-title">Chemické analýzy půdy</div>
+                    </div>
+                    <div class="protocol-body">
+                        <div class="protocol-method">
+                            <div class="method-bullet"></div>
+                            <div class="method-text">CHNS analyzátor pro Corg, ztráta žíháním</div>
+                        </div>
+                        <div class="protocol-method">
+                            <div class="method-bullet"></div>
+                            <div class="method-text">Kjeldahl pro celkový dusík</div>
+                        </div>
+                        <div class="protocol-method">
+                            <div class="method-bullet"></div>
+                            <div class="method-text">Spektrofotometrie (P) a AAS (K) pro dostupné živiny</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="protocol-card animate-on-scroll">
+                    <div class="protocol-header">
+                        <div class="protocol-icon">
+                            <svg viewBox="0 0 24 24"><path d="M4,10A1,1 0 0,1 3,9A1,1 0 0,1 4,8H12A2,2 0 0,0 14,6A2,2 0 0,0 12,4C11.45,4 10.95,4.22 10.59,4.59C10.2,5 9.56,5 9.17,4.59C8.78,4.2 8.78,3.56 9.17,3.17C9.9,2.45 10.9,2 12,2A4,4 0 0,1 16,6A4,4 0 0,1 12,10H4M19,12A1,1 0 0,0 20,11A1,1 0 0,0 19,10C18.72,10 18.47,10.11 18.29,10.29C17.9,10.68 17.27,10.68 16.88,10.29C16.5,9.9 16.5,9.27 16.88,8.88C17.42,8.34 18.17,8 19,8A3,3 0 0,1 22,11A3,3 0 0,1 19,14H5A1,1 0 0,1 4,13A1,1 0 0,1 5,12H19M18,18H4A1,1 0 0,1 3,17A1,1 0 0,1 4,16H18A3,3 0 0,1 21,19A3,3 0 0,1 18,22C17.17,22 16.42,21.66 15.88,21.12C15.5,20.73 15.5,20.1 15.88,19.71C16.27,19.32 16.9,19.32 17.29,19.71C17.47,19.89 17.72,20 18,20A1,1 0 0,0 19,19A1,1 0 0,0 18,18Z"/></svg>
+                        </div>
+                        <div class="protocol-title">Mikrobiální aktivita</div>
+                    </div>
+                    <div class="protocol-body">
+                        <div class="protocol-method">
+                            <div class="method-bullet"></div>
+                            <div class="method-text">Fumigace-extrakce pro mikrobiální biomasu C</div>
+                        </div>
+                        <div class="protocol-method">
+                            <div class="method-bullet"></div>
+                            <div class="method-text">Terénní/komorová respirace pro měření CO₂</div>
+                        </div>
+                        <div class="protocol-method">
+                            <div class="method-bullet"></div>
+                            <div class="method-text">Laboratorní inkubace pro standardizované podmínky</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="protocol-card animate-on-scroll">
+                    <div class="protocol-header">
+                        <div class="protocol-icon">
+                            <svg viewBox="0 0 24 24"><path d="M12,8A4,4 0 0,0 8,12A4,4 0 0,0 12,16A4,4 0 0,0 16,12A4,4 0 0,0 12,8M12,18A6,6 0 0,1 6,12A6,6 0 0,1 12,6A6,6 0 0,1 18,12A6,6 0 0,1 12,18M20,5V19H4V5H20M20,3H4A2,2 0 0,0 2,5V19A2,2 0 0,0 4,21H20A2,2 0 0,0 22,19V5A2,2 0 0,0 20,3Z"/></svg>
+                        </div>
+                        <div class="protocol-title">Mykorhiza</div>
+                    </div>
+                    <div class="protocol-body">
+                        <div class="protocol-method">
+                            <div class="method-bullet"></div>
+                            <div class="method-text">Mikroskopie kořenových vzorků sazenic</div>
+                        </div>
+                        <div class="protocol-method">
+                            <div class="method-bullet"></div>
+                            <div class="method-text">PCR pro molekulární identifikaci (volitelně)</div>
+                        </div>
+                        <div class="protocol-method">
+                            <div class="method-bullet"></div>
+                            <div class="method-text">Stanovení % kolonizace kořenového systému</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="protocol-card animate-on-scroll">
+                    <div class="protocol-header">
+                        <div class="protocol-icon">
+                            <svg viewBox="0 0 24 24"><path d="M11,21H5C3.89,21 3,20.1 3,19V5C3,3.89 3.89,3 5,3H19A2,2 0 0,1 21,5V11.17C20.5,11.06 20,11 19.5,11A6.5,6.5 0 0,0 13,17.5C13,18.79 13.38,20 14,21H11M5,5V19H11V13H19V5H5M7,7H11V11H7V7M13,7H17V11H13V7M7,13H11V17H7V13Z"/></svg>
+                        </div>
+                        <div class="protocol-title">Dekompozice dřeva</div>
+                    </div>
+                    <div class="protocol-body">
+                        <div class="protocol-method">
+                            <div class="method-bullet"></div>
+                            <div class="method-text">Litter-bagy s definovanou frakcí a známou sušinou</div>
+                        </div>
+                        <div class="protocol-method">
+                            <div class="method-bullet"></div>
+                            <div class="method-text">Vyzvednutí a vážení v intervalech 6–12–18–24 měsíců</div>
+                        </div>
+                        <div class="protocol-method">
+                            <div class="method-bullet"></div>
+                            <div class="method-text">Výpočet úbytku hmotnosti ligninu a celulózy</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="protocol-card animate-on-scroll">
+                    <div class="protocol-header">
+                        <div class="protocol-icon">
+                            <svg viewBox="0 0 24 24"><path d="M17.66,11.2C17.43,10.9 17.15,10.64 16.89,10.38C16.22,9.78 15.46,9.35 14.82,8.72C13.33,7.26 13,4.85 13.95,3C13,3.23 12.17,3.75 11.46,4.32C8.87,6.4 7.85,10.07 9.07,13.22C9.11,13.32 9.15,13.42 9.15,13.55C9.15,13.77 9,13.97 8.8,14.05C8.57,14.15 8.33,14.09 8.14,13.93C8.08,13.88 8.04,13.83 8,13.76C6.87,12.33 6.69,10.28 7.45,8.64C5.78,10 4.87,12.3 5,14.47C5.06,14.97 5.12,15.47 5.29,15.97C5.43,16.57 5.7,17.17 6,17.7C7.08,19.43 8.95,20.67 10.96,20.92C13.1,21.19 15.39,20.8 17.03,19.32C18.86,17.66 19.5,15 18.56,12.72L18.43,12.46C18.22,12 17.66,11.2 17.66,11.2Z"/></svg>
+                        </div>
+                        <div class="protocol-title">Požární riziko</div>
+                    </div>
+                    <div class="protocol-body">
+                        <div class="protocol-method">
+                            <div class="method-bullet"></div>
+                            <div class="method-text">Syntetický index: vlhkost, objem CWD, teplota</div>
+                        </div>
+                        <div class="protocol-method">
+                            <div class="method-bullet"></div>
+                            <div class="method-text">Laboratorní test vznícení se standardizovaným zdrojem žáru</div>
+                        </div>
+                        <div class="protocol-method">
+                            <div class="method-bullet"></div>
+                            <div class="method-text">Bezpečnostní protokol pro manipulaci se vzorky</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="protocol-card animate-on-scroll">
+                    <div class="protocol-header">
+                        <div class="protocol-icon">
+                            <svg viewBox="0 0 24 24"><path d="M12 2C9.5 2 8 5 8 7C8 8.5 8.5 9.5 9 10.5C7.5 11 6 12.5 6 14C6 16 7.5 17.5 9 18.5V22H15V18.5C16.5 17.5 18 16 18 14C18 12.5 16.5 11 15 10.5C15.5 9.5 16 8.5 16 7C16 5 14.5 2 12 2Z"/></svg>
+                        </div>
+                        <div class="protocol-title">Růst sazenic</div>
+                    </div>
+                    <div class="protocol-body">
+                        <div class="protocol-method">
+                            <div class="method-bullet"></div>
+                            <div class="method-text">Tyč/měřítko pro výšku, posuvné měřítko pro průměr kmínku</div>
+                        </div>
+                        <div class="protocol-method">
+                            <div class="method-bullet"></div>
+                            <div class="method-text">SPAD metr pro měření chlorofylu v listech</div>
+                        </div>
+                        <div class="protocol-method">
+                            <div class="method-bullet"></div>
+                            <div class="method-text">Trvalé značení min. 30 jedinců na plochu</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="protocol-card animate-on-scroll">
+                    <div class="protocol-header">
+                        <div class="protocol-icon">
+                            <svg viewBox="0 0 24 24"><path d="M4,4H7L9,2H15L17,4H20A2,2 0 0,1 22,6V18A2,2 0 0,1 20,20H4A2,2 0 0,1 2,18V6A2,2 0 0,1 4,4M12,7A5,5 0 0,0 7,12A5,5 0 0,0 12,17A5,5 0 0,0 17,12A5,5 0 0,0 12,7M12,9A3,3 0 0,1 15,12A3,3 0 0,1 12,15A3,3 0 0,1 9,12A3,3 0 0,1 12,9Z"/></svg>
+                        </div>
+                        <div class="protocol-title">Časosběrné snímkování</div>
+                    </div>
+                    <div class="protocol-body">
+                        <div class="protocol-method">
+                            <div class="method-bullet"></div>
+                            <div class="method-text">Automatické kamery s intervalem 1 snímek/hodinu</div>
+                        </div>
+                        <div class="protocol-method">
+                            <div class="method-bullet"></div>
+                            <div class="method-text">Pevné body a stejná kompozice záběru</div>
+                        </div>
+                        <div class="protocol-method">
+                            <div class="method-bullet"></div>
+                            <div class="method-text">Celoroční provoz během vegetačního období</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Risks Section -->
+    <section id="rizika">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-tag">07 / Rizika a mitigace</div>
+                <h2 class="section-title">Identifikovaná rizika projektu</h2>
+                <p class="section-subtitle">Přehled potenciálních problémů a strategií pro jejich minimalizaci</p>
+            </div>
+            
+            <div class="risks-grid">
+                <div class="risk-card high animate-on-scroll">
+                    <span class="risk-level">Vysoké riziko</span>
+                    <h3 class="risk-title">Extrémní počasí</h3>
+                    <p class="risk-desc">Dlouhodobé sucho, silné mrazy nebo vichřice mohou poškodit sazenice a znemožnit srovnání variant.</p>
+                    <div class="risk-mitigation">
+                        <div class="risk-mitigation-label">Mitigace</div>
+                        <div class="risk-mitigation-text">Instalace meteorologické stanice, dokumentace všech extrémních událostí, zahrnutí kovariát do statistické analýzy.</div>
+                    </div>
+                </div>
+                
+                <div class="risk-card high animate-on-scroll">
+                    <span class="risk-level">Vysoké riziko</span>
+                    <h3 class="risk-title">Technické selhání kamer</h3>
+                    <p class="risk-desc">Porucha časosběrných kamer by znamenala ztrátu cenných dat o dynamice růstu.</p>
+                    <div class="risk-mitigation">
+                        <div class="risk-mitigation-label">Mitigace</div>
+                        <div class="risk-mitigation-text">Redundantní zálohovací kamery, pravidelná kontrola každé 2 týdny, cloudové zálohování dat.</div>
+                    </div>
+                </div>
+                
+                <div class="risk-card medium animate-on-scroll">
+                    <span class="risk-level">Střední riziko</span>
+                    <h3 class="risk-title">Prostorová heterogenita</h3>
+                    <p class="risk-desc">Přirozená variabilita půdy může zastřít efekt frézování.</p>
+                    <div class="risk-mitigation">
+                        <div class="risk-mitigation-label">Mitigace</div>
+                        <div class="risk-mitigation-text">Vysoký počet replikací (3× na variantu), stratifikované vzorkování, použití smíšených modelů.</div>
+                    </div>
+                </div>
+                
+                <div class="risk-card medium animate-on-scroll">
+                    <span class="risk-level">Střední riziko</span>
+                    <h3 class="risk-title">Kontaminace vzorků</h3>
+                    <p class="risk-desc">Nesprávná manipulace může znehodnotit laboratorní analýzy.</p>
+                    <div class="risk-mitigation">
+                        <div class="risk-mitigation-label">Mitigace</div>
+                        <div class="risk-mitigation-text">Standardizované protokoly, školení personálu, kontrolní vzorky, certifikované laboratoře.</div>
+                    </div>
+                </div>
+                
+                <div class="risk-card medium animate-on-scroll">
+                    <span class="risk-level">Střední riziko</span>
+                    <h3 class="risk-title">Škůdci a choroby</h3>
+                    <p class="risk-desc">Kalamitní výskyt hmyzu nebo houbových patogenů může ovlivnit sazenice.</p>
+                    <div class="risk-mitigation">
+                        <div class="risk-mitigation-label">Mitigace</div>
+                        <div class="risk-mitigation-text">Pravidelný zdravotní monitoring, dokumentace výskytu, spolupráce s ochranou lesa.</div>
+                    </div>
+                </div>
+                
+                <div class="risk-card low animate-on-scroll">
+                    <span class="risk-level">Nízké riziko</span>
+                    <h3 class="risk-title">Personální výpadky</h3>
+                    <p class="risk-desc">Změny v projektovém týmu mohou narušit kontinuitu měření.</p>
+                    <div class="risk-mitigation">
+                        <div class="risk-mitigation-label">Mitigace</div>
+                        <div class="risk-mitigation-text">Detailní dokumentace postupů, křížové zaškolení, sdílená databáze protokolů.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Technology Section -->
+    <section id="technologie">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-tag">08 / Technologie</div>
+                <h2 class="section-title">Použité technologie a vybavení</h2>
+                <p class="section-subtitle">Kompletní přehled terénního a laboratorního vybavení pro monitoring</p>
+            </div>
+            
+            <div class="tech-categories">
+                <div class="tech-category animate-on-scroll">
+                    <div class="tech-category-header">
+                        <h3 class="tech-category-title">Terénní měřicí přístroje</h3>
+                    </div>
+                    <div class="tech-items">
+                        <div class="tech-item">
+                            <div class="tech-item-name">Kopeckého válce</div>
+                            <div class="tech-item-desc">Nerezové válce standardního objemu (100 cm³) pro odběr neporušených půdních vzorků</div>
+                        </div>
+                        <div class="tech-item">
+                            <div class="tech-item-name">Elektronický penetrometr</div>
+                            <div class="tech-item-desc">Digitální přístroj s automatickým záznamem penetračního odporu v celém profilu</div>
+                        </div>
+                        <div class="tech-item">
+                            <div class="tech-item-name">Dvojitý infiltrometr</div>
+                            <div class="tech-item-desc">Standardní double-ring infiltrometr pro měření saturované hydraulické vodivosti</div>
+                        </div>
+                        <div class="tech-item">
+                            <div class="tech-item-name">SPAD metr</div>
+                            <div class="tech-item-desc">Přenosný chlorofylmetr pro nedestruktivní měření obsahu chlorofylu v listech</div>
+                        </div>
+                        <div class="tech-item">
+                            <div class="tech-item-name">Půdní vlhkoměr</div>
+                            <div class="tech-item-desc">TDR nebo kapacitní sonda pro kontinuální monitoring vlhkosti půdy</div>
+                        </div>
+                        <div class="tech-item">
+                            <div class="tech-item-name">GPS/GNSS přijímač</div>
+                            <div class="tech-item-desc">Přesné zaměření vzorkovacích bodů a trvale značených sazenic</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tech-category animate-on-scroll">
+                    <div class="tech-category-header">
+                        <h3 class="tech-category-title">Laboratorní vybavení</h3>
+                    </div>
+                    <div class="tech-items">
+                        <div class="tech-item">
+                            <div class="tech-item-name">CHNS analyzátor</div>
+                            <div class="tech-item-desc">Elementární analyzátor pro stanovení uhlíku, dusíku, vodíku a síry</div>
+                        </div>
+                        <div class="tech-item">
+                            <div class="tech-item-name">Tlakové desky</div>
+                            <div class="tech-item-desc">Aparatura pro stanovení retenčních křivek (pF) při různých matricových potenciálech</div>
+                        </div>
+                        <div class="tech-item">
+                            <div class="tech-item-name">BET analyzátor</div>
+                            <div class="tech-item-desc">Přístroj pro měření měrného povrchu metodou adsorpce dusíku</div>
+                        </div>
+                        <div class="tech-item">
+                            <div class="tech-item-name">AAS spektrometr</div>
+                            <div class="tech-item-desc">Atomová absorpční spektrometrie pro stanovení kovových prvků (K, Ca, Mg)</div>
+                        </div>
+                        <div class="tech-item">
+                            <div class="tech-item-name">UV-VIS spektrofotometr</div>
+                            <div class="tech-item-desc">Spektrofotometrické stanovení fosforu a dalších analytů</div>
+                        </div>
+                        <div class="tech-item">
+                            <div class="tech-item-name">Mikroskop + PCR</div>
+                            <div class="tech-item-desc">Optická mikroskopie kořenů a molekulární identifikace mykorhizních hub</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tech-category animate-on-scroll">
+                    <div class="tech-category-header">
+                        <h3 class="tech-category-title">Monitorovací senzory a kamery</h3>
+                    </div>
+                    <div class="tech-items">
+                        <div class="tech-item">
+                            <div class="tech-item-name">Brinno TLC 2020 (RGB časosběr)</div>
+                            <div class="tech-item-desc">Časosběrná RGB kamera, 1 snímek/h, bateriové napájení (~80 dnů na AA), AVI/JPEG výstup. Extrakce indexů GCC, RCC, ExG, VARI, GLI, RGBVI.</div>
+                        </div>
+                        <div class="tech-item">
+                            <div class="tech-item-name">MAPIR Survey3W OCN (NIR kamera)</div>
+                            <div class="tech-item-desc">Multispektrální kamera v konfiguraci Orange/Cyan/NIR (850 nm). NDVI a SAVI výpočty. RAW formát pro max. radiometrický rozsah.</div>
+                        </div>
+                        <div class="tech-item">
+                            <div class="tech-item-name">Půdní VWC sondy (10/20/60 cm)</div>
+                            <div class="tech-item-desc">Kapacitní sondy volumetrické vlhkosti půdy v hloubkách 10, 20 a 60 cm. Vzorkování 15–30 min.</div>
+                        </div>
+                        <div class="tech-item">
+                            <div class="tech-item-name">Půdní teplotní čidla + povrchový teploměr</div>
+                            <div class="tech-item-desc">Teplotní senzory ve stejných hloubkách (10/20/60 cm) + povrchový teploměr 10 cm nad půdou v radiation shield.</div>
+                        </div>
+                        <div class="tech-item">
+                            <div class="tech-item-name">Kalibrační referenční terče</div>
+                            <div class="tech-item-desc">ColorChecker Passport / šedá karta 18% v záběru Brinno, kalibrační panel pro MAPIR. Normalizace RGB a NIR hodnot.</div>
+                        </div>
+                        <div class="tech-item">
+                            <div class="tech-item-name">Dataloggery pro půdní senzory</div>
+                            <div class="tech-item-desc">Záznamníky s UTC synchronizací pro kontinuální monitoring teploty a vlhkosti. Párování s EXIF časovými razítky kamer.</div>
+                        </div>
+                        <div class="tech-item">
+                            <div class="tech-item-name">Meteostanice</div>
+                            <div class="tech-item-desc">Automatická měřicí stanice pro srážky, teplotu, vlhkost vzduchu a rychlost větru</div>
+                        </div>
+                        <div class="tech-item">
+                            <div class="tech-item-name">Tablety s GIS</div>
+                            <div class="tech-item-desc">Terénní zařízení s GIS aplikací pro sběr a vizualizaci prostorových dat</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Algorithms Section -->
+    <section id="algoritmy">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-tag">09 / Analytické algoritmy</div>
+                <h2 class="section-title">Statistické a analytické metody</h2>
+                <p class="section-subtitle">Přehled algoritmů pro zpracování dat a testování hypotéz</p>
+            </div>
+            
+            <div class="algo-cards">
+                <div class="algo-card animate-on-scroll">
+                    <div class="algo-header">
+                        <div class="algo-number">01</div>
+                        <div class="algo-title">Porovnání variant (ANOVA)</div>
+                    </div>
+                    <div class="algo-body">
+                        <p class="algo-purpose">Testování statisticky významných rozdílů mezi frézovanými a nefrézovanými plochami pro jednotlivé parametry.</p>
+                        <ul class="algo-steps">
+                            <li class="algo-step">
+                                <span class="algo-step-num">1</span>
+                                <span class="algo-step-text">Kontrola předpokladů: normalita (Shapiro-Wilk), homogenita variancí (Levene)</span>
+                            </li>
+                            <li class="algo-step">
+                                <span class="algo-step-num">2</span>
+                                <span class="algo-step-text">Dvoucestná ANOVA: faktory Varianta (fréza/nefréza) × Věk výsadby</span>
+                            </li>
+                            <li class="algo-step">
+                                <span class="algo-step-num">3</span>
+                                <span class="algo-step-text">Post-hoc testy (Tukey HSD) pro párová srovnání</span>
+                            </li>
+                            <li class="algo-step">
+                                <span class="algo-step-num">4</span>
+                                <span class="algo-step-text">Výpočet effect size (η², Cohen's d)</span>
+                            </li>
+                        </ul>
+                        <div class="algo-formula">H₀: μ_fréza = μ_nefréza | α = 0.05</div>
+                    </div>
+                </div>
+                
+                <div class="algo-card animate-on-scroll">
+                    <div class="algo-header">
+                        <div class="algo-number">02</div>
+                        <div class="algo-title">Smíšené modely (LMM)</div>
+                    </div>
+                    <div class="algo-body">
+                        <p class="algo-purpose">Analýza opakovaných měření s náhodnými efekty pro plochy a jedince při respektování hierarchické struktury dat.</p>
+                        <ul class="algo-steps">
+                            <li class="algo-step">
+                                <span class="algo-step-num">1</span>
+                                <span class="algo-step-text">Definice fixních efektů: Varianta, Čas, Varianta×Čas</span>
+                            </li>
+                            <li class="algo-step">
+                                <span class="algo-step-num">2</span>
+                                <span class="algo-step-text">Definice náhodných efektů: (1|Lokalita/Plocha/Jedinec)</span>
+                            </li>
+                            <li class="algo-step">
+                                <span class="algo-step-num">3</span>
+                                <span class="algo-step-text">Výběr kovarianční struktury (AR1, CS) pro časové korelace</span>
+                            </li>
+                            <li class="algo-step">
+                                <span class="algo-step-num">4</span>
+                                <span class="algo-step-text">Model comparison pomocí AIC/BIC</span>
+                            </li>
+                        </ul>
+                        <div class="algo-formula">Y = Xβ + Zu + ε, kde u ~ N(0, G), ε ~ N(0, R)</div>
+                    </div>
+                </div>
+                
+                <div class="algo-card animate-on-scroll">
+                    <div class="algo-header">
+                        <div class="algo-number">03</div>
+                        <div class="algo-title">Korelační analýza</div>
+                    </div>
+                    <div class="algo-body">
+                        <p class="algo-purpose">Kvantifikace síly a směru vztahů mezi půdními parametry, dekompozicí a růstem sazenic.</p>
+                        <ul class="algo-steps">
+                            <li class="algo-step">
+                                <span class="algo-step-num">1</span>
+                                <span class="algo-step-text">Pearsonova korelace pro lineární vztahy (normální data)</span>
+                            </li>
+                            <li class="algo-step">
+                                <span class="algo-step-num">2</span>
+                                <span class="algo-step-text">Spearmanův koef. pro neparametrické nebo ordinální data</span>
+                            </li>
+                            <li class="algo-step">
+                                <span class="algo-step-num">3</span>
+                                <span class="algo-step-text">Parciální korelace pro kontrolu confounding proměnných</span>
+                            </li>
+                            <li class="algo-step">
+                                <span class="algo-step-num">4</span>
+                                <span class="algo-step-text">Korelační matice s Bonferroniho korekcí pro mnohočetné testování</span>
+                            </li>
+                        </ul>
+                        <div class="algo-formula">r = Σ(xi - x̄)(yi - ȳ) / √[Σ(xi - x̄)² × Σ(yi - ȳ)²]</div>
+                    </div>
+                </div>
+                
+                <div class="algo-card animate-on-scroll">
+                    <div class="algo-header">
+                        <div class="algo-number">04</div>
+                        <div class="algo-title">Path analýza (SEM)</div>
+                    </div>
+                    <div class="algo-body">
+                        <p class="algo-purpose">Testování kauzálních hypotéz a kvantifikace přímých/nepřímých efektů frézování na cílové proměnné.</p>
+                        <ul class="algo-steps">
+                            <li class="algo-step">
+                                <span class="algo-step-num">1</span>
+                                <span class="algo-step-text">Specifikace teoretického modelu na základě kauzální mapy</span>
+                            </li>
+                            <li class="algo-step">
+                                <span class="algo-step-num">2</span>
+                                <span class="algo-step-text">Estimace parametrů (ML, WLSMV pro nenormální data)</span>
+                            </li>
+                            <li class="algo-step">
+                                <span class="algo-step-num">3</span>
+                                <span class="algo-step-text">Hodnocení fit (χ², RMSEA, CFI, SRMR)</span>
+                            </li>
+                            <li class="algo-step">
+                                <span class="algo-step-num">4</span>
+                                <span class="algo-step-text">Dekompozice efektů: přímé, nepřímé, celkové</span>
+                            </li>
+                        </ul>
+                        <div class="algo-formula">Total effect = Direct effect + Σ(Indirect effects)</div>
+                    </div>
+                </div>
+                
+                <div class="algo-card animate-on-scroll">
+                    <div class="algo-header">
+                        <div class="algo-number">05</div>
+                        <div class="algo-title">Požární rizikový index</div>
+                    </div>
+                    <div class="algo-body">
+                        <p class="algo-purpose">Výpočet syntetického indexu požárního nebezpečí kombinující vlhkost paliva, objem CWD a meteorologické podmínky.</p>
+                        <ul class="algo-steps">
+                            <li class="algo-step">
+                                <span class="algo-step-num">1</span>
+                                <span class="algo-step-text">Standardizace vstupních proměnných (z-skóre nebo min-max)</span>
+                            </li>
+                            <li class="algo-step">
+                                <span class="algo-step-num">2</span>
+                                <span class="algo-step-text">Definice vah komponent na základě expertního odhadu/PCA</span>
+                            </li>
+                            <li class="algo-step">
+                                <span class="algo-step-num">3</span>
+                                <span class="algo-step-text">Kompozitní výpočet: FRI = w₁×(1-M) + w₂×V + w₃×T</span>
+                            </li>
+                            <li class="algo-step">
+                                <span class="algo-step-num">4</span>
+                                <span class="algo-step-text">Škálování na interval 0–1, validace proti skutečným událostem</span>
+                            </li>
+                        </ul>
+                        <div class="algo-formula">FRI = 0.4×(1-M_norm) + 0.35×V_norm + 0.25×T_norm</div>
+                    </div>
+                </div>
+                
+                <div class="algo-card animate-on-scroll">
+                    <div class="algo-header">
+                        <div class="algo-number">06</div>
+                        <div class="algo-title">Analýza časových řad</div>
+                    </div>
+                    <div class="algo-body">
+                        <p class="algo-purpose">Modelování růstových trajektorií sazenic a detekce trendů z časosběrných dat.</p>
+                        <ul class="algo-steps">
+                            <li class="algo-step">
+                                <span class="algo-step-num">1</span>
+                                <span class="algo-step-text">Dekompozice: trend + sezonní složka + reziduály</span>
+                            </li>
+                            <li class="algo-step">
+                                <span class="algo-step-num">2</span>
+                                <span class="algo-step-text">Nelineární růstové modely (Gompertz, logistický)</span>
+                            </li>
+                            <li class="algo-step">
+                                <span class="algo-step-num">3</span>
+                                <span class="algo-step-text">Porovnání parametrů růstu mezi variantami</span>
+                            </li>
+                            <li class="algo-step">
+                                <span class="algo-step-num">4</span>
+                                <span class="algo-step-text">Change-point detection pro identifikaci zlomových bodů</span>
+                            </li>
+                        </ul>
+                        <div class="algo-formula">Y(t) = K / (1 + exp(-r × (t - t₀)))</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Image Gallery Section -->
+    <section id="galerie">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-tag">10 / Multispektrální snímky</div>
+                <h2 class="section-title">Galerie snímků z monitoringu</h2>
+                <p class="section-subtitle">Ukázky RGB, NIR a CIR kompozitních snímků z experimentálních ploch</p>
+            </div>
+
+            <div class="gallery-grid">
+                <div class="gallery-card animate-on-scroll">
+                    <img src="assets/images/nir_comparison.jpg" alt="NIR porovnání - Plocha 1" onclick="openLightbox(this.src)">
+                    <div class="gallery-card-body">
+                        <div class="gallery-card-title">NIR porovnání – Plocha 1</div>
+                        <div class="gallery-card-desc">Porovnání blízkoinfračerveného snímku (850 nm) z kamery MAPIR Survey3W OCN. Zdravá vegetace reflektuje výrazně v NIR pásmu.</div>
+                        <span class="gallery-card-tag tag-nir">NIR 850 nm</span>
+                    </div>
+                </div>
+
+                <div class="gallery-card animate-on-scroll">
+                    <img src="assets/images/ndvi_vegetation.jpg" alt="NDVI vegetační analýza" onclick="openLightbox(this.src)">
+                    <div class="gallery-card-body">
+                        <div class="gallery-card-title">NDVI vegetační analýza</div>
+                        <div class="gallery-card-desc">Normalizovaný vegetační index (NDVI) vypočtený z NIR a červeného pásma. Vyšší hodnoty = zdravější vegetace.</div>
+                        <span class="gallery-card-tag tag-ndvi">NDVI</span>
+                    </div>
+                </div>
+
+                <div class="gallery-card animate-on-scroll">
+                    <img src="assets/images/cir_false_color.jpg" alt="CIR nepravé barvy - Plocha 1" onclick="openLightbox(this.src)">
+                    <div class="gallery-card-body">
+                        <div class="gallery-card-title">CIR nepravé barvy – Plocha 1</div>
+                        <div class="gallery-card-desc">Color-infrared (CIR) kompozit zobrazující vegetaci v červených tónech. Aktivní fotosyntéza se projevuje sytou červenou barvou.</div>
+                        <span class="gallery-card-tag tag-cir">CIR kompozit</span>
+                    </div>
+                </div>
+
+                <div class="gallery-card animate-on-scroll">
+                    <img src="assets/images/nir_comparison_plot2.jpg" alt="NIR porovnání - Plocha 2" onclick="openLightbox(this.src)">
+                    <div class="gallery-card-body">
+                        <div class="gallery-card-title">NIR porovnání – Plocha 2</div>
+                        <div class="gallery-card-desc">Blízkoinfračervený snímek druhé experimentální plochy pro srovnání vegetačního pokryvu mezi variantami.</div>
+                        <span class="gallery-card-tag tag-nir">NIR 850 nm</span>
+                    </div>
+                </div>
+
+                <div class="gallery-card animate-on-scroll">
+                    <img src="assets/images/ndvi_plot2.jpg" alt="NDVI - Plocha 2" onclick="openLightbox(this.src)">
+                    <div class="gallery-card-body">
+                        <div class="gallery-card-title">NDVI – Plocha 2</div>
+                        <div class="gallery-card-desc">NDVI analýza druhé plochy. Porovnání rozdílů ve vitalitě sazenic mezi frézovanými a nefrézovanými variantami.</div>
+                        <span class="gallery-card-tag tag-ndvi">NDVI</span>
+                    </div>
+                </div>
+
+                <div class="gallery-card animate-on-scroll">
+                    <img src="assets/images/cir_plot2.jpg" alt="CIR nepravé barvy - Plocha 2" onclick="openLightbox(this.src)">
+                    <div class="gallery-card-body">
+                        <div class="gallery-card-title">CIR nepravé barvy – Plocha 2</div>
+                        <div class="gallery-card-desc">CIR kompozit druhé experimentální plochy. Prostorový vzor vegetace odpovídá uspořádání výsadby.</div>
+                        <span class="gallery-card-tag tag-cir">CIR kompozit</span>
+                    </div>
+                </div>
+
+                <div class="gallery-card animate-on-scroll">
+                    <img src="assets/images/nir_comparison_plot3.jpg" alt="NIR porovnání - Plocha 3" onclick="openLightbox(this.src)">
+                    <div class="gallery-card-body">
+                        <div class="gallery-card-title">NIR porovnání – Plocha 3</div>
+                        <div class="gallery-card-desc">Třetí experimentální plocha v NIR pásmu. Slouží ke kalibraci a cross-validaci vegetačních indexů napříč lokalitami.</div>
+                        <span class="gallery-card-tag tag-nir">NIR 850 nm</span>
+                    </div>
+                </div>
+
+                <div class="gallery-card animate-on-scroll">
+                    <img src="assets/images/camera_coverage_analysis.png" alt="Analýza pokrytí kamerami" onclick="openLightbox(this.src)">
+                    <div class="gallery-card-body">
+                        <div class="gallery-card-title">Analýza pokrytí kamerami</div>
+                        <div class="gallery-card-desc">Vizualizace pokrytí experimentálních ploch časosběrnými kamerami Brinno TLC 2020 a MAPIR Survey3W OCN.</div>
+                        <span class="gallery-card-tag tag-coverage">Pokrytí</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Lightbox -->
+    <div class="lightbox-overlay" id="lightbox" onclick="closeLightbox()">
+        <button type="button" class="lightbox-close" onclick="closeLightbox()">&times;</button>
+        <img id="lightbox-img" src="" alt="Zvětšený snímek">
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-logo">🌲 Lesnický monitoring</div>
+            <p class="footer-text">Vliv frézování půdy po těžbě dřeva na růst a vývoj sazenic</p>
+            <p class="footer-text">Období realizace: leden 2026 – prosinec 2027</p>
+            <p class="footer-copy">© 2026 Výzkumný projekt | Dokumentace vytvořena pro účely lesnické praxe</p>
+        </div>
+    </footer>
+
+    <script>
+        // Tab functionality
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Remove active from all buttons
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                // Add active to clicked button
+                btn.classList.add('active');
+                
+                // Hide all tab contents
+                document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+                // Show selected tab content
+                const tabId = btn.getAttribute('data-tab');
+                document.getElementById(tabId).classList.add('active');
+            });
+        });
+
+        // Scroll animation
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.animate-on-scroll').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Smooth scroll for nav links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Add stagger animation delay to cards
+        document.querySelectorAll('.objectives-grid .objective-card').forEach((card, index) => {
+            card.style.transitionDelay = `${index * 0.1}s`;
+        });
+
+        document.querySelectorAll('.protocols-grid .protocol-card').forEach((card, index) => {
+            card.style.transitionDelay = `${index * 0.05}s`;
+        });
+
+        document.querySelectorAll('.risks-grid .risk-card').forEach((card, index) => {
+            card.style.transitionDelay = `${index * 0.1}s`;
+        });
+
+        document.querySelectorAll('.algo-cards .algo-card').forEach((card, index) => {
+            card.style.transitionDelay = `${index * 0.1}s`;
+        });
+
+        // ===== SATELLITE MAP =====
+        const centerLat = 49.363115490683654;
+        const centerLng = 14.298905871827733;
+
+        const polygonCoords = [
+            [49.365483090355454, 14.300742154163428],
+            [49.35997802431898, 14.30239942152552],
+            [49.3601114206073, 14.292426390953636],
+            [49.365400207948404, 14.292516156818191],
+            [49.365483090355454, 14.300742154163428]
+        ];
+
+        // Initialize Leaflet map with fractional zoom
+        const map = L.map('satellite-map', {
+            center: [centerLat, centerLng],
+            zoom: 16,
+            zoomSnap: 0.1,
+            zoomDelta: 0.1,
+            wheelPxPerZoomLevel: 120,
+            maxZoom: 23,
+            minZoom: 10
+        });
+
+        // ESRI World Imagery (Maxar) tile layer with overzoom
+        L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+            attribution: '&copy; Esri, Maxar, Earthstar Geographics',
+            maxZoom: 23,
+            maxNativeZoom: 19,
+            tileSize: 256
+        }).addTo(map);
+
+        // Add ESRI labels overlay
+        L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}', {
+            maxZoom: 23,
+            maxNativeZoom: 19,
+            opacity: 0.6
+        }).addTo(map);
+
+        // Draw polygon
+        const polygon = L.polygon(polygonCoords, {
+            color: '#8cb369',
+            weight: 3,
+            fillColor: '#8cb369',
+            fillOpacity: 0.2,
+            dashArray: '8, 4'
+        }).addTo(map);
+
+        // Center marker
+        const centerMarker = L.circleMarker([centerLat, centerLng], {
+            radius: 8,
+            fillColor: '#d4a574',
+            color: '#fff',
+            weight: 2,
+            fillOpacity: 1
+        }).addTo(map);
+
+        centerMarker.bindPopup(
+            '<div style="font-family: Source Sans 3, sans-serif; font-size: 14px;">' +
+            '<strong style="color: #1a2f1a;">Střed pozemků</strong><br>' +
+            '<span style="font-family: JetBrains Mono, monospace; font-size: 12px; color: #4a6741;">' +
+            '49.3631°N, 14.2989°E</span></div>'
+        );
+
+        polygon.bindPopup(
+            '<div style="font-family: Source Sans 3, sans-serif; font-size: 14px;">' +
+            '<strong style="color: #1a2f1a;">Polygon pokusných ploch</strong><br>' +
+            'Celková plocha experimentu<br>' +
+            '<span style="color: #4a6741;">9 lokalit × 3 replikace = 27 ploch</span></div>'
+        );
+
+        // Fit to polygon initially
+        map.fitBounds(polygon.getBounds().pad(0.15));
+
+        // Zoom display
+        const zoomDisplay = L.control({position: 'topright'});
+        zoomDisplay.onAdd = function() {
+            const div = L.DomUtil.create('div', 'zoom-display');
+            div.style.cssText = 'background: rgba(26,47,26,0.9); color: #f5f1e8; padding: 8px 14px; border-radius: 8px; font-family: JetBrains Mono, monospace; font-size: 13px; backdrop-filter: blur(10px);';
+            div.innerHTML = 'Zoom: ' + map.getZoom().toFixed(1);
+            return div;
+        };
+        zoomDisplay.addTo(map);
+
+        map.on('zoomend', function() {
+            document.querySelector('.zoom-display').innerHTML = 'Zoom: ' + map.getZoom().toFixed(1);
+        });
+
+        // Map control functions
+        function toggleView(btn, mode) {
+            document.querySelectorAll('.map-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            const container = document.getElementById('map3dContainer');
+            if (mode === 'flat') {
+                container.classList.add('flat-view');
+            } else {
+                container.classList.remove('flat-view');
+            }
+            // Invalidate map size after transform transition
+            setTimeout(() => map.invalidateSize(), 700);
+        }
+
+        function zoomToPolygon() {
+            map.fitBounds(polygon.getBounds().pad(0.05));
+        }
+
+        function zoomStep(delta) {
+            const currentZoom = map.getZoom();
+            const newZoom = Math.round((currentZoom + delta) * 10) / 10;
+            map.setZoom(Math.max(10, Math.min(23, newZoom)));
+        }
+
+        // Fix map rendering in perspective container
+        setTimeout(() => map.invalidateSize(), 500);
+
+        // Lightbox
+        function openLightbox(src) {
+            document.getElementById('lightbox-img').src = src;
+            document.getElementById('lightbox').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeLightbox() {
+            document.getElementById('lightbox').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') closeLightbox();
+        });
+    </script>
+</body>
+</html>
