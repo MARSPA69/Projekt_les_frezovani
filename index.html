@@ -1718,6 +1718,425 @@
                 height: 200px;
             }
         }
+
+        /* Pasportizace Section */
+        #pasportizace {
+            background: linear-gradient(180deg, var(--cream) 0%, var(--cream-dark) 100%);
+        }
+
+        .passport-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+            gap: 2rem;
+        }
+
+        .passport-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(26, 47, 26, 0.1);
+            transition: all 0.4s ease;
+        }
+
+        .passport-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 60px rgba(26, 47, 26, 0.15);
+        }
+
+        .passport-card-header {
+            padding: 1.5rem 2rem;
+            color: var(--cream);
+            position: relative;
+        }
+
+        .passport-card-header.freza {
+            background: linear-gradient(135deg, #2d6a3d 0%, #4a8a52 100%);
+        }
+
+        .passport-card-header.nefreza {
+            background: linear-gradient(135deg, var(--bark-brown) 0%, #7a5a3a 100%);
+        }
+
+        .passport-card-header.nova {
+            background: linear-gradient(135deg, var(--amber) 0%, #c49060 100%);
+            color: var(--forest-dark);
+        }
+
+        .passport-card-header h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.4rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .passport-card-header .passport-subtitle {
+            font-size: 0.9rem;
+            opacity: 0.85;
+        }
+
+        .passport-card-body {
+            padding: 1.5rem 2rem;
+        }
+
+        .passport-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.6rem 0;
+            border-bottom: 1px solid var(--cream-dark);
+            font-size: 0.92rem;
+        }
+
+        .passport-row:last-child {
+            border-bottom: none;
+        }
+
+        .passport-label {
+            color: var(--bark-light);
+            font-weight: 500;
+        }
+
+        .passport-value {
+            color: var(--forest-dark);
+            font-weight: 600;
+            text-align: right;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+        }
+
+        .passport-value.text {
+            font-family: 'Source Sans 3', sans-serif;
+            font-size: 0.92rem;
+        }
+
+        .elevation-bar {
+            display: flex;
+            align-items: flex-end;
+            gap: 4px;
+            height: 50px;
+            margin-top: 0.75rem;
+            padding-top: 0.5rem;
+        }
+
+        .elev-point {
+            flex: 1;
+            background: linear-gradient(180deg, var(--leaf-fresh) 0%, var(--moss) 100%);
+            border-radius: 4px 4px 0 0;
+            position: relative;
+            min-height: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .elev-point:hover {
+            opacity: 0.8;
+        }
+
+        .elev-point .elev-label {
+            position: absolute;
+            top: -18px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.65rem;
+            color: var(--bark-light);
+            white-space: nowrap;
+        }
+
+        .passport-elevation-section {
+            background: var(--cream);
+            border-radius: 10px;
+            padding: 1rem;
+            margin-top: 0.75rem;
+        }
+
+        .passport-elevation-title {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--moss);
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        /* Photo gallery tags */
+        .tag-freza-2022 { background: rgba(45, 106, 61, 0.15); color: #2d6a3d; }
+        .tag-nefreza-2022 { background: rgba(74, 55, 40, 0.15); color: var(--bark-brown); }
+        .tag-kombo-2026 { background: rgba(212, 165, 116, 0.15); color: #9a7040; }
+
+        /* Metodika Section */
+        #metodika {
+            background: var(--forest-deep);
+            color: var(--cream);
+        }
+
+        #metodika .section-tag {
+            color: var(--leaf-light);
+        }
+
+        #metodika .section-title {
+            color: var(--cream);
+        }
+
+        #metodika .section-subtitle {
+            color: var(--cream-dark);
+        }
+
+        .metodika-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 2rem;
+        }
+
+        .metodika-card {
+            background: var(--forest-dark);
+            border-radius: 16px;
+            padding: 2rem;
+            border: 1px solid var(--forest-mid);
+            transition: all 0.3s ease;
+        }
+
+        .metodika-card:hover {
+            border-color: var(--leaf-light);
+        }
+
+        .metodika-card h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.3rem;
+            color: var(--amber);
+            margin-bottom: 1rem;
+        }
+
+        .metodika-card p {
+            color: var(--cream-dark);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .metodika-card a {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--leaf-light);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            padding: 0.5rem 1rem;
+            background: var(--forest-deep);
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .metodika-card a:hover {
+            background: var(--moss);
+            color: var(--cream);
+        }
+
+        /* Equipment badges */
+        .equipment-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.3rem 0.8rem;
+            border-radius: 50px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            margin: 0.15rem;
+        }
+
+        .equip-tms { background: rgba(90, 143, 168, 0.2); color: var(--water); }
+        .equip-brinno { background: rgba(93, 138, 74, 0.2); color: var(--leaf-fresh); }
+        .equip-mapir { background: rgba(138, 58, 122, 0.2); color: #8a3a7a; }
+
+        /* Lag concept box */
+        .lag-concept-box {
+            background: linear-gradient(135deg, var(--forest-dark) 0%, var(--bark-brown) 100%);
+            border-radius: 16px;
+            padding: 2.5rem;
+            margin-top: 3rem;
+            border-left: 4px solid var(--amber);
+        }
+        .lag-concept-box h3 {
+            font-family: 'Playfair Display', serif;
+            color: var(--cream);
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+        }
+        .lag-concept-box p {
+            color: var(--cream-dark);
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+        .lag-scale {
+            display: flex;
+            gap: 1rem;
+            margin: 1.5rem 0;
+            flex-wrap: wrap;
+        }
+        .lag-item {
+            flex: 1;
+            min-width: 200px;
+            background: rgba(255,255,255,0.08);
+            border-radius: 12px;
+            padding: 1.2rem;
+            text-align: center;
+        }
+        .lag-item-days {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 0.3rem;
+        }
+        .lag-item-label {
+            font-size: 0.85rem;
+            color: var(--cream-dark);
+            margin-bottom: 0.3rem;
+        }
+        .lag-item-meaning {
+            font-size: 0.8rem;
+            font-style: italic;
+        }
+        .lag-good { border: 2px solid var(--leaf-light); }
+        .lag-good .lag-item-days { color: var(--leaf-light); }
+        .lag-good .lag-item-meaning { color: var(--leaf-light); }
+        .lag-typical { border: 2px solid var(--amber); }
+        .lag-typical .lag-item-days { color: var(--amber); }
+        .lag-typical .lag-item-meaning { color: var(--amber); }
+        .lag-problem { border: 2px solid var(--fire-warning); }
+        .lag-problem .lag-item-days { color: var(--fire-warning); }
+        .lag-problem .lag-item-meaning { color: var(--fire-warning); }
+
+        /* Hypotheses table */
+        .hypothesis-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        .hypothesis-card {
+            background: rgba(255,255,255,0.06);
+            border-radius: 12px;
+            padding: 1.5rem;
+            border-left: 4px solid var(--leaf-light);
+            transition: transform 0.3s ease;
+        }
+        .hypothesis-card:hover {
+            transform: translateY(-3px);
+        }
+        .hypothesis-id {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            color: var(--leaf-light);
+            font-weight: 700;
+            margin-bottom: 0.3rem;
+        }
+        .hypothesis-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.1rem;
+            color: var(--cream);
+            margin-bottom: 0.5rem;
+        }
+        .hypothesis-desc {
+            font-size: 0.9rem;
+            color: var(--cream-dark);
+            line-height: 1.6;
+            margin-bottom: 0.7rem;
+        }
+        .hypothesis-metric {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.78rem;
+            color: var(--amber);
+            background: rgba(212, 165, 116, 0.1);
+            padding: 0.3rem 0.6rem;
+            border-radius: 6px;
+            display: inline-block;
+        }
+
+        /* Glossary */
+        .glossary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+        .glossary-item {
+            background: rgba(255,255,255,0.06);
+            border-radius: 10px;
+            padding: 1.2rem;
+            display: flex;
+            gap: 1rem;
+            align-items: flex-start;
+        }
+        .glossary-term {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--amber);
+            background: rgba(212, 165, 116, 0.15);
+            padding: 0.3rem 0.6rem;
+            border-radius: 6px;
+            white-space: nowrap;
+            min-width: 60px;
+            text-align: center;
+        }
+        .glossary-def {
+            font-size: 0.9rem;
+            color: var(--cream-dark);
+            line-height: 1.5;
+        }
+
+        /* Measured params simplified */
+        .measured-params-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        .measured-param-card {
+            background: var(--cream);
+            border-radius: 12px;
+            padding: 1.5rem;
+            border-top: 3px solid var(--moss);
+        }
+        .measured-param-card h4 {
+            font-family: 'Playfair Display', serif;
+            color: var(--forest-dark);
+            margin-bottom: 0.5rem;
+        }
+        .measured-param-card p {
+            font-size: 0.9rem;
+            color: var(--bark-light);
+            line-height: 1.6;
+        }
+        .param-sensor-tag {
+            display: inline-block;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            margin-top: 0.5rem;
+        }
+        .sensor-tms { background: rgba(90, 143, 168, 0.15); color: var(--water); }
+        .sensor-brinno { background: rgba(93, 138, 74, 0.15); color: var(--leaf-fresh); }
+        .sensor-mapir { background: rgba(138, 58, 122, 0.15); color: #8a3a7a; }
+        .sensor-czu { background: rgba(212, 165, 116, 0.15); color: var(--amber); }
+
+        @media (max-width: 768px) {
+            .passport-grid {
+                grid-template-columns: 1fr;
+            }
+            .metodika-grid {
+                grid-template-columns: 1fr;
+            }
+            .lag-scale {
+                flex-direction: column;
+            }
+            .hypothesis-grid {
+                grid-template-columns: 1fr;
+            }
+            .glossary-grid {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
 </head>
 <body>
@@ -1732,17 +2151,16 @@
             </div>
             <ul class="nav-links">
                 <li><a href="#cile">Cíle</a></li>
-                <li><a href="#design">Design</a></li>
+                <li><a href="#design">Pozemky</a></li>
                 <li><a href="#mapa">Mapa</a></li>
+                <li><a href="#pasportizace">Pasportizace</a></li>
                 <li><a href="#monitoring">Monitoring</a></li>
-                <li><a href="#parametry">Parametry</a></li>
-                <li><a href="#kauzality">Kauzality</a></li>
+                <li><a href="#parametry">Co měříme</a></li>
+                <li><a href="#hypotezy">Hypotézy</a></li>
                 <li><a href="#harmonogram">Harmonogram</a></li>
-                <li><a href="#protokoly">Protokoly</a></li>
-                <li><a href="#rizika">Rizika</a></li>
-                <li><a href="#technologie">Technologie</a></li>
-                <li><a href="#algoritmy">Algoritmy</a></li>
-                <li><a href="#galerie">Galerie</a></li>
+                <li><a href="#galerie">Fotogalerie</a></li>
+                <li><a href="#metodika">Metodika</a></li>
+                <li><a href="#slovnicek">Slovníček</a></li>
             </ul>
         </div>
     </nav>
@@ -1765,23 +2183,23 @@
         <div class="hero-content">
             <div class="hero-badge">Výzkumný projekt 2026–2027</div>
             <h1>Vliv <span>frézování půdy</span> po těžbě dřeva na růst sazenic</h1>
-            <p class="hero-subtitle">Komplexní monitoring fyzikálně-mechanických a biologických vlastností lesní půdy, dekompozice dřevních zbytků a vitality výsadby</p>
+            <p class="hero-subtitle">Monitoring půdní teploty a vlhkosti (TMS senzory TOMST), časosběrná fotodokumentace (Brinno TLC 2020), NIR analýza vegetace (MAPIR Survey 3W) a sekvestrace uhlíku (ČZU Praha) na 4 testovacích pozemcích</p>
             <div class="hero-stats">
                 <div class="stat-item">
-                    <span class="stat-number">9</span>
-                    <span class="stat-label">Lokalit</span>
+                    <span class="stat-number">4</span>
+                    <span class="stat-label">Testovací pozemky</span>
                 </div>
                 <div class="stat-item">
-                    <span class="stat-number">27</span>
-                    <span class="stat-label">Ploch</span>
+                    <span class="stat-number">0.41</span>
+                    <span class="stat-label">ha celkem</span>
                 </div>
                 <div class="stat-item">
-                    <span class="stat-number">35+</span>
-                    <span class="stat-label">Parametrů</span>
+                    <span class="stat-number">8</span>
+                    <span class="stat-label">TMS senzorů</span>
                 </div>
                 <div class="stat-item">
                     <span class="stat-number">2</span>
-                    <span class="stat-label">Roky</span>
+                    <span class="stat-label">Roky (2026–2027)</span>
                 </div>
             </div>
         </div>
@@ -1791,58 +2209,58 @@
     <section id="cile">
         <div class="container">
             <div class="section-header">
-                <div class="section-tag">01 / Cíle projektu</div>
-                <h2 class="section-title">Výzkumné cíle a očekávané výstupy</h2>
-                <p class="section-subtitle">Projekt si klade za cíl systematicky ověřit přínosy frézování půdy pro obnovu lesa a snížení požárního rizika</p>
+                <div class="section-tag">01 / Proč měříme</div>
+                <h2 class="section-title">Co chceme zjistit a jak</h2>
+                <p class="section-subtitle">Náš monitorovací systém popisuje celý řetězec <strong>atmosféra → půda → rostlina</strong>. Každý senzor měří jinou část tohoto řetězce – teprve jejich kombinace umožňuje identifikovat příčiny změn, nikoli pouze symptomy.</p>
             </div>
-            
+
             <div class="objectives-grid">
                 <div class="objective-card animate-on-scroll">
                     <div class="objective-icon">
-                        <svg viewBox="0 0 24 24"><path d="M12,3L2,12H5V20H19V12H22L12,3M12,8.75A2.25,2.25 0 0,1 14.25,11A2.25,2.25 0 0,1 12,13.25A2.25,2.25 0 0,1 9.75,11A2.25,2.25 0 0,1 12,8.75M12,15C13.5,15 16.5,15.75 16.5,17.25V18H7.5V17.25C7.5,15.75 10.5,15 12,15Z"/></svg>
+                        <svg viewBox="0 0 24 24"><path d="M17,8C8,10 5.9,16.17 3.82,21.34L5.71,22L6.66,19.7C7.14,19.87 7.64,20 8,20C19,20 22,3 22,3C21,5 14,5.25 9,6.25C4,7.25 2,11.5 2,13.5C2,15.5 3.75,17.25 3.75,17.25C7,8 17,8 17,8Z"/></svg>
                     </div>
-                    <h3>Vliv na ujímání sazenic</h3>
-                    <p>Ověřit, zda frézování půdy po těžbě včetně zapravení těžebních zbytků vytváří příznivější podmínky pro ujímání, růst a vitalitu vysazených stromků.</p>
+                    <h3>NIR kamera (MAPIR Survey 3W)</h3>
+                    <p>Řekne nám: <strong>„Sazenici se daří / nedaří"</strong> – měří NDVI (zdravotní stav vegetace pomocí blízkého infračerveného světla). Ale neřekne proč – nevíme, zda je příčinou sucho, mráz, škůdce nebo něco jiného.</p>
                 </div>
-                
+
                 <div class="objective-card animate-on-scroll">
                     <div class="objective-icon">
-                        <svg viewBox="0 0 24 24"><path d="M11.99,2C6.47,2 2,6.48 2,12C2,17.52 6.47,22 11.99,22C17.52,22 22,17.52 22,12C22,6.48 17.52,2 11.99,2ZM18.92,8H15.97C15.65,6.75 15.19,5.55 14.59,4.44C16.43,5.07 17.96,6.35 18.92,8ZM12,4.04C12.83,5.24 13.48,6.57 13.91,8H10.09C10.52,6.57 11.17,5.24 12,4.04ZM4.26,14C4.1,13.36 4,12.69 4,12C4,11.31 4.1,10.64 4.26,10H7.64C7.56,10.66 7.5,11.32 7.5,12C7.5,12.68 7.56,13.34 7.64,14H4.26ZM5.08,16H8.03C8.35,17.25 8.81,18.45 9.41,19.56C7.57,18.93 6.04,17.66 5.08,16ZM8.03,8H5.08C6.04,6.34 7.57,5.07 9.41,4.44C8.81,5.55 8.35,6.75 8.03,8ZM12,19.96C11.17,18.76 10.52,17.43 10.09,16H13.91C13.48,17.43 12.83,18.76 12,19.96ZM14.34,14H9.66C9.57,13.34 9.5,12.68 9.5,12C9.5,11.32 9.57,10.65 9.66,10H14.34C14.43,10.65 14.5,11.32 14.5,12C14.5,12.68 14.43,13.34 14.34,14ZM14.59,19.56C15.19,18.45 15.65,17.25 15.97,16H18.92C17.96,17.65 16.43,18.93 14.59,19.56ZM16.36,14C16.44,13.34 16.5,12.68 16.5,12C16.5,11.32 16.44,10.66 16.36,10H19.74C19.9,10.64 20,11.31 20,12C20,12.69 19.9,13.36 19.74,14H16.36Z"/></svg>
+                        <svg viewBox="0 0 24 24"><path d="M19,3H14.82C14.4,1.84 13.3,1 12,1C10.7,1 9.6,1.84 9.18,3H5A2,2 0 0,0 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5A2,2 0 0,0 19,3M12,3A1,1 0 0,1 13,4A1,1 0 0,1 12,5A1,1 0 0,1 11,4A1,1 0 0,1 12,3Z"/></svg>
                     </div>
-                    <h3>Fyzikálně-mechanické vlastnosti</h3>
-                    <p>Porovnat klíčové parametry půdy (hutnost, pórovitost, infiltrace, penetrační odpor) mezi frézovanými a nefrézovanými plochami.</p>
+                    <h3>RGB kamera (Brinno TLC 2020)</h3>
+                    <p>Řekne nám: <strong>„Jak vegetace vypadá okem"</strong> – časosběrné snímky zachycují fenologii (zelenání, podzimní zbarvení), rozpad mulče po frézování, poměr zelené plochy vs. holé půdy a vizuální změny, které NIR nerozliší.</p>
                 </div>
-                
+
                 <div class="objective-card animate-on-scroll">
                     <div class="objective-icon">
-                        <svg viewBox="0 0 24 24"><path d="M6,22A3,3 0 0,1 3,19C3,18.4 3.18,17.84 3.5,17.37L9,7.81V6A1,1 0 0,1 8,5V4A2,2 0 0,1 10,2H14A2,2 0 0,1 16,4V5A1,1 0 0,1 15,6V7.81L20.5,17.37C20.82,17.84 21,18.4 21,19A3,3 0 0,1 18,22H6M5,19A1,1 0 0,0 6,20H18A1,1 0 0,0 19,19C19,18.79 18.93,18.59 18.82,18.43L16.53,14.47L14,17L8.93,11.93L5.18,18.43C5.07,18.59 5,18.79 5,19M13,10A1,1 0 0,0 12,11A1,1 0 0,0 13,12A1,1 0 0,0 14,11A1,1 0 0,0 13,10Z"/></svg>
+                        <svg viewBox="0 0 24 24"><path d="M12,3.25C12,3.25 6,10 6,14C6,17.32 8.69,20 12,20A6,6 0 0,0 18,14C18,10 12,3.25 12,3.25Z"/></svg>
                     </div>
-                    <h3>Biologické procesy</h3>
-                    <p>Sledovat mikrobiální aktivitu, dekompozici organické hmoty, kolonizaci dřevních zbytků houbami a bakteriemi a jejich vliv na tvorbu humusu.</p>
+                    <h3>Půdní vlhkost (TMS senzory)</h3>
+                    <p>Řekne nám: <strong>„Vody je dost / málo"</strong> – měří obsah vody v 10, 20 a 48 cm hloubce. Ale neřekne, jestli ji sazenice skutečně využívá. Můžeme mít VWC 25 % a sazenice stejně uschýná, protože kořeny do té hloubky nedosáhly.</p>
                 </div>
-                
+
                 <div class="objective-card animate-on-scroll">
                     <div class="objective-icon">
-                        <svg viewBox="0 0 24 24"><path d="M17.66 11.2C17.43 10.9 17.15 10.64 16.89 10.38C16.22 9.78 15.46 9.35 14.82 8.72C13.33 7.26 13 4.85 13.95 3C13 3.23 12.17 3.75 11.46 4.32C8.87 6.4 7.85 10.07 9.07 13.22C9.11 13.32 9.15 13.42 9.15 13.55C9.15 13.77 9 13.97 8.8 14.05C8.57 14.15 8.33 14.09 8.14 13.93C8.08 13.88 8.04 13.83 8 13.76C6.87 12.33 6.69 10.28 7.45 8.64C5.78 10 4.87 12.3 5 14.47C5.06 14.97 5.12 15.47 5.29 15.97C5.43 16.57 5.7 17.17 6 17.7C7.08 19.43 8.95 20.67 10.96 20.92C13.1 21.19 15.39 20.8 17.03 19.32C18.86 17.66 19.5 15 18.56 12.72L18.43 12.46C18.22 12 17.66 11.2 17.66 11.2M14.5 17.5C14.22 17.74 13.76 18 13.4 18.1C12.28 18.5 11.16 17.94 10.5 17.28C11.69 17 12.4 16.12 12.61 15.23C12.78 14.43 12.46 13.77 12.33 13C12.21 12.26 12.23 11.63 12.5 10.94C12.69 11.32 12.89 11.7 13.13 12C13.9 13 15.11 13.44 15.37 14.8C15.41 14.94 15.43 15.08 15.43 15.23C15.46 16.05 15.1 16.95 14.5 17.5H14.5Z"/></svg>
+                        <svg viewBox="0 0 24 24"><path d="M11.99,2C6.47,2 2,6.48 2,12C2,17.52 6.47,22 11.99,22C17.52,22 22,17.52 22,12C22,6.48 17.52,2 11.99,2ZM18.92,8H15.97C15.65,6.75 15.19,5.55 14.59,4.44C16.43,5.07 17.96,6.35 18.92,8ZM12,4.04C12.83,5.24 13.48,6.57 13.91,8H10.09C10.52,6.57 11.17,5.24 12,4.04Z"/></svg>
                     </div>
-                    <h3>Požární riziko</h3>
-                    <p>Kvantifikovat vliv frézování na snížení objemu suchého paliva a vytvořit syntetický požární rizikový index pro lesnickou praxi.</p>
+                    <h3>Půdní teplota (TMS senzory)</h3>
+                    <p>Řekne nám: <strong>„Podmínky pro růst kořenů existují / neexistují"</strong> – měří teplotu v půdním profilu a 10 cm nad zemí (přízemní mrazy). Ale neřekne, zda sazenice těch podmínek využívá.</p>
                 </div>
-                
-                <div class="objective-card animate-on-scroll">
-                    <div class="objective-icon">
-                        <svg viewBox="0 0 24 24"><path d="M19,3H14.82C14.4,1.84 13.3,1 12,1C10.7,1 9.6,1.84 9.18,3H5A2,2 0 0,0 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5A2,2 0 0,0 19,3M12,3A1,1 0 0,1 13,4A1,1 0 0,1 12,5A1,1 0 0,1 11,4A1,1 0 0,1 12,3M7,7H17V5H19V19H5V5H7V7M12,9C10.56,9 9.33,10.06 9.06,11.44C8.5,11.16 7.9,11 7.25,11A4.75,4.75 0 0,0 2.5,15.75V17H21.5V15.75A4.75,4.75 0 0,0 16.75,11C16.1,11 15.5,11.16 14.94,11.44C14.67,10.06 13.44,9 12,9Z"/></svg>
-                    </div>
-                    <h3>Časosběrná dokumentace</h3>
-                    <p>Pomocí automatických kamer dokumentovat dynamiku růstu sazenic a vizuálně porovnat vývoj vegetace mezi variantami.</p>
-                </div>
-                
-                <div class="objective-card animate-on-scroll">
-                    <div class="objective-icon">
+
+                <div class="objective-card animate-on-scroll" style="grid-column: 1 / -1; max-width: 900px; margin: 0 auto; border-left: 4px solid var(--amber);">
+                    <div class="objective-icon" style="background: linear-gradient(135deg, var(--amber) 0%, var(--bark-brown) 100%);">
                         <svg viewBox="0 0 24 24"><path d="M16,11.78L20.24,4.45L21.97,5.45L16.74,14.5L10.23,10.75L5.46,19H22V21H2V3H4V17.54L9.5,8L16,11.78Z"/></svg>
                     </div>
-                    <h3>Kauzální analýza</h3>
-                    <p>Statisticky ověřit vztahy mezi proměnnými a vytvořit kauzální mapu pro pochopení mechanismů působení frézování.</p>
+                    <h3>Kombinace všech senzorů = odpověď na „proč"</h3>
+                    <p>Teprve kombinace všech dat nám řekne: <em>„Na frézované ploše se půda na jaře ohřála o 10 dní dříve, vlhkost po dešti pronikla rychleji do 20 cm, a sazenice na to reagovaly měřitelným nárůstem NDVI o 0,08 oproti kontrolní ploše."</em> To je vědecky publikovatelný výsledek – zjistíme jak, o kolik a kde se liší frézovaná a nefrézovaná plocha.</p>
+                </div>
+
+                <div class="objective-card animate-on-scroll">
+                    <div class="objective-icon">
+                        <svg viewBox="0 0 24 24"><path d="M6,22A3,3 0 0,1 3,19C3,18.4 3.18,17.84 3.5,17.37L9,7.81V6A1,1 0 0,1 8,5V4A2,2 0 0,1 10,2H14A2,2 0 0,1 16,4V5A1,1 0 0,1 15,6V7.81L20.5,17.37C20.82,17.84 21,18.4 21,19A3,3 0 0,1 18,22H6M5,19A1,1 0 0,0 6,20H18A1,1 0 0,0 19,19C19,18.79 18.93,18.59 18.82,18.43L16.53,14.47L14,17L8.93,11.93L5.18,18.43C5.07,18.59 5,18.79 5,19Z"/></svg>
+                    </div>
+                    <h3>Sekvestrace uhlíku (ČZU Praha)</h3>
+                    <p>Odborníci z České zemědělské univerzity budou sledovat ukládání uhlíku v půdě na frézovaných vs. nefrézovaných plochách. Metodika bude upřesněna v dalších fázích projektu.</p>
                 </div>
             </div>
         </div>
@@ -1852,114 +2270,104 @@
     <section id="design">
         <div class="container">
             <div class="section-header">
-                <div class="section-tag">02 / Experimentální design</div>
-                <h2 class="section-title">Přehled pokusných ploch</h2>
-                <p class="section-subtitle">Monitoring zahrnuje 9 lokalit s různým stářím výsadby a způsobem přípravy půdy, každá ve třech replikacích</p>
+                <div class="section-tag">02 / Testovací pozemky</div>
+                <h2 class="section-title">Přehled 4 testovacích pozemků</h2>
+                <p class="section-subtitle">Projekt pracuje se 4 reálnými pozemky v oblasti Podolí I – 2 pozemky frézované/zalesněné v roce 2022 a 2 pozemky připravované k frézování na jaře 2026</p>
             </div>
-            
+
             <div class="plots-table-wrapper">
                 <table class="plots-table">
                     <thead>
                         <tr>
-                            <th>Lokalita</th>
+                            <th>Porost</th>
                             <th>Varianta</th>
-                            <th>Věk od výsadby (roky k 1.1.2026)</th>
-                            <th>Rozměr plochy</th>
-                            <th>Replikace</th>
+                            <th>Rok frézování</th>
+                            <th>Plocha (ha)</th>
+                            <th>Vysazené dřeviny</th>
+                            <th>Typ půdy</th>
+                            <th>LVS / HS</th>
+                            <th>Senzory</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <td><strong>L1</strong></td>
-                            <td><span class="variant-badge variant-freza">Fréza</span></td>
-                            <td>4</td>
-                            <td>30 × 30 m</td>
-                            <td>3</td>
+                            <td><strong>41Ca0</strong></td>
+                            <td><span class="variant-badge variant-freza">Frézovaný 2022</span></td>
+                            <td>12. 2. 2022</td>
+                            <td>0.190</td>
+                            <td>Dub (230 ks), Modřín (495 ks)</td>
+                            <td>3K4</td>
+                            <td>3 / 433</td>
+                            <td>
+                                <span class="equipment-badge equip-tms">TMS std</span>
+                                <span class="equipment-badge equip-tms">TMS 48cm</span>
+                                <span class="equipment-badge equip-brinno">Brinno</span>
+                                <span class="equipment-badge equip-mapir">MAPIR</span>
+                            </td>
                         </tr>
                         <tr>
-                            <td><strong>L2</strong></td>
-                            <td><span class="variant-badge variant-nefreza">Nefréza</span></td>
-                            <td>4</td>
-                            <td>30 × 30 m</td>
-                            <td>3</td>
+                            <td><strong>41Ka0</strong></td>
+                            <td><span class="variant-badge variant-nefreza">Zalesněný 2022</span></td>
+                            <td>2022</td>
+                            <td>0.149</td>
+                            <td>Dub (1070 ks), Modřín (60 ks)</td>
+                            <td>3K4</td>
+                            <td>4 / 471</td>
+                            <td>
+                                <span class="equipment-badge equip-tms">TMS std</span>
+                                <span class="equipment-badge equip-tms">TMS 48cm</span>
+                                <span class="equipment-badge equip-brinno">Brinno</span>
+                                <span class="equipment-badge equip-mapir">MAPIR</span>
+                            </td>
                         </tr>
                         <tr>
-                            <td><strong>L3</strong></td>
-                            <td><span class="variant-badge variant-freza">Fréza</span></td>
-                            <td>3</td>
-                            <td>30 × 30 m</td>
-                            <td>3</td>
+                            <td><strong>41Ca8</strong></td>
+                            <td><span class="variant-badge variant-nova">Fréza jaro 2026</span></td>
+                            <td>Jaro 2026</td>
+                            <td rowspan="2">0.076</td>
+                            <td rowspan="2">Dosud nevysazeno</td>
+                            <td>3K4</td>
+                            <td>3 / 433</td>
+                            <td rowspan="2">
+                                <span class="equipment-badge equip-tms">TMS std</span>
+                                <span class="equipment-badge equip-tms">TMS 48cm</span>
+                            </td>
                         </tr>
                         <tr>
-                            <td><strong>L4</strong></td>
-                            <td><span class="variant-badge variant-nefreza">Nefréza</span></td>
-                            <td>3</td>
-                            <td>30 × 30 m</td>
-                            <td>3</td>
-                        </tr>
-                        <tr>
-                            <td><strong>L5</strong></td>
-                            <td><span class="variant-badge variant-freza">Fréza</span></td>
-                            <td>2</td>
-                            <td>20 × 20 m</td>
-                            <td>3</td>
-                        </tr>
-                        <tr>
-                            <td><strong>L6</strong></td>
-                            <td><span class="variant-badge variant-nefreza">Nefréza</span></td>
-                            <td>2</td>
-                            <td>20 × 20 m</td>
-                            <td>3</td>
-                        </tr>
-                        <tr>
-                            <td><strong>L7</strong></td>
-                            <td><span class="variant-badge variant-freza">Fréza</span></td>
-                            <td>1</td>
-                            <td>20 × 20 m</td>
-                            <td>3</td>
-                        </tr>
-                        <tr>
-                            <td><strong>L8</strong></td>
-                            <td><span class="variant-badge variant-nefreza">Nefréza</span></td>
-                            <td>1</td>
-                            <td>20 × 20 m</td>
-                            <td>3</td>
-                        </tr>
-                        <tr>
-                            <td><strong>L9</strong></td>
-                            <td><span class="variant-badge variant-nova">Nová frézace + výsadba (leden 2026)</span></td>
-                            <td>0</td>
-                            <td>30 × 30 m</td>
-                            <td>3</td>
+                            <td><strong>41La7</strong></td>
+                            <td><span class="variant-badge variant-nefreza">Nefrézováno 2026</span></td>
+                            <td>–</td>
+                            <td>3K2</td>
+                            <td>3 / 433</td>
                         </tr>
                     </tbody>
                 </table>
             </div>
-            
+
             <div class="design-features">
                 <div class="feature-box">
-                    <div class="feature-box-value">400+ m²</div>
-                    <div class="feature-box-label">Minimální plocha na variantu</div>
+                    <div class="feature-box-value">0.415 ha</div>
+                    <div class="feature-box-label">Celková plocha pozemků</div>
                 </div>
                 <div class="feature-box">
-                    <div class="feature-box-value">5 × 5 m</div>
-                    <div class="feature-box-label">Vzorkovací rastr</div>
+                    <div class="feature-box-value">8 senzorů</div>
+                    <div class="feature-box-label">TMS (standard + long 48 cm)</div>
                 </div>
                 <div class="feature-box">
-                    <div class="feature-box-value">10+</div>
-                    <div class="feature-box-label">Vzorkovacích bodů na plochu</div>
+                    <div class="feature-box-value">2 kamery</div>
+                    <div class="feature-box-label">Brinno TLC 2020 (pozemky 2022)</div>
                 </div>
                 <div class="feature-box">
-                    <div class="feature-box-value">2× ročně</div>
-                    <div class="feature-box-label">Frekvence půdních měření</div>
+                    <div class="feature-box-value">2 kamery</div>
+                    <div class="feature-box-label">MAPIR Survey 3W NIR (pozemky 2022)</div>
                 </div>
                 <div class="feature-box">
-                    <div class="feature-box-value">1× měsíčně</div>
-                    <div class="feature-box-label">Měření sazenic (duben–říjen)</div>
+                    <div class="feature-box-value">Kůrovec</div>
+                    <div class="feature-box-label">Důvod obnovy u všech pozemků</div>
                 </div>
                 <div class="feature-box">
-                    <div class="feature-box-value">1 snímek/h</div>
-                    <div class="feature-box-label">Časosběrné kamery</div>
+                    <div class="feature-box-value">ČZU Praha</div>
+                    <div class="feature-box-label">Sekvestrace uhlíku v půdě</div>
                 </div>
             </div>
         </div>
@@ -1970,8 +2378,8 @@
         <div class="container">
             <div class="section-header">
                 <div class="section-tag">02b / Lokalizace</div>
-                <h2 class="section-title">Satelitní mapa experimentálních ploch</h2>
-                <p class="section-subtitle">ESRI Maxar World Imagery – polygon pokusných ploch s vysokým rozlišením</p>
+                <h2 class="section-title">Satelitní mapa testovacích pozemků</h2>
+                <p class="section-subtitle">ESRI Maxar World Imagery – GPS polygony 4 testovacích pozemků s vyznačenými rohy a nadmořskými výškami</p>
             </div>
 
             <div class="map-wrapper">
@@ -1983,40 +2391,246 @@
             </div>
 
             <div class="map-controls">
-                <button class="map-btn active" onclick="toggleView(this, 'perspective')" title="Semi-3D pohled">🗺️ Semi-3D pohled</button>
-                <button class="map-btn" onclick="toggleView(this, 'flat')" title="Plochý pohled">📐 Plochý pohled</button>
-                <button class="map-btn" onclick="zoomToPolygon()" title="Zoom na polygon">🔍 Zoom na polygon</button>
-                <button class="map-btn" onclick="zoomStep(-0.1)" title="Zoom out">➖ Zoom −0.1</button>
-                <button class="map-btn" onclick="zoomStep(+0.1)" title="Zoom in">➕ Zoom +0.1</button>
+                <button type="button" class="map-btn active" onclick="toggleView(this, 'perspective')" title="Semi-3D pohled">Semi-3D pohled</button>
+                <button type="button" class="map-btn" onclick="toggleView(this, 'flat')" title="Plochý pohled">Plochý pohled</button>
+                <button type="button" class="map-btn" onclick="zoomToPlot('all')" title="Zobrazit vše">Zobrazit vše</button>
+                <button type="button" class="map-btn" onclick="zoomToPlot('41Ca0')" title="41Ca0">41Ca0</button>
+                <button type="button" class="map-btn" onclick="zoomToPlot('41Ka0')" title="41Ka0">41Ka0</button>
+                <button type="button" class="map-btn" onclick="zoomToPlot('41Ca8')" title="41Ca8/41La7">41Ca8/La7</button>
             </div>
 
             <div class="map-legend">
                 <div class="legend-item">
-                    <div class="legend-color" style="background: rgba(140, 179, 105, 0.5); border: 2px solid #8cb369;"></div>
-                    <span>Polygon pokusných ploch</span>
+                    <div class="legend-color" style="background: rgba(220, 50, 50, 0.3); border: 2px solid #dc3232;"></div>
+                    <span>41Ca0 – Frézovaný 2022</span>
                 </div>
                 <div class="legend-item">
-                    <div class="legend-color" style="background: #d4a574; border-radius: 50%;"></div>
-                    <span>Střed pozemků</span>
+                    <div class="legend-color" style="background: rgba(50, 120, 220, 0.3); border: 2px solid #3278dc;"></div>
+                    <span>41Ka0 – Zalesněný 2022</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: rgba(220, 165, 50, 0.3); border: 2px solid #dca532;"></div>
+                    <span>41Ca8/41La7 – Jaro 2026</span>
                 </div>
             </div>
 
             <div class="map-info-grid">
                 <div class="map-info-card">
-                    <div class="map-info-value">49.3631°N, 14.2989°E</div>
-                    <div class="map-info-label">GPS střed pozemků</div>
+                    <div class="map-info-value">41Ca0: 0.190 ha</div>
+                    <div class="map-info-label">Frézovaný 2022 | 466–470 m n.m.</div>
                 </div>
                 <div class="map-info-card">
-                    <div class="map-info-value">~8.5 ha</div>
-                    <div class="map-info-label">Celková plocha polygonu</div>
+                    <div class="map-info-value">41Ka0: 0.149 ha</div>
+                    <div class="map-info-label">Zalesněný 2022 | 485–491 m n.m.</div>
                 </div>
                 <div class="map-info-card">
-                    <div class="map-info-value">Zoom 19–23</div>
-                    <div class="map-info-label">Rozsah přiblížení (krok 0.1)</div>
+                    <div class="map-info-value">41Ca8/La7: 0.076 ha</div>
+                    <div class="map-info-label">Připravovaný 2026 | 465–471 m n.m.</div>
                 </div>
                 <div class="map-info-card">
-                    <div class="map-info-value">ESRI Maxar</div>
-                    <div class="map-info-label">Satelitní podklad</div>
+                    <div class="map-info-value">Celkem: 0.415 ha</div>
+                    <div class="map-info-label">ESRI Maxar satelitní podklad</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pasportizace Section -->
+    <section id="pasportizace">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-tag">02c / Pasportizace pozemků</div>
+                <h2 class="section-title">Detailní popis testovacích pozemků</h2>
+                <p class="section-subtitle">GPS souřadnice rohů, nadmořské výšky, typ půdy, předchozí porost a způsob obnovy</p>
+            </div>
+
+            <div class="passport-grid">
+                <!-- 41Ca0 -->
+                <div class="passport-card animate-on-scroll">
+                    <div class="passport-card-header freza">
+                        <h3>41Ca0 – Frézovaný pozemek</h3>
+                        <div class="passport-subtitle">Frézováno 12. 2. 2022 | Zalesněno 2022</div>
+                    </div>
+                    <div class="passport-card-body">
+                        <div class="passport-row">
+                            <span class="passport-label">Plocha</span>
+                            <span class="passport-value">0.190 ha (1 900 m²)</span>
+                        </div>
+                        <div class="passport-row">
+                            <span class="passport-label">Vysazené dřeviny</span>
+                            <span class="passport-value text">Dub (230 ks) + Modřín (495 ks)</span>
+                        </div>
+                        <div class="passport-row">
+                            <span class="passport-label">Typ půdy</span>
+                            <span class="passport-value">3K4</span>
+                        </div>
+                        <div class="passport-row">
+                            <span class="passport-label">LVS / HS</span>
+                            <span class="passport-value">3 / 433</span>
+                        </div>
+                        <div class="passport-row">
+                            <span class="passport-label">Předchozí porost</span>
+                            <span class="passport-value text">BO 55%, SM 45% (věk 93 let)</span>
+                        </div>
+                        <div class="passport-row">
+                            <span class="passport-label">Důvod obnovy</span>
+                            <span class="passport-value text">Kůrovcová kalamita</span>
+                        </div>
+                        <div class="passport-row">
+                            <span class="passport-label">Senzory</span>
+                            <span class="passport-value text">TMS std + TMS 48cm + Brinno + MAPIR</span>
+                        </div>
+                        <div class="passport-elevation-section">
+                            <div class="passport-elevation-title">Nadmořská výška rohů</div>
+                            <div class="elevation-bar">
+                                <div class="elev-point" style="height: 20%"><span class="elev-label">466 m</span></div>
+                                <div class="elev-point" style="height: 60%"><span class="elev-label">468 m</span></div>
+                                <div class="elev-point" style="height: 100%"><span class="elev-label">470 m</span></div>
+                                <div class="elev-point" style="height: 20%"><span class="elev-label">466 m</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 41Ka0 -->
+                <div class="passport-card animate-on-scroll">
+                    <div class="passport-card-header nefreza">
+                        <h3>41Ka0 – Zalesněný pozemek</h3>
+                        <div class="passport-subtitle">Zalesněno 2022 | Bez frézování</div>
+                    </div>
+                    <div class="passport-card-body">
+                        <div class="passport-row">
+                            <span class="passport-label">Plocha</span>
+                            <span class="passport-value">0.149 ha (1 489 m²)</span>
+                        </div>
+                        <div class="passport-row">
+                            <span class="passport-label">Vysazené dřeviny</span>
+                            <span class="passport-value text">Dub (1 070 ks) + Modřín (60 ks)</span>
+                        </div>
+                        <div class="passport-row">
+                            <span class="passport-label">Typ půdy</span>
+                            <span class="passport-value">3K4</span>
+                        </div>
+                        <div class="passport-row">
+                            <span class="passport-label">LVS / HS</span>
+                            <span class="passport-value">4 / 471</span>
+                        </div>
+                        <div class="passport-row">
+                            <span class="passport-label">Předchozí porost</span>
+                            <span class="passport-value text">SM 75%, DB 10%, OL 10%, OS 10% (33 let)</span>
+                        </div>
+                        <div class="passport-row">
+                            <span class="passport-label">Důvod obnovy</span>
+                            <span class="passport-value text">Kůrovcová kalamita</span>
+                        </div>
+                        <div class="passport-row">
+                            <span class="passport-label">Senzory</span>
+                            <span class="passport-value text">TMS std + TMS 48cm + Brinno + MAPIR</span>
+                        </div>
+                        <div class="passport-elevation-section">
+                            <div class="passport-elevation-title">Nadmořská výška rohů</div>
+                            <div class="elevation-bar">
+                                <div class="elev-point" style="height: 17%"><span class="elev-label">486 m</span></div>
+                                <div class="elev-point" style="height: 0%"><span class="elev-label">485 m</span></div>
+                                <div class="elev-point" style="height: 0%"><span class="elev-label">485 m</span></div>
+                                <div class="elev-point" style="height: 100%"><span class="elev-label">491 m</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 41Ca8 -->
+                <div class="passport-card animate-on-scroll">
+                    <div class="passport-card-header nova">
+                        <h3>41Ca8 – Frézování jaro 2026</h3>
+                        <div class="passport-subtitle">Připraveno k frézování | Část společného pozemku</div>
+                    </div>
+                    <div class="passport-card-body">
+                        <div class="passport-row">
+                            <span class="passport-label">Sdílená plocha</span>
+                            <span class="passport-value">0.076 ha (759 m²)</span>
+                        </div>
+                        <div class="passport-row">
+                            <span class="passport-label">Výsadba</span>
+                            <span class="passport-value text">Dosud neproběhla</span>
+                        </div>
+                        <div class="passport-row">
+                            <span class="passport-label">Typ půdy</span>
+                            <span class="passport-value">3K4</span>
+                        </div>
+                        <div class="passport-row">
+                            <span class="passport-label">LVS / HS</span>
+                            <span class="passport-value">3 / 433</span>
+                        </div>
+                        <div class="passport-row">
+                            <span class="passport-label">Předchozí porost</span>
+                            <span class="passport-value text">SM 45%, BO 55% (věk 67 let)</span>
+                        </div>
+                        <div class="passport-row">
+                            <span class="passport-label">Důvod obnovy</span>
+                            <span class="passport-value text">Kůrovcová kalamita</span>
+                        </div>
+                        <div class="passport-row">
+                            <span class="passport-label">Senzory</span>
+                            <span class="passport-value text">TMS std + TMS 48cm</span>
+                        </div>
+                        <div class="passport-elevation-section">
+                            <div class="passport-elevation-title">Nadmořská výška rohů</div>
+                            <div class="elevation-bar">
+                                <div class="elev-point" style="height: 33%"><span class="elev-label">467 m</span></div>
+                                <div class="elev-point" style="height: 67%"><span class="elev-label">469 m</span></div>
+                                <div class="elev-point" style="height: 100%"><span class="elev-label">471 m</span></div>
+                                <div class="elev-point" style="height: 0%"><span class="elev-label">465 m</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 41La7 -->
+                <div class="passport-card animate-on-scroll">
+                    <div class="passport-card-header nefreza">
+                        <h3>41La7 – Kontrola (bez frézy)</h3>
+                        <div class="passport-subtitle">Sdílený pozemek s 41Ca8 | Nefrézovaná část</div>
+                    </div>
+                    <div class="passport-card-body">
+                        <div class="passport-row">
+                            <span class="passport-label">Sdílená plocha</span>
+                            <span class="passport-value">0.076 ha (759 m²)</span>
+                        </div>
+                        <div class="passport-row">
+                            <span class="passport-label">Výsadba</span>
+                            <span class="passport-value text">Dosud neproběhla</span>
+                        </div>
+                        <div class="passport-row">
+                            <span class="passport-label">Typ půdy</span>
+                            <span class="passport-value">3K2</span>
+                        </div>
+                        <div class="passport-row">
+                            <span class="passport-label">LVS / HS</span>
+                            <span class="passport-value">3 / 433</span>
+                        </div>
+                        <div class="passport-row">
+                            <span class="passport-label">Předchozí porost</span>
+                            <span class="passport-value text">SM 45%, BO 55% (věk 67 let)</span>
+                        </div>
+                        <div class="passport-row">
+                            <span class="passport-label">Důvod obnovy</span>
+                            <span class="passport-value text">Kůrovcová kalamita</span>
+                        </div>
+                        <div class="passport-row">
+                            <span class="passport-label">Senzory</span>
+                            <span class="passport-value text">TMS std + TMS 48cm</span>
+                        </div>
+                        <div class="passport-elevation-section">
+                            <div class="passport-elevation-title">Nadmořská výška</div>
+                            <div class="elevation-bar">
+                                <div class="elev-point" style="height: 33%"><span class="elev-label">467 m</span></div>
+                                <div class="elev-point" style="height: 67%"><span class="elev-label">469 m</span></div>
+                                <div class="elev-point" style="height: 100%"><span class="elev-label">471 m</span></div>
+                                <div class="elev-point" style="height: 0%"><span class="elev-label">465 m</span></div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -2026,30 +2640,30 @@
     <section id="monitoring">
         <div class="container">
             <div class="section-header">
-                <div class="section-tag">02c / Měřicí technologie</div>
-                <h2 class="section-title">Multispektrální monitorovací systém</h2>
-                <p class="section-subtitle">Čtyřvrstvá architektura: RGB časosběr (Brinno TLC 2020) + NIR kamera (MAPIR Survey3W OCN) + půdní senzory vlhkosti a teploty</p>
+                <div class="section-tag">03 / Měřicí technologie</div>
+                <h2 class="section-title">Monitorovací systém</h2>
+                <p class="section-subtitle">Třívrstvá architektura: půdní senzory TOMST TMS (standard + long 48 cm) na všech pozemcích, RGB kamery Brinno TLC 2020 a NIR kamery MAPIR Survey 3W na pozemcích 2022</p>
             </div>
 
             <!-- Architecture diagram -->
             <div class="monitoring-arch animate-on-scroll">
                 <div class="arch-layer">
+                    <div class="arch-layer-icon">🌡️</div>
+                    <div class="arch-layer-title">Půdní senzory TMS</div>
+                    <div class="arch-layer-device">TOMST TMS standard + TMS long 48 cm</div>
+                    <div class="arch-layer-desc">2 senzory na pozemek (8 celkem). TMS standard: teplota ve 3 hloubkách + vlhkost. TMS long 48 cm: hloubkový profil teploty a vlhkosti. Kontinuální záznam na všech 4 pozemcích.</div>
+                </div>
+                <div class="arch-layer">
                     <div class="arch-layer-icon">📷</div>
-                    <div class="arch-layer-title">RGB vrstva</div>
+                    <div class="arch-layer-title">RGB časosběr</div>
                     <div class="arch-layer-device">Brinno TLC 2020</div>
-                    <div class="arch-layer-desc">Časosběrné RGB snímky pro extrakci vegetačních indexů (GCC, RCC, ExG, VARI, GLI, RGBVI). Fenologický monitoring a povrchová dynamika půdy.</div>
+                    <div class="arch-layer-desc">Časosběrné RGB snímky pro fenologický monitoring a extrakci vegetačních indexů (GCC, ExG, VARI). Instalace pouze na pozemcích 2022 (41Ca0, 41Ka0).</div>
                 </div>
                 <div class="arch-layer">
                     <div class="arch-layer-icon">🛰️</div>
-                    <div class="arch-layer-title">NIR vrstva</div>
-                    <div class="arch-layer-device">MAPIR Survey3W OCN</div>
-                    <div class="arch-layer-desc">Blízkoinfračervená kamera (850 nm) pro výpočet NDVI. Konfigurce Orange/Cyan/NIR pro fyziologickou detekci stresu.</div>
-                </div>
-                <div class="arch-layer">
-                    <div class="arch-layer-icon">🌡️</div>
-                    <div class="arch-layer-title">Půdní senzory</div>
-                    <div class="arch-layer-device">VWC + T @ 10/20/60 cm</div>
-                    <div class="arch-layer-desc">Kontinuální monitoring vlhkosti (VWC) a teploty v hloubkách 10, 20 a 60 cm + povrchová teplota 10 cm nad půdou.</div>
+                    <div class="arch-layer-title">NIR kamera</div>
+                    <div class="arch-layer-device">MAPIR Survey 3W</div>
+                    <div class="arch-layer-desc">Blízkoinfračervená kamera pro výpočet NDVI a detekci fyziologického stresu. Instalace pouze na pozemcích 2022 (41Ca0, 41Ka0).</div>
                 </div>
             </div>
 
@@ -2156,6 +2770,32 @@
                     Hypotéza: Sazenice na frézované ploše budou mít kratší lag VWC→NDVI (lepší kontakt kořenů s minerální půdou)
                 </p>
             </div>
+
+            <!-- Lag Concept -->
+            <div class="lag-concept-box animate-on-scroll">
+                <h3>Časové zpoždění (LAG) – klíč k interpretaci</h3>
+                <p>Nejdůležitější koncept celé metodiky: <strong>NDVI nereaguje na půdní podmínky okamžitě</strong>. Mezi změnou vlhkosti nebo teploty v půdě a viditelnou reakcí vegetace (NDVI) uplyne vždy nějaký čas – tzv. <strong>lag</strong>. Měříme ho ve dnech pomocí cross-korelace mezi časovou řadou VWC (vlhkost) a NDVI.</p>
+                <p>Délka lagu nám říká, jak dobře je sazenice propojena s půdou – tedy jak rychle dokáže reagovat na dostupnou vodu.</p>
+                <div class="lag-scale">
+                    <div class="lag-item lag-good">
+                        <div class="lag-item-days">1–3 dny</div>
+                        <div class="lag-item-label">Krátký lag</div>
+                        <div class="lag-item-meaning">Výborné zakořenění, kořeny v kontaktu s vodou</div>
+                    </div>
+                    <div class="lag-item lag-typical">
+                        <div class="lag-item-days">3–14 dnů</div>
+                        <div class="lag-item-label">Typický lag</div>
+                        <div class="lag-item-meaning">Normální pro mladé 1–2leté sazenice</div>
+                    </div>
+                    <div class="lag-item lag-problem">
+                        <div class="lag-item-days">&gt; 14 dnů</div>
+                        <div class="lag-item-label">Dlouhý lag</div>
+                        <div class="lag-item-meaning">Slabé zakořenění, riziko stresu při suchu</div>
+                    </div>
+                </div>
+                <p style="font-size: 0.9rem; color: var(--leaf-light);">Hlavní hypotéza: Sazenice na frézované ploše budou mít kratší lag (1–5 dnů) než na nefrézované (7–14 dnů), protože frézování vytváří lepší kontakt kořenů s minerální půdou a zlepšuje infiltraci vody do kořenové zóny.</p>
+                <p style="font-size: 0.85rem;">Pokud lag pro VWC(10 cm) klesne a lag pro VWC(20 cm) se začne zkracovat, znamená to, že kořeny prorůstají hlouběji – sazenice je dobře zakořeněná.</p>
+            </div>
         </div>
     </section>
 
@@ -2163,449 +2803,114 @@
     <section id="parametry">
         <div class="container">
             <div class="section-header">
-                <div class="section-tag">03 / Monitorované parametry</div>
-                <h2 class="section-title">Komplexní sada měřených ukazatelů</h2>
-                <p class="section-subtitle">Projekt sleduje fyzikálně-mechanické vlastnosti půdy, stav dřevních zbytků a vývoj sazenic</p>
+                <div class="section-tag">03 / Co měříme</div>
+                <h2 class="section-title">Měřené veličiny a jejich význam</h2>
+                <p class="section-subtitle">Kontinuální automatický monitoring pomocí TMS senzorů a kamer. Každá veličina odpovídá na konkrétní otázku o stavu půdy a sazenic.</p>
             </div>
-            
-            <div class="tabs-container">
-                <div class="tabs">
-                    <button class="tab-btn active" data-tab="puda">Parametry půdy</button>
-                    <button class="tab-btn" data-tab="zbytky">Dřevní zbytky</button>
-                    <button class="tab-btn" data-tab="sazenice">Sazenice</button>
+
+            <div class="measured-params-grid">
+                <div class="measured-param-card animate-on-scroll">
+                    <h4>Teplota půdy (3 hloubky)</h4>
+                    <p>TMS standard měří teplotu v hloubkách +10 cm (vzduch u země), −10 cm a −20 cm. Ukazuje, kdy na jaře začnou podmínky pro růst kořenů (prahová teplota ~5–8 °C) a kdy hrozí přízemní mrazy.</p>
+                    <span class="param-sensor-tag sensor-tms">TMS standard</span>
                 </div>
-                
-                <!-- Půda Tab -->
-                <div class="tab-content active" id="puda">
-                    <div class="params-table-wrapper">
-                        <table class="params-table">
-                            <thead>
-                                <tr>
-                                    <th>Parametr</th>
-                                    <th>Jednotka</th>
-                                    <th>Efekt frézy</th>
-                                    <th>Kauzální role</th>
-                                    <th>Metoda</th>
-                                    <th>Frekvence</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td><span class="param-name">Objemová hmotnost půdy</span></td>
-                                    <td><span class="param-unit">g/cm³</span></td>
-                                    <td><span class="effect-negative">− nižší</span></td>
-                                    <td>Lepší prorůstání kořenů, ↑ pórovitost</td>
-                                    <td><span class="method-tag">Kopeckého válec</span><span class="method-tag">sušení</span></td>
-                                    <td>2× ročně</td>
-                                </tr>
-                                <tr>
-                                    <td><span class="param-name">Celková pórovitost</span></td>
-                                    <td><span class="param-unit">% obj.</span></td>
-                                    <td><span class="effect-positive">+ vyšší</span></td>
-                                    <td>Výměna plynů, infiltrace</td>
-                                    <td><span class="method-tag">Výpočet z obj. hmotnosti</span></td>
-                                    <td>2× ročně</td>
-                                </tr>
-                                <tr>
-                                    <td><span class="param-name">Kapilární vs. nekapilární póry</span></td>
-                                    <td><span class="param-unit">% obj.</span></td>
-                                    <td><span class="effect-positive">+ více nekapilárních</span></td>
-                                    <td>Aerační kapacita, difúze O₂/CO₂</td>
-                                    <td><span class="method-tag">pF křivka</span><span class="method-tag">retence vody</span></td>
-                                    <td>1× ročně</td>
-                                </tr>
-                                <tr>
-                                    <td><span class="param-name">Penetrační odpor</span></td>
-                                    <td><span class="param-unit">MPa</span></td>
-                                    <td><span class="effect-negative">− nižší</span></td>
-                                    <td>Mechanická bariéra kořenů</td>
-                                    <td><span class="method-tag">Elektronický penetrometr</span></td>
-                                    <td>2× ročně + po suchu</td>
-                                </tr>
-                                <tr>
-                                    <td><span class="param-name">Infiltrační rychlost (Ks)</span></td>
-                                    <td><span class="param-unit">mm/h</span></td>
-                                    <td><span class="effect-positive">+ vyšší</span></td>
-                                    <td>Dostupnost vody po dešti</td>
-                                    <td><span class="method-tag">Dvojitý infiltrometr</span></td>
-                                    <td>2× ročně</td>
-                                </tr>
-                                <tr>
-                                    <td><span class="param-name">Vodní retenční křivka (pF)</span></td>
-                                    <td><span class="param-unit">–</span></td>
-                                    <td><span class="effect-positive">+ více využitelné vody</span></td>
-                                    <td>Stabilita zásoby vody</td>
-                                    <td><span class="method-tag">Tlakové desky</span></td>
-                                    <td>1× ročně</td>
-                                </tr>
-                                <tr>
-                                    <td><span class="param-name">Plynopropustnost</span></td>
-                                    <td><span class="param-unit">µm² / m/s</span></td>
-                                    <td><span class="effect-positive">+ vyšší</span></td>
-                                    <td>Výměna plynů, dýchání kořenů</td>
-                                    <td><span class="method-tag">Permeametr</span><span class="method-tag">difuzní měření</span></td>
-                                    <td>1× ročně</td>
-                                </tr>
-                                <tr>
-                                    <td><span class="param-name">Měrná povrchová plocha (BET)</span></td>
-                                    <td><span class="param-unit">m²/g</span></td>
-                                    <td><span class="effect-positive">+ vyšší</span></td>
-                                    <td>Sorpce vody/živin, mikrobiální habitat</td>
-                                    <td><span class="method-tag">Adsorpce N₂</span><span class="method-tag">methylenová modř</span></td>
-                                    <td>1× ročně</td>
-                                </tr>
-                                <tr>
-                                    <td><span class="param-name">Obsah organické hmoty (Corg)</span></td>
-                                    <td><span class="param-unit">% hm.</span></td>
-                                    <td><span class="effect-positive">+ vyšší</span></td>
-                                    <td>Energie pro mikroby, tvorba humusu</td>
-                                    <td><span class="method-tag">CHNS</span><span class="method-tag">ztráta žíháním</span></td>
-                                    <td>1× ročně</td>
-                                </tr>
-                                <tr>
-                                    <td><span class="param-name">Mikrobiální biomasa C</span></td>
-                                    <td><span class="param-unit">mg C/kg</span></td>
-                                    <td><span class="effect-positive">+ vyšší</span></td>
-                                    <td>Rychlejší dekompozice</td>
-                                    <td><span class="method-tag">Fumigace-extrakce</span></td>
-                                    <td>1× ročně</td>
-                                </tr>
-                                <tr>
-                                    <td><span class="param-name">Respirace půdy</span></td>
-                                    <td><span class="param-unit">mg CO₂-C/m²/h</span></td>
-                                    <td><span class="effect-positive">+ vyšší</span></td>
-                                    <td>Intenzita rozkladu</td>
-                                    <td><span class="method-tag">Inkubace</span><span class="method-tag">komory</span></td>
-                                    <td>2× ročně</td>
-                                </tr>
-                                <tr>
-                                    <td><span class="param-name">pH (H₂O/KCl)</span></td>
-                                    <td><span class="param-unit">–</span></td>
-                                    <td><span class="effect-neutral">± mírná změna</span></td>
-                                    <td>Dostupnost živin</td>
-                                    <td><span class="method-tag">Elektroda</span></td>
-                                    <td>1× ročně</td>
-                                </tr>
-                                <tr>
-                                    <td><span class="param-name">Dostupný N, P, K</span></td>
-                                    <td><span class="param-unit">mg/kg</span></td>
-                                    <td><span class="effect-positive">+ vyšší</span></td>
-                                    <td>Růst sazenic</td>
-                                    <td><span class="method-tag">Kjeldahl</span><span class="method-tag">spektrofotometrie</span><span class="method-tag">AAS</span></td>
-                                    <td>1× ročně</td>
-                                </tr>
-                                <tr>
-                                    <td><span class="param-name">Mykorhiza (kolonizace)</span></td>
-                                    <td><span class="param-unit">%</span></td>
-                                    <td><span class="effect-positive">+ vyšší</span></td>
-                                    <td>Příjem vody/živin</td>
-                                    <td><span class="method-tag">Mikroskopie</span><span class="method-tag">PCR</span></td>
-                                    <td>1× ročně (léto)</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
+
+                <div class="measured-param-card animate-on-scroll">
+                    <h4>Vlhkost půdy – VWC (3 hloubky)</h4>
+                    <p>Volumetrický obsah vody v půdě (%) v hloubkách 10, 20 a 48 cm. Říká nám, kolik vody je v půdě k dispozici pro kořeny. Porovnáním hloubek zjistíme, kam až pronikají srážky a kde jsou kořeny.</p>
+                    <span class="param-sensor-tag sensor-tms">TMS standard + TMS long 48 cm</span>
                 </div>
-                
-                <!-- Dřevní zbytky Tab -->
-                <div class="tab-content" id="zbytky">
-                    <div class="params-table-wrapper">
-                        <table class="params-table">
-                            <thead>
-                                <tr>
-                                    <th>Parametr</th>
-                                    <th>Jednotka</th>
-                                    <th>Efekt frézy</th>
-                                    <th>Kauzální role</th>
-                                    <th>Metoda</th>
-                                    <th>Frekvence</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td><span class="param-name">Velikostní distribuce zbytků</span></td>
-                                    <td><span class="param-unit">třídy (cm)</span></td>
-                                    <td><span class="effect-positive">menší frakce</span></td>
-                                    <td>↑ plocha/objem → ↑ kolonizace houbami</td>
-                                    <td><span class="method-tag">Transekty</span><span class="method-tag">měření kusů</span></td>
-                                    <td>1× ročně</td>
-                                </tr>
-                                <tr>
-                                    <td><span class="param-name">Poškození povrchu velkých kusů</span></td>
-                                    <td><span class="param-unit">% porušené kůry</span></td>
-                                    <td><span class="effect-positive">+ více porušení</span></td>
-                                    <td>Vstupní brány pro houby/bakterie</td>
-                                    <td><span class="method-tag">Vizuální skóre</span><span class="method-tag">fotodokumentace</span></td>
-                                    <td>1× ročně</td>
-                                </tr>
-                                <tr>
-                                    <td><span class="param-name">Kolonizace dřevními houbami</span></td>
-                                    <td><span class="param-unit">% kusů / diverzita</span></td>
-                                    <td><span class="effect-positive">+ vyšší</span></td>
-                                    <td>Rychlejší dekompozice</td>
-                                    <td><span class="method-tag">Mykologie</span><span class="method-tag">DNA barcoding</span></td>
-                                    <td>1× ročně</td>
-                                </tr>
-                                <tr>
-                                    <td><span class="param-name">Rychlost dekompozice</span></td>
-                                    <td><span class="param-unit">% hmotnosti/rok</span></td>
-                                    <td><span class="effect-positive">+ rychlejší</span></td>
-                                    <td>Pokles požárního paliva</td>
-                                    <td><span class="method-tag">Litter-bagy</span></td>
-                                    <td>6–12–18–24 měs.</td>
-                                </tr>
-                                <tr>
-                                    <td><span class="param-name">Vlhkost zbytků</span></td>
-                                    <td><span class="param-unit">% hm.</span></td>
-                                    <td><span class="effect-positive">+ vyšší</span></td>
-                                    <td>Delší čas do vznícení</td>
-                                    <td><span class="method-tag">Vlhkoměr</span><span class="method-tag">sušení</span></td>
-                                    <td>Sezónně (3×)</td>
-                                </tr>
-                                <tr>
-                                    <td><span class="param-name">Čas do vznícení (proxy)</span></td>
-                                    <td><span class="param-unit">s při std. žáru</span></td>
-                                    <td><span class="effect-positive">+ delší</span></td>
-                                    <td>Nižší požární riziko</td>
-                                    <td><span class="method-tag">Laboratorní pec</span></td>
-                                    <td>1× ročně</td>
-                                </tr>
-                                <tr>
-                                    <td><span class="param-name">Požární rizikový index</span></td>
-                                    <td><span class="param-unit">0–1</span></td>
-                                    <td><span class="effect-negative">− nižší</span></td>
-                                    <td>Syntetický ukazatel paliva a sucha</td>
-                                    <td><span class="method-tag">Kombinace vlhkosti, CWD, teploty</span></td>
-                                    <td>Měsíčně</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
+
+                <div class="measured-param-card animate-on-scroll">
+                    <h4>Hluboká teplota a vlhkost (48 cm)</h4>
+                    <p>TMS long 48 cm sonduje strategickou zásobní zónu. Tato hloubka reaguje na srážky se zpožděním (dny až týdny), ale drží vodu dlouho. S postupným zakořeněním sazenic roste korelace s NDVI.</p>
+                    <span class="param-sensor-tag sensor-tms">TMS long 48 cm</span>
                 </div>
-                
-                <!-- Sazenice Tab -->
-                <div class="tab-content" id="sazenice">
-                    <div class="params-table-wrapper">
-                        <table class="params-table">
-                            <thead>
-                                <tr>
-                                    <th>Parametr</th>
-                                    <th>Jednotka</th>
-                                    <th>Efekt frézy</th>
-                                    <th>Kauzální role</th>
-                                    <th>Metoda</th>
-                                    <th>Frekvence</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td><span class="param-name">Výška sazenic</span></td>
-                                    <td><span class="param-unit">cm</span></td>
-                                    <td><span class="effect-positive">+ vyšší</span></td>
-                                    <td>Cílová proměnná</td>
-                                    <td><span class="method-tag">Měřítko/tyč</span></td>
-                                    <td>Měsíčně (IV–X)</td>
-                                </tr>
-                                <tr>
-                                    <td><span class="param-name">Průměr kmínku u báze</span></td>
-                                    <td><span class="param-unit">mm</span></td>
-                                    <td><span class="effect-positive">+ větší</span></td>
-                                    <td>Cílová proměnná</td>
-                                    <td><span class="method-tag">Posuvné měřítko</span></td>
-                                    <td>Měsíčně (IV–X)</td>
-                                </tr>
-                                <tr>
-                                    <td><span class="param-name">Přežívání sazenic</span></td>
-                                    <td><span class="param-unit">%</span></td>
-                                    <td><span class="effect-positive">+ vyšší</span></td>
-                                    <td>Cílová proměnná</td>
-                                    <td><span class="method-tag">Sčítání označených jedinců</span></td>
-                                    <td>Měsíčně</td>
-                                </tr>
-                                <tr>
-                                    <td><span class="param-name">Barva listů / chlorofyl</span></td>
-                                    <td><span class="param-unit">SPAD</span></td>
-                                    <td><span class="effect-positive">+ lepší</span></td>
-                                    <td>Stav živin/vody</td>
-                                    <td><span class="method-tag">SPAD metr</span></td>
-                                    <td>Měsíčně</td>
-                                </tr>
-                                <tr>
-                                    <td><span class="param-name">Obsah živin v listech (N/P)</span></td>
-                                    <td><span class="param-unit">% / mg g⁻¹</span></td>
-                                    <td><span class="effect-positive">+ vyšší</span></td>
-                                    <td>Živinový stav</td>
-                                    <td><span class="method-tag">Laboratorní analýza</span></td>
-                                    <td>1–2× ročně</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
+
+                <div class="measured-param-card animate-on-scroll">
+                    <h4>NDVI – zdravotní stav vegetace</h4>
+                    <p>Normalizovaný vegetační index z NIR kamery MAPIR. Měří fyziologický stav sazenic pomocí blízkého infračerveného světla (850 nm). Reaguje na stres o 2–5 dnů dříve, než je viditelný okem.</p>
+                    <span class="param-sensor-tag sensor-mapir">MAPIR Survey 3W</span>
+                </div>
+
+                <div class="measured-param-card animate-on-scroll">
+                    <h4>GCC, ExG, VARI – vizuální vegetační indexy</h4>
+                    <p>Vegetační indexy z RGB snímků (Brinno). GCC (Green Chromatic Coordinate) koreluje s chlorofylem, ExG zvýrazňuje zelenou vegetaci, VARI koriguje osvětlení. Zachycují fenologii – zelenání, podzimní zbarvení, rozpad mulče.</p>
+                    <span class="param-sensor-tag sensor-brinno">Brinno TLC 2020</span>
+                </div>
+
+                <div class="measured-param-card animate-on-scroll">
+                    <h4>GDD – akumulace tepla</h4>
+                    <p>Growing Degree Days = suma efektivních teplot nad 5 °C z půdních senzorů. Koreluje s fenologickými přechody (začátek/konec vegetační sezóny). Umožňuje srovnat, zda frézovaná plocha akumuluje teplo rychleji.</p>
+                    <span class="param-sensor-tag sensor-tms">Vypočteno z TMS dat</span>
+                </div>
+
+                <div class="measured-param-card animate-on-scroll">
+                    <h4>LAG – časové zpoždění VWC → NDVI</h4>
+                    <p>Klíčová odvozená metrika: počet dnů, než se změna vlhkosti projeví na zdraví vegetace. Krátký lag (1–3 dny) = dobré zakořenění, dlouhý lag (&gt;14 dnů) = slabý kořenový systém. Měříme cross-korelací.</p>
+                    <span class="param-sensor-tag sensor-tms">TMS</span>
+                    <span class="param-sensor-tag sensor-mapir">+ MAPIR</span>
+                </div>
+
+                <div class="measured-param-card animate-on-scroll">
+                    <h4>Sekvestrace uhlíku v půdě</h4>
+                    <p>Ukládání uhlíku v půdě na frézovaných vs. nefrézovaných plochách. Měření ve spolupráci s ČZU Praha. Metodika bude upřesněna v dalších fázích projektu.</p>
+                    <span class="param-sensor-tag sensor-czu">ČZU Praha</span>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Causal Map Section -->
-    <section id="kauzality">
+    <!-- Hypotheses Section -->
+    <section id="hypotezy">
         <div class="container">
             <div class="section-header">
-                <div class="section-tag">04 / Kauzální vztahy</div>
-                <h2 class="section-title">Mapa příčin a následků</h2>
-                <p class="section-subtitle">Vizualizace očekávaných kauzálních vztahů mezi frézováním, půdními procesy a růstem sazenic</p>
+                <div class="section-tag">04 / Testovatelné hypotézy</div>
+                <h2 class="section-title">Co konkrétně testujeme</h2>
+                <p class="section-subtitle">6 hypotéz, které můžeme ověřit kombinací TMS senzorů a NIR/RGB kamer. Každá hypotéza má jasně definovanou metriku a způsob vyhodnocení.</p>
             </div>
-            
-            <div class="causal-diagram">
-                <div class="causal-flow">
-                    <div class="causal-level">
-                        <div class="causal-node primary">🔄 FRÉZOVÁNÍ PŮDY</div>
-                    </div>
-                    
-                    <div class="causal-arrow">↓ ↓ ↓</div>
-                    
-                    <div class="causal-level">
-                        <div class="causal-node">↓ Objemová hmotnost</div>
-                        <div class="causal-node">↑ Pórovitost</div>
-                        <div class="causal-node">↑ BET (m²/g)</div>
-                        <div class="causal-node">↑ Poškození povrchů CWD</div>
-                    </div>
-                    
-                    <div class="causal-arrow">↓ ↓ ↓</div>
-                    
-                    <div class="causal-level">
-                        <div class="causal-node">↑ Infiltrace vody</div>
-                        <div class="causal-node">↑ Plynopropustnost</div>
-                        <div class="causal-node">↓ Penetrační odpor</div>
-                        <div class="causal-node">↑ Kolonizace houbami</div>
-                    </div>
-                    
-                    <div class="causal-arrow">↓ ↓ ↓</div>
-                    
-                    <div class="causal-level">
-                        <div class="causal-node">↑ Dostupnost vody + O₂</div>
-                        <div class="causal-node">↑ Mikrobiální aktivita</div>
-                        <div class="causal-node">↑ Rychlost dekompozice</div>
-                    </div>
-                    
-                    <div class="causal-arrow">↓ ↓ ↓</div>
-                    
-                    <div class="causal-level">
-                        <div class="causal-node outcome">🌱 ↑ Růst sazenic</div>
-                        <div class="causal-node outcome">🌱 ↑ Přežívání sazenic</div>
-                        <div class="causal-node warning">🔥 ↓ Požární riziko</div>
-                    </div>
+
+            <div class="hypothesis-grid">
+                <div class="hypothesis-card animate-on-scroll">
+                    <div class="hypothesis-id">H1</div>
+                    <div class="hypothesis-title">Frézování zlepšuje příjem vody</div>
+                    <div class="hypothesis-desc">Sazenice na frézované ploše budou mít vyšší korelaci mezi vlhkostí půdy (VWC) a stavem vegetace (NDVI). Nakypřená půda umožňuje rychlejší infiltraci a lepší kontakt kořenů s vodou.</div>
+                    <span class="hypothesis-metric">Metrika: r(VWC → NDVI) fréza &gt; r(VWC → NDVI) kontrola</span>
                 </div>
-            </div>
-            
-            <h3 style="color: var(--cream); text-align: center; margin-bottom: 2rem; font-family: 'Playfair Display', serif;">Očekávané korelace mezi proměnnými</h3>
-            
-            <div class="correlations-grid">
-                <div class="correlation-card">
-                    <div class="correlation-pair">
-                        <span class="correlation-var">Frézování</span>
-                        <span class="correlation-arrow negative">→ −</span>
-                        <span class="correlation-var">Obj. hmotnost</span>
-                    </div>
-                    <div class="correlation-pair">
-                        <span class="correlation-var">Frézování</span>
-                        <span class="correlation-arrow positive">→ +</span>
-                        <span class="correlation-var">Pórovitost</span>
-                    </div>
-                    <div class="correlation-pair">
-                        <span class="correlation-var">Frézování</span>
-                        <span class="correlation-arrow negative">→ −</span>
-                        <span class="correlation-var">Penetr. odpor</span>
-                    </div>
+
+                <div class="hypothesis-card animate-on-scroll">
+                    <div class="hypothesis-id">H2</div>
+                    <div class="hypothesis-title">Frézovaná půda se na jaře ohřívá rychleji</div>
+                    <div class="hypothesis-desc">Frézovaná půda má tmavší povrch (odkrytá minerální vrstva) a nižší tepelnou setrvačnost. Na jaře by měla dosáhnout prahové teploty pro růst kořenů (~5–8 °C) dříve, což se projeví dřívějším nástupem NDVI.</div>
+                    <span class="hypothesis-metric">Metrika: T_onset(fréza) &lt; T_onset(kontrola); NDVI_onset analogicky</span>
                 </div>
-                
-                <div class="correlation-card">
-                    <div class="correlation-pair">
-                        <span class="correlation-var">Frézování</span>
-                        <span class="correlation-arrow positive">→ +</span>
-                        <span class="correlation-var">Infiltrace</span>
-                    </div>
-                    <div class="correlation-pair">
-                        <span class="correlation-var">Frézování</span>
-                        <span class="correlation-arrow positive">→ +</span>
-                        <span class="correlation-var">BET (m²/g)</span>
-                    </div>
-                    <div class="correlation-pair">
-                        <span class="correlation-var">Frézování</span>
-                        <span class="correlation-arrow positive">→ +</span>
-                        <span class="correlation-var">Corg</span>
-                    </div>
+
+                <div class="hypothesis-card animate-on-scroll">
+                    <div class="hypothesis-id">H3</div>
+                    <div class="hypothesis-title">Lepší přežívání letního sucha</div>
+                    <div class="hypothesis-desc">Během letních suchých období by sazenice na frézované ploše měly vykazovat menší pokles NDVI díky lepší dostupnosti vody v kořenové zóně. Frézování zlepšuje infiltraci, takže dešťová voda proniká hlouběji.</div>
+                    <span class="hypothesis-metric">Metrika: ΔNDVI při poklesu VWC &lt; kritická hodnota</span>
                 </div>
-                
-                <div class="correlation-card">
-                    <div class="correlation-pair">
-                        <span class="correlation-var">Pórovitost</span>
-                        <span class="correlation-arrow positive">→ +</span>
-                        <span class="correlation-var">Infiltrace</span>
-                    </div>
-                    <div class="correlation-pair">
-                        <span class="correlation-var">Pórovitost</span>
-                        <span class="correlation-arrow positive">→ +</span>
-                        <span class="correlation-var">Plynopropust.</span>
-                    </div>
-                    <div class="correlation-pair">
-                        <span class="correlation-var">Obj. hmotnost</span>
-                        <span class="correlation-arrow positive">→ +</span>
-                        <span class="correlation-var">Penetr. odpor</span>
-                    </div>
+
+                <div class="hypothesis-card animate-on-scroll">
+                    <div class="hypothesis-id">H4</div>
+                    <div class="hypothesis-title">Hluboká vlhkost (48 cm) koreluje s dlouhodobým zdravím</div>
+                    <div class="hypothesis-desc">TMS long 48 cm měří vlhkost v hloubce, kam kořeny sazenice teprve prorůstají. Pokud korelace NDVI vs. VWC(48 cm) roste s časem, znamená to, že se kořenový systém prohlubuje – sazenice je dobře zakořeněná.</div>
+                    <span class="hypothesis-metric">Metrika: r(VWC_48cm → NDVI) roste meziročně</span>
                 </div>
-                
-                <div class="correlation-card">
-                    <div class="correlation-pair">
-                        <span class="correlation-var">Corg</span>
-                        <span class="correlation-arrow positive">→ +</span>
-                        <span class="correlation-var">Mikrob. biomasa</span>
-                    </div>
-                    <div class="correlation-pair">
-                        <span class="correlation-var">Mikrob. biomasa</span>
-                        <span class="correlation-arrow positive">→ +</span>
-                        <span class="correlation-var">Respirace půdy</span>
-                    </div>
-                    <div class="correlation-pair">
-                        <span class="correlation-var">Dekompozice</span>
-                        <span class="correlation-arrow positive">→ +</span>
-                        <span class="correlation-var">Corg</span>
-                    </div>
+
+                <div class="hypothesis-card animate-on-scroll">
+                    <div class="hypothesis-id">H5</div>
+                    <div class="hypothesis-title">Mrazové poškození je detekovatelné přes NDVI</div>
+                    <div class="hypothesis-desc">Přízemní mrazy (T na +10 cm &lt; 0 °C) poškozují listy/jehlice. Pokud po mrazové události dojde k poklesu NDVI se zpožděním 2–5 dnů, potvrdí to citlivost metody. Na frézované ploše mohou být mrazy extrémnější (méně krytu).</div>
+                    <span class="hypothesis-metric">Metrika: ΔNDVI po T(+10cm) &lt; 0 °C vs. kontrolní období</span>
                 </div>
-                
-                <div class="correlation-card">
-                    <div class="correlation-pair">
-                        <span class="correlation-var">Penetr. odpor</span>
-                        <span class="correlation-arrow negative">→ −</span>
-                        <span class="correlation-var">Růst sazenic</span>
-                    </div>
-                    <div class="correlation-pair">
-                        <span class="correlation-var">Infiltrace</span>
-                        <span class="correlation-arrow positive">→ +</span>
-                        <span class="correlation-var">Růst sazenic</span>
-                    </div>
-                    <div class="correlation-pair">
-                        <span class="correlation-var">Růst sazenic</span>
-                        <span class="correlation-arrow positive">→ +</span>
-                        <span class="correlation-var">Přežívání</span>
-                    </div>
-                </div>
-                
-                <div class="correlation-card">
-                    <div class="correlation-pair">
-                        <span class="correlation-var">Frézování</span>
-                        <span class="correlation-arrow positive">→ +</span>
-                        <span class="correlation-var">Kolonizace CWD</span>
-                    </div>
-                    <div class="correlation-pair">
-                        <span class="correlation-var">Dekompozice</span>
-                        <span class="correlation-arrow negative">→ −</span>
-                        <span class="correlation-var">Požární index</span>
-                    </div>
-                    <div class="correlation-pair">
-                        <span class="correlation-var">Frézování</span>
-                        <span class="correlation-arrow negative">→ −</span>
-                        <span class="correlation-var">Požární index</span>
-                    </div>
+
+                <div class="hypothesis-card animate-on-scroll">
+                    <div class="hypothesis-id">H6</div>
+                    <div class="hypothesis-title">Frézování prodlužuje vegetační sezónu</div>
+                    <div class="hypothesis-desc">Dřívější ohřev půdy na jaře + pozdější ochlazení na podzim by měly prodloužit dobu, po kterou je NDVI nad prahem aktivní vegetace. To se projeví vyšším kumulativním přírůstkem za sezónu.</div>
+                    <span class="hypothesis-metric">Metrika: GDD_onset(fréza) &lt; GDD_onset(kontrola); délka sezóny ve dnech</span>
                 </div>
             </div>
         </div>
@@ -2623,739 +2928,57 @@
             <div class="timeline">
                 <div class="timeline-item animate-on-scroll">
                     <div class="timeline-content">
-                        <div class="timeline-date">Leden 2026</div>
-                        <div class="timeline-title">Založení nové plochy L9</div>
-                        <div class="timeline-desc">Frézace půdy a výsadba sazenic na nové experimentální ploše pro sledování od času T0</div>
+                        <div class="timeline-date">Jaro 2026</div>
+                        <div class="timeline-title">Frézování a výsadba pozemku 41Ca8/41La7</div>
+                        <div class="timeline-desc">Frézování půdy na nové ploše 41Ca8, ponechání kontrolní plochy 41La7 bez zásahu. Výsadba sazenic. Instalace TMS senzorů (standard + long 48 cm) na obou plochách.</div>
                     </div>
                 </div>
-                
-                <div class="timeline-item animate-on-scroll">
-                    <div class="timeline-content">
-                        <div class="timeline-date">Únor–Březen 2026</div>
-                        <div class="timeline-title">Instalace a mapování</div>
-                        <div class="timeline-desc">Základní terénní mapování všech ploch, instalace časosběrných kamer (1 snímek/hod)</div>
-                    </div>
-                </div>
-                
+
                 <div class="timeline-item animate-on-scroll">
                     <div class="timeline-content">
                         <div class="timeline-date">Březen–Duben 2026</div>
-                        <div class="timeline-title">Výchozí odběry</div>
-                        <div class="timeline-desc">Kompletní odběr půdních vzorků a dřevních zbytků, stanovení výchozího stavu všech parametrů</div>
+                        <div class="timeline-title">Instalace senzorů a kamer</div>
+                        <div class="timeline-desc">Instalace TMS senzorů na všech 4 pozemcích (2× na pozemek). Kontrola a kalibrace Brinno a MAPIR kamer na pozemcích 2022 (41Ca0, 41Ka0).</div>
                     </div>
                 </div>
-                
+
                 <div class="timeline-item animate-on-scroll">
                     <div class="timeline-content">
                         <div class="timeline-date">Duben–Říjen 2026</div>
-                        <div class="timeline-title">Měsíční monitoring sazenic</div>
-                        <div class="timeline-desc">Pravidelné měření výšky, průměru kmínku, přežívání a SPAD hodnot na min. 30 jedincích/plocha</div>
+                        <div class="timeline-title">Kontinuální monitoring – 1. sezóna</div>
+                        <div class="timeline-desc">Automatický sběr dat TMS (teplota + vlhkost, 15min interval), RGB snímky Brinno (1×/hod), NIR snímky MAPIR. Pravidelná kontrola a stahování dat.</div>
                     </div>
                 </div>
-                
+
                 <div class="timeline-item animate-on-scroll">
                     <div class="timeline-content">
-                        <div class="timeline-date">Květen + Září 2026</div>
-                        <div class="timeline-title">Sezónní půdní měření</div>
-                        <div class="timeline-desc">Infiltrometrie, penetrace, respirace půdy ve vlhkém období</div>
+                        <div class="timeline-date">Červen–Srpen 2026</div>
+                        <div class="timeline-title">Sledování letního sucha</div>
+                        <div class="timeline-desc">Klíčové období pro testování hypotéz H1 (příjem vody) a H3 (přežívání sucha). Porovnání lag VWC→NDVI mezi frézovanými a kontrolními plochami.</div>
                     </div>
                 </div>
-                
+
                 <div class="timeline-item animate-on-scroll">
                     <div class="timeline-content">
-                        <div class="timeline-date">Říjen–Listopad 2026</div>
-                        <div class="timeline-title">Laboratorní analýzy</div>
-                        <div class="timeline-desc">BET, pF křivky, Corg, mikrobiální biomasa C a další laboratorní stanovení</div>
+                        <div class="timeline-date">Říjen–Prosinec 2026</div>
+                        <div class="timeline-title">Vyhodnocení 1. sezóny</div>
+                        <div class="timeline-desc">Stažení všech dat z TMS a kamer. Výpočet vegetačních indexů (NDVI, GCC, ExG). Lag-korelace VWC vs. NDVI. Porovnání fréza/kontrola. Zpráva za 1. rok.</div>
                     </div>
                 </div>
-                
-                <div class="timeline-item animate-on-scroll">
-                    <div class="timeline-content">
-                        <div class="timeline-date">Leden–Únor 2027</div>
-                        <div class="timeline-title">Průběžná analýza</div>
-                        <div class="timeline-desc">Vyhodnocení prvního roku dat, analýza korelací a kauzalit, roční zpráva</div>
-                    </div>
-                </div>
-                
+
                 <div class="timeline-item animate-on-scroll">
                     <div class="timeline-content">
                         <div class="timeline-date">Březen–Říjen 2027</div>
-                        <div class="timeline-title">Opakování monitoringu</div>
-                        <div class="timeline-desc">Kompletní opakování všech měření podle protokolu prvního roku</div>
+                        <div class="timeline-title">Kontinuální monitoring – 2. sezóna</div>
+                        <div class="timeline-desc">Opakování monitoringu. Klíčové sledování: zkrátil se lag na pozemcích 2026? Prorůstají kořeny hlouběji (posun korelace z VWC_10 na VWC_20)? Prodloužila se vegetační sezóna?</div>
                     </div>
                 </div>
-                
+
                 <div class="timeline-item animate-on-scroll">
                     <div class="timeline-content">
                         <div class="timeline-date">Listopad–Prosinec 2027</div>
                         <div class="timeline-title">Závěrečné vyhodnocení</div>
-                        <div class="timeline-desc">Souhrnná analýza, statistické testování hypotéz, doporučení pro lesnickou praxi</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Protocols Section -->
-    <section id="protokoly">
-        <div class="container">
-            <div class="section-header">
-                <div class="section-tag">06 / Měřicí protokoly</div>
-                <h2 class="section-title">Standardizované postupy měření</h2>
-                <p class="section-subtitle">Přehled vybavení a metodik pro jednotlivé oblasti monitoringu</p>
-            </div>
-            
-            <div class="protocols-grid">
-                <div class="protocol-card animate-on-scroll">
-                    <div class="protocol-header">
-                        <div class="protocol-icon">
-                            <svg viewBox="0 0 24 24"><path d="M12,3C7.58,3 4,4.79 4,7C4,9.21 7.58,11 12,11C16.42,11 20,9.21 20,7C20,4.79 16.42,3 12,3M4,9V12C4,14.21 7.58,16 12,16C16.42,16 20,14.21 20,12V9C20,11.21 16.42,13 12,13C7.58,13 4,11.21 4,9M4,14V17C4,19.21 7.58,21 12,21C16.42,21 20,19.21 20,17V14C20,16.21 16.42,18 12,18C7.58,18 4,16.21 4,14Z"/></svg>
-                        </div>
-                        <div class="protocol-title">Půda – hutnost a pórovitost</div>
-                    </div>
-                    <div class="protocol-body">
-                        <div class="protocol-method">
-                            <div class="method-bullet"></div>
-                            <div class="method-text">Kopeckého válec pro odběr neporušených vzorků o známém objemu</div>
-                        </div>
-                        <div class="protocol-method">
-                            <div class="method-bullet"></div>
-                            <div class="method-text">Sušení při 105°C do konstantní hmotnosti</div>
-                        </div>
-                        <div class="protocol-method">
-                            <div class="method-bullet"></div>
-                            <div class="method-text">Výpočet pórovitosti z objemové hmotnosti a hustoty skeletu</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="protocol-card animate-on-scroll">
-                    <div class="protocol-header">
-                        <div class="protocol-icon">
-                            <svg viewBox="0 0 24 24"><path d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4M12,6A6,6 0 0,0 6,12A6,6 0 0,0 12,18A6,6 0 0,0 18,12A6,6 0 0,0 12,6M12,8A4,4 0 0,1 16,12A4,4 0 0,1 12,16A4,4 0 0,1 8,12A4,4 0 0,1 12,8Z"/></svg>
-                        </div>
-                        <div class="protocol-title">Penetrační odpor</div>
-                    </div>
-                    <div class="protocol-body">
-                        <div class="protocol-method">
-                            <div class="method-bullet"></div>
-                            <div class="method-text">Elektronický penetrometr s automatickým záznamem profilů</div>
-                        </div>
-                        <div class="protocol-method">
-                            <div class="method-bullet"></div>
-                            <div class="method-text">Min. 10 měření na plochu v pravidelném rastru</div>
-                        </div>
-                        <div class="protocol-method">
-                            <div class="method-bullet"></div>
-                            <div class="method-text">Dodatečná měření po období silného vyschnutí půdy</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="protocol-card animate-on-scroll">
-                    <div class="protocol-header">
-                        <div class="protocol-icon">
-                            <svg viewBox="0 0 24 24"><path d="M12,20A6,6 0 0,1 6,14C6,10 12,3.25 12,3.25C12,3.25 18,10 18,14A6,6 0 0,1 12,20Z"/></svg>
-                        </div>
-                        <div class="protocol-title">Infiltrace vody</div>
-                    </div>
-                    <div class="protocol-body">
-                        <div class="protocol-method">
-                            <div class="method-bullet"></div>
-                            <div class="method-text">Dvojitý infiltrometr (double-ring) standardního průměru</div>
-                        </div>
-                        <div class="protocol-method">
-                            <div class="method-bullet"></div>
-                            <div class="method-text">Měření ustáleného toku v terénu</div>
-                        </div>
-                        <div class="protocol-method">
-                            <div class="method-bullet"></div>
-                            <div class="method-text">4–6 měření na plochu ve vlhkém období</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="protocol-card animate-on-scroll">
-                    <div class="protocol-header">
-                        <div class="protocol-icon">
-                            <svg viewBox="0 0 24 24"><path d="M7,2V4H8V18A4,4 0 0,0 12,22A4,4 0 0,0 16,18V4H17V2H7M11,16C10.4,16 10,15.6 10,15C10,14.4 10.4,14 11,14C11.6,14 12,14.4 12,15C12,15.6 11.6,16 11,16M13,12C12.4,12 12,11.6 12,11C12,10.4 12.4,10 13,10C13.6,10 14,10.4 14,11C14,11.6 13.6,12 13,12M14,7H10V4H14V7Z"/></svg>
-                        </div>
-                        <div class="protocol-title">Retence vody (pF křivka)</div>
-                    </div>
-                    <div class="protocol-body">
-                        <div class="protocol-method">
-                            <div class="method-bullet"></div>
-                            <div class="method-text">Tlakové desky pro stanovení matricového potenciálu</div>
-                        </div>
-                        <div class="protocol-method">
-                            <div class="method-bullet"></div>
-                            <div class="method-text">Laboratorní protokol na neporušených vzorcích</div>
-                        </div>
-                        <div class="protocol-method">
-                            <div class="method-bullet"></div>
-                            <div class="method-text">Konstrukce pF křivky pro výpočet využitelné vody</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="protocol-card animate-on-scroll">
-                    <div class="protocol-header">
-                        <div class="protocol-icon">
-                            <svg viewBox="0 0 24 24"><path d="M19.36,2.72L20.78,4.14L15.06,9.85C16.13,11.39 16.28,13.24 15.38,14.44L9.06,8.12C10.26,7.22 12.11,7.37 13.65,8.44L19.36,2.72M5.93,17.57C3.92,15.56 2.69,13.16 2.35,10.92L7.23,8.83L14.67,16.27L12.58,21.15C10.34,20.81 7.94,19.58 5.93,17.57Z"/></svg>
-                        </div>
-                        <div class="protocol-title">BET – měrná plocha</div>
-                    </div>
-                    <div class="protocol-body">
-                        <div class="protocol-method">
-                            <div class="method-bullet"></div>
-                            <div class="method-text">Adsorpce N₂ metodou BET (Brunauer–Emmett–Teller)</div>
-                        </div>
-                        <div class="protocol-method">
-                            <div class="method-bullet"></div>
-                            <div class="method-text">Alternativně orientační stanovení methylenovou modří</div>
-                        </div>
-                        <div class="protocol-method">
-                            <div class="method-bullet"></div>
-                            <div class="method-text">Kompozitní vzorek z min. 5 bodů na ploše</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="protocol-card animate-on-scroll">
-                    <div class="protocol-header">
-                        <div class="protocol-icon">
-                            <svg viewBox="0 0 24 24"><path d="M7,2H17A2,2 0 0,1 19,4V20A2,2 0 0,1 17,22H7A2,2 0 0,1 5,20V4A2,2 0 0,1 7,2M7,4V8H17V4H7M7,10V12H9V10H7M11,10V12H13V10H11M15,10V12H17V10H15M7,14V16H9V14H7M11,14V16H13V14H11M15,14V16H17V14H15M7,18V20H9V18H7M11,18V20H13V18H11M15,18V20H17V18H15Z"/></svg>
-                        </div>
-                        <div class="protocol-title">Chemické analýzy půdy</div>
-                    </div>
-                    <div class="protocol-body">
-                        <div class="protocol-method">
-                            <div class="method-bullet"></div>
-                            <div class="method-text">CHNS analyzátor pro Corg, ztráta žíháním</div>
-                        </div>
-                        <div class="protocol-method">
-                            <div class="method-bullet"></div>
-                            <div class="method-text">Kjeldahl pro celkový dusík</div>
-                        </div>
-                        <div class="protocol-method">
-                            <div class="method-bullet"></div>
-                            <div class="method-text">Spektrofotometrie (P) a AAS (K) pro dostupné živiny</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="protocol-card animate-on-scroll">
-                    <div class="protocol-header">
-                        <div class="protocol-icon">
-                            <svg viewBox="0 0 24 24"><path d="M4,10A1,1 0 0,1 3,9A1,1 0 0,1 4,8H12A2,2 0 0,0 14,6A2,2 0 0,0 12,4C11.45,4 10.95,4.22 10.59,4.59C10.2,5 9.56,5 9.17,4.59C8.78,4.2 8.78,3.56 9.17,3.17C9.9,2.45 10.9,2 12,2A4,4 0 0,1 16,6A4,4 0 0,1 12,10H4M19,12A1,1 0 0,0 20,11A1,1 0 0,0 19,10C18.72,10 18.47,10.11 18.29,10.29C17.9,10.68 17.27,10.68 16.88,10.29C16.5,9.9 16.5,9.27 16.88,8.88C17.42,8.34 18.17,8 19,8A3,3 0 0,1 22,11A3,3 0 0,1 19,14H5A1,1 0 0,1 4,13A1,1 0 0,1 5,12H19M18,18H4A1,1 0 0,1 3,17A1,1 0 0,1 4,16H18A3,3 0 0,1 21,19A3,3 0 0,1 18,22C17.17,22 16.42,21.66 15.88,21.12C15.5,20.73 15.5,20.1 15.88,19.71C16.27,19.32 16.9,19.32 17.29,19.71C17.47,19.89 17.72,20 18,20A1,1 0 0,0 19,19A1,1 0 0,0 18,18Z"/></svg>
-                        </div>
-                        <div class="protocol-title">Mikrobiální aktivita</div>
-                    </div>
-                    <div class="protocol-body">
-                        <div class="protocol-method">
-                            <div class="method-bullet"></div>
-                            <div class="method-text">Fumigace-extrakce pro mikrobiální biomasu C</div>
-                        </div>
-                        <div class="protocol-method">
-                            <div class="method-bullet"></div>
-                            <div class="method-text">Terénní/komorová respirace pro měření CO₂</div>
-                        </div>
-                        <div class="protocol-method">
-                            <div class="method-bullet"></div>
-                            <div class="method-text">Laboratorní inkubace pro standardizované podmínky</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="protocol-card animate-on-scroll">
-                    <div class="protocol-header">
-                        <div class="protocol-icon">
-                            <svg viewBox="0 0 24 24"><path d="M12,8A4,4 0 0,0 8,12A4,4 0 0,0 12,16A4,4 0 0,0 16,12A4,4 0 0,0 12,8M12,18A6,6 0 0,1 6,12A6,6 0 0,1 12,6A6,6 0 0,1 18,12A6,6 0 0,1 12,18M20,5V19H4V5H20M20,3H4A2,2 0 0,0 2,5V19A2,2 0 0,0 4,21H20A2,2 0 0,0 22,19V5A2,2 0 0,0 20,3Z"/></svg>
-                        </div>
-                        <div class="protocol-title">Mykorhiza</div>
-                    </div>
-                    <div class="protocol-body">
-                        <div class="protocol-method">
-                            <div class="method-bullet"></div>
-                            <div class="method-text">Mikroskopie kořenových vzorků sazenic</div>
-                        </div>
-                        <div class="protocol-method">
-                            <div class="method-bullet"></div>
-                            <div class="method-text">PCR pro molekulární identifikaci (volitelně)</div>
-                        </div>
-                        <div class="protocol-method">
-                            <div class="method-bullet"></div>
-                            <div class="method-text">Stanovení % kolonizace kořenového systému</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="protocol-card animate-on-scroll">
-                    <div class="protocol-header">
-                        <div class="protocol-icon">
-                            <svg viewBox="0 0 24 24"><path d="M11,21H5C3.89,21 3,20.1 3,19V5C3,3.89 3.89,3 5,3H19A2,2 0 0,1 21,5V11.17C20.5,11.06 20,11 19.5,11A6.5,6.5 0 0,0 13,17.5C13,18.79 13.38,20 14,21H11M5,5V19H11V13H19V5H5M7,7H11V11H7V7M13,7H17V11H13V7M7,13H11V17H7V13Z"/></svg>
-                        </div>
-                        <div class="protocol-title">Dekompozice dřeva</div>
-                    </div>
-                    <div class="protocol-body">
-                        <div class="protocol-method">
-                            <div class="method-bullet"></div>
-                            <div class="method-text">Litter-bagy s definovanou frakcí a známou sušinou</div>
-                        </div>
-                        <div class="protocol-method">
-                            <div class="method-bullet"></div>
-                            <div class="method-text">Vyzvednutí a vážení v intervalech 6–12–18–24 měsíců</div>
-                        </div>
-                        <div class="protocol-method">
-                            <div class="method-bullet"></div>
-                            <div class="method-text">Výpočet úbytku hmotnosti ligninu a celulózy</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="protocol-card animate-on-scroll">
-                    <div class="protocol-header">
-                        <div class="protocol-icon">
-                            <svg viewBox="0 0 24 24"><path d="M17.66,11.2C17.43,10.9 17.15,10.64 16.89,10.38C16.22,9.78 15.46,9.35 14.82,8.72C13.33,7.26 13,4.85 13.95,3C13,3.23 12.17,3.75 11.46,4.32C8.87,6.4 7.85,10.07 9.07,13.22C9.11,13.32 9.15,13.42 9.15,13.55C9.15,13.77 9,13.97 8.8,14.05C8.57,14.15 8.33,14.09 8.14,13.93C8.08,13.88 8.04,13.83 8,13.76C6.87,12.33 6.69,10.28 7.45,8.64C5.78,10 4.87,12.3 5,14.47C5.06,14.97 5.12,15.47 5.29,15.97C5.43,16.57 5.7,17.17 6,17.7C7.08,19.43 8.95,20.67 10.96,20.92C13.1,21.19 15.39,20.8 17.03,19.32C18.86,17.66 19.5,15 18.56,12.72L18.43,12.46C18.22,12 17.66,11.2 17.66,11.2Z"/></svg>
-                        </div>
-                        <div class="protocol-title">Požární riziko</div>
-                    </div>
-                    <div class="protocol-body">
-                        <div class="protocol-method">
-                            <div class="method-bullet"></div>
-                            <div class="method-text">Syntetický index: vlhkost, objem CWD, teplota</div>
-                        </div>
-                        <div class="protocol-method">
-                            <div class="method-bullet"></div>
-                            <div class="method-text">Laboratorní test vznícení se standardizovaným zdrojem žáru</div>
-                        </div>
-                        <div class="protocol-method">
-                            <div class="method-bullet"></div>
-                            <div class="method-text">Bezpečnostní protokol pro manipulaci se vzorky</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="protocol-card animate-on-scroll">
-                    <div class="protocol-header">
-                        <div class="protocol-icon">
-                            <svg viewBox="0 0 24 24"><path d="M12 2C9.5 2 8 5 8 7C8 8.5 8.5 9.5 9 10.5C7.5 11 6 12.5 6 14C6 16 7.5 17.5 9 18.5V22H15V18.5C16.5 17.5 18 16 18 14C18 12.5 16.5 11 15 10.5C15.5 9.5 16 8.5 16 7C16 5 14.5 2 12 2Z"/></svg>
-                        </div>
-                        <div class="protocol-title">Růst sazenic</div>
-                    </div>
-                    <div class="protocol-body">
-                        <div class="protocol-method">
-                            <div class="method-bullet"></div>
-                            <div class="method-text">Tyč/měřítko pro výšku, posuvné měřítko pro průměr kmínku</div>
-                        </div>
-                        <div class="protocol-method">
-                            <div class="method-bullet"></div>
-                            <div class="method-text">SPAD metr pro měření chlorofylu v listech</div>
-                        </div>
-                        <div class="protocol-method">
-                            <div class="method-bullet"></div>
-                            <div class="method-text">Trvalé značení min. 30 jedinců na plochu</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="protocol-card animate-on-scroll">
-                    <div class="protocol-header">
-                        <div class="protocol-icon">
-                            <svg viewBox="0 0 24 24"><path d="M4,4H7L9,2H15L17,4H20A2,2 0 0,1 22,6V18A2,2 0 0,1 20,20H4A2,2 0 0,1 2,18V6A2,2 0 0,1 4,4M12,7A5,5 0 0,0 7,12A5,5 0 0,0 12,17A5,5 0 0,0 17,12A5,5 0 0,0 12,7M12,9A3,3 0 0,1 15,12A3,3 0 0,1 12,15A3,3 0 0,1 9,12A3,3 0 0,1 12,9Z"/></svg>
-                        </div>
-                        <div class="protocol-title">Časosběrné snímkování</div>
-                    </div>
-                    <div class="protocol-body">
-                        <div class="protocol-method">
-                            <div class="method-bullet"></div>
-                            <div class="method-text">Automatické kamery s intervalem 1 snímek/hodinu</div>
-                        </div>
-                        <div class="protocol-method">
-                            <div class="method-bullet"></div>
-                            <div class="method-text">Pevné body a stejná kompozice záběru</div>
-                        </div>
-                        <div class="protocol-method">
-                            <div class="method-bullet"></div>
-                            <div class="method-text">Celoroční provoz během vegetačního období</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Risks Section -->
-    <section id="rizika">
-        <div class="container">
-            <div class="section-header">
-                <div class="section-tag">07 / Rizika a mitigace</div>
-                <h2 class="section-title">Identifikovaná rizika projektu</h2>
-                <p class="section-subtitle">Přehled potenciálních problémů a strategií pro jejich minimalizaci</p>
-            </div>
-            
-            <div class="risks-grid">
-                <div class="risk-card high animate-on-scroll">
-                    <span class="risk-level">Vysoké riziko</span>
-                    <h3 class="risk-title">Extrémní počasí</h3>
-                    <p class="risk-desc">Dlouhodobé sucho, silné mrazy nebo vichřice mohou poškodit sazenice a znemožnit srovnání variant.</p>
-                    <div class="risk-mitigation">
-                        <div class="risk-mitigation-label">Mitigace</div>
-                        <div class="risk-mitigation-text">Instalace meteorologické stanice, dokumentace všech extrémních událostí, zahrnutí kovariát do statistické analýzy.</div>
-                    </div>
-                </div>
-                
-                <div class="risk-card high animate-on-scroll">
-                    <span class="risk-level">Vysoké riziko</span>
-                    <h3 class="risk-title">Technické selhání kamer</h3>
-                    <p class="risk-desc">Porucha časosběrných kamer by znamenala ztrátu cenných dat o dynamice růstu.</p>
-                    <div class="risk-mitigation">
-                        <div class="risk-mitigation-label">Mitigace</div>
-                        <div class="risk-mitigation-text">Redundantní zálohovací kamery, pravidelná kontrola každé 2 týdny, cloudové zálohování dat.</div>
-                    </div>
-                </div>
-                
-                <div class="risk-card medium animate-on-scroll">
-                    <span class="risk-level">Střední riziko</span>
-                    <h3 class="risk-title">Prostorová heterogenita</h3>
-                    <p class="risk-desc">Přirozená variabilita půdy může zastřít efekt frézování.</p>
-                    <div class="risk-mitigation">
-                        <div class="risk-mitigation-label">Mitigace</div>
-                        <div class="risk-mitigation-text">Vysoký počet replikací (3× na variantu), stratifikované vzorkování, použití smíšených modelů.</div>
-                    </div>
-                </div>
-                
-                <div class="risk-card medium animate-on-scroll">
-                    <span class="risk-level">Střední riziko</span>
-                    <h3 class="risk-title">Kontaminace vzorků</h3>
-                    <p class="risk-desc">Nesprávná manipulace může znehodnotit laboratorní analýzy.</p>
-                    <div class="risk-mitigation">
-                        <div class="risk-mitigation-label">Mitigace</div>
-                        <div class="risk-mitigation-text">Standardizované protokoly, školení personálu, kontrolní vzorky, certifikované laboratoře.</div>
-                    </div>
-                </div>
-                
-                <div class="risk-card medium animate-on-scroll">
-                    <span class="risk-level">Střední riziko</span>
-                    <h3 class="risk-title">Škůdci a choroby</h3>
-                    <p class="risk-desc">Kalamitní výskyt hmyzu nebo houbových patogenů může ovlivnit sazenice.</p>
-                    <div class="risk-mitigation">
-                        <div class="risk-mitigation-label">Mitigace</div>
-                        <div class="risk-mitigation-text">Pravidelný zdravotní monitoring, dokumentace výskytu, spolupráce s ochranou lesa.</div>
-                    </div>
-                </div>
-                
-                <div class="risk-card low animate-on-scroll">
-                    <span class="risk-level">Nízké riziko</span>
-                    <h3 class="risk-title">Personální výpadky</h3>
-                    <p class="risk-desc">Změny v projektovém týmu mohou narušit kontinuitu měření.</p>
-                    <div class="risk-mitigation">
-                        <div class="risk-mitigation-label">Mitigace</div>
-                        <div class="risk-mitigation-text">Detailní dokumentace postupů, křížové zaškolení, sdílená databáze protokolů.</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Technology Section -->
-    <section id="technologie">
-        <div class="container">
-            <div class="section-header">
-                <div class="section-tag">08 / Technologie</div>
-                <h2 class="section-title">Použité technologie a vybavení</h2>
-                <p class="section-subtitle">Kompletní přehled terénního a laboratorního vybavení pro monitoring</p>
-            </div>
-            
-            <div class="tech-categories">
-                <div class="tech-category animate-on-scroll">
-                    <div class="tech-category-header">
-                        <h3 class="tech-category-title">Terénní měřicí přístroje</h3>
-                    </div>
-                    <div class="tech-items">
-                        <div class="tech-item">
-                            <div class="tech-item-name">Kopeckého válce</div>
-                            <div class="tech-item-desc">Nerezové válce standardního objemu (100 cm³) pro odběr neporušených půdních vzorků</div>
-                        </div>
-                        <div class="tech-item">
-                            <div class="tech-item-name">Elektronický penetrometr</div>
-                            <div class="tech-item-desc">Digitální přístroj s automatickým záznamem penetračního odporu v celém profilu</div>
-                        </div>
-                        <div class="tech-item">
-                            <div class="tech-item-name">Dvojitý infiltrometr</div>
-                            <div class="tech-item-desc">Standardní double-ring infiltrometr pro měření saturované hydraulické vodivosti</div>
-                        </div>
-                        <div class="tech-item">
-                            <div class="tech-item-name">SPAD metr</div>
-                            <div class="tech-item-desc">Přenosný chlorofylmetr pro nedestruktivní měření obsahu chlorofylu v listech</div>
-                        </div>
-                        <div class="tech-item">
-                            <div class="tech-item-name">Půdní vlhkoměr</div>
-                            <div class="tech-item-desc">TDR nebo kapacitní sonda pro kontinuální monitoring vlhkosti půdy</div>
-                        </div>
-                        <div class="tech-item">
-                            <div class="tech-item-name">GPS/GNSS přijímač</div>
-                            <div class="tech-item-desc">Přesné zaměření vzorkovacích bodů a trvale značených sazenic</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="tech-category animate-on-scroll">
-                    <div class="tech-category-header">
-                        <h3 class="tech-category-title">Laboratorní vybavení</h3>
-                    </div>
-                    <div class="tech-items">
-                        <div class="tech-item">
-                            <div class="tech-item-name">CHNS analyzátor</div>
-                            <div class="tech-item-desc">Elementární analyzátor pro stanovení uhlíku, dusíku, vodíku a síry</div>
-                        </div>
-                        <div class="tech-item">
-                            <div class="tech-item-name">Tlakové desky</div>
-                            <div class="tech-item-desc">Aparatura pro stanovení retenčních křivek (pF) při různých matricových potenciálech</div>
-                        </div>
-                        <div class="tech-item">
-                            <div class="tech-item-name">BET analyzátor</div>
-                            <div class="tech-item-desc">Přístroj pro měření měrného povrchu metodou adsorpce dusíku</div>
-                        </div>
-                        <div class="tech-item">
-                            <div class="tech-item-name">AAS spektrometr</div>
-                            <div class="tech-item-desc">Atomová absorpční spektrometrie pro stanovení kovových prvků (K, Ca, Mg)</div>
-                        </div>
-                        <div class="tech-item">
-                            <div class="tech-item-name">UV-VIS spektrofotometr</div>
-                            <div class="tech-item-desc">Spektrofotometrické stanovení fosforu a dalších analytů</div>
-                        </div>
-                        <div class="tech-item">
-                            <div class="tech-item-name">Mikroskop + PCR</div>
-                            <div class="tech-item-desc">Optická mikroskopie kořenů a molekulární identifikace mykorhizních hub</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="tech-category animate-on-scroll">
-                    <div class="tech-category-header">
-                        <h3 class="tech-category-title">Monitorovací senzory a kamery</h3>
-                    </div>
-                    <div class="tech-items">
-                        <div class="tech-item">
-                            <div class="tech-item-name">Brinno TLC 2020 (RGB časosběr)</div>
-                            <div class="tech-item-desc">Časosběrná RGB kamera, 1 snímek/h, bateriové napájení (~80 dnů na AA), AVI/JPEG výstup. Extrakce indexů GCC, RCC, ExG, VARI, GLI, RGBVI.</div>
-                        </div>
-                        <div class="tech-item">
-                            <div class="tech-item-name">MAPIR Survey3W OCN (NIR kamera)</div>
-                            <div class="tech-item-desc">Multispektrální kamera v konfiguraci Orange/Cyan/NIR (850 nm). NDVI a SAVI výpočty. RAW formát pro max. radiometrický rozsah.</div>
-                        </div>
-                        <div class="tech-item">
-                            <div class="tech-item-name">Půdní VWC sondy (10/20/60 cm)</div>
-                            <div class="tech-item-desc">Kapacitní sondy volumetrické vlhkosti půdy v hloubkách 10, 20 a 60 cm. Vzorkování 15–30 min.</div>
-                        </div>
-                        <div class="tech-item">
-                            <div class="tech-item-name">Půdní teplotní čidla + povrchový teploměr</div>
-                            <div class="tech-item-desc">Teplotní senzory ve stejných hloubkách (10/20/60 cm) + povrchový teploměr 10 cm nad půdou v radiation shield.</div>
-                        </div>
-                        <div class="tech-item">
-                            <div class="tech-item-name">Kalibrační referenční terče</div>
-                            <div class="tech-item-desc">ColorChecker Passport / šedá karta 18% v záběru Brinno, kalibrační panel pro MAPIR. Normalizace RGB a NIR hodnot.</div>
-                        </div>
-                        <div class="tech-item">
-                            <div class="tech-item-name">Dataloggery pro půdní senzory</div>
-                            <div class="tech-item-desc">Záznamníky s UTC synchronizací pro kontinuální monitoring teploty a vlhkosti. Párování s EXIF časovými razítky kamer.</div>
-                        </div>
-                        <div class="tech-item">
-                            <div class="tech-item-name">Meteostanice</div>
-                            <div class="tech-item-desc">Automatická měřicí stanice pro srážky, teplotu, vlhkost vzduchu a rychlost větru</div>
-                        </div>
-                        <div class="tech-item">
-                            <div class="tech-item-name">Tablety s GIS</div>
-                            <div class="tech-item-desc">Terénní zařízení s GIS aplikací pro sběr a vizualizaci prostorových dat</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Algorithms Section -->
-    <section id="algoritmy">
-        <div class="container">
-            <div class="section-header">
-                <div class="section-tag">09 / Analytické algoritmy</div>
-                <h2 class="section-title">Statistické a analytické metody</h2>
-                <p class="section-subtitle">Přehled algoritmů pro zpracování dat a testování hypotéz</p>
-            </div>
-            
-            <div class="algo-cards">
-                <div class="algo-card animate-on-scroll">
-                    <div class="algo-header">
-                        <div class="algo-number">01</div>
-                        <div class="algo-title">Porovnání variant (ANOVA)</div>
-                    </div>
-                    <div class="algo-body">
-                        <p class="algo-purpose">Testování statisticky významných rozdílů mezi frézovanými a nefrézovanými plochami pro jednotlivé parametry.</p>
-                        <ul class="algo-steps">
-                            <li class="algo-step">
-                                <span class="algo-step-num">1</span>
-                                <span class="algo-step-text">Kontrola předpokladů: normalita (Shapiro-Wilk), homogenita variancí (Levene)</span>
-                            </li>
-                            <li class="algo-step">
-                                <span class="algo-step-num">2</span>
-                                <span class="algo-step-text">Dvoucestná ANOVA: faktory Varianta (fréza/nefréza) × Věk výsadby</span>
-                            </li>
-                            <li class="algo-step">
-                                <span class="algo-step-num">3</span>
-                                <span class="algo-step-text">Post-hoc testy (Tukey HSD) pro párová srovnání</span>
-                            </li>
-                            <li class="algo-step">
-                                <span class="algo-step-num">4</span>
-                                <span class="algo-step-text">Výpočet effect size (η², Cohen's d)</span>
-                            </li>
-                        </ul>
-                        <div class="algo-formula">H₀: μ_fréza = μ_nefréza | α = 0.05</div>
-                    </div>
-                </div>
-                
-                <div class="algo-card animate-on-scroll">
-                    <div class="algo-header">
-                        <div class="algo-number">02</div>
-                        <div class="algo-title">Smíšené modely (LMM)</div>
-                    </div>
-                    <div class="algo-body">
-                        <p class="algo-purpose">Analýza opakovaných měření s náhodnými efekty pro plochy a jedince při respektování hierarchické struktury dat.</p>
-                        <ul class="algo-steps">
-                            <li class="algo-step">
-                                <span class="algo-step-num">1</span>
-                                <span class="algo-step-text">Definice fixních efektů: Varianta, Čas, Varianta×Čas</span>
-                            </li>
-                            <li class="algo-step">
-                                <span class="algo-step-num">2</span>
-                                <span class="algo-step-text">Definice náhodných efektů: (1|Lokalita/Plocha/Jedinec)</span>
-                            </li>
-                            <li class="algo-step">
-                                <span class="algo-step-num">3</span>
-                                <span class="algo-step-text">Výběr kovarianční struktury (AR1, CS) pro časové korelace</span>
-                            </li>
-                            <li class="algo-step">
-                                <span class="algo-step-num">4</span>
-                                <span class="algo-step-text">Model comparison pomocí AIC/BIC</span>
-                            </li>
-                        </ul>
-                        <div class="algo-formula">Y = Xβ + Zu + ε, kde u ~ N(0, G), ε ~ N(0, R)</div>
-                    </div>
-                </div>
-                
-                <div class="algo-card animate-on-scroll">
-                    <div class="algo-header">
-                        <div class="algo-number">03</div>
-                        <div class="algo-title">Korelační analýza</div>
-                    </div>
-                    <div class="algo-body">
-                        <p class="algo-purpose">Kvantifikace síly a směru vztahů mezi půdními parametry, dekompozicí a růstem sazenic.</p>
-                        <ul class="algo-steps">
-                            <li class="algo-step">
-                                <span class="algo-step-num">1</span>
-                                <span class="algo-step-text">Pearsonova korelace pro lineární vztahy (normální data)</span>
-                            </li>
-                            <li class="algo-step">
-                                <span class="algo-step-num">2</span>
-                                <span class="algo-step-text">Spearmanův koef. pro neparametrické nebo ordinální data</span>
-                            </li>
-                            <li class="algo-step">
-                                <span class="algo-step-num">3</span>
-                                <span class="algo-step-text">Parciální korelace pro kontrolu confounding proměnných</span>
-                            </li>
-                            <li class="algo-step">
-                                <span class="algo-step-num">4</span>
-                                <span class="algo-step-text">Korelační matice s Bonferroniho korekcí pro mnohočetné testování</span>
-                            </li>
-                        </ul>
-                        <div class="algo-formula">r = Σ(xi - x̄)(yi - ȳ) / √[Σ(xi - x̄)² × Σ(yi - ȳ)²]</div>
-                    </div>
-                </div>
-                
-                <div class="algo-card animate-on-scroll">
-                    <div class="algo-header">
-                        <div class="algo-number">04</div>
-                        <div class="algo-title">Path analýza (SEM)</div>
-                    </div>
-                    <div class="algo-body">
-                        <p class="algo-purpose">Testování kauzálních hypotéz a kvantifikace přímých/nepřímých efektů frézování na cílové proměnné.</p>
-                        <ul class="algo-steps">
-                            <li class="algo-step">
-                                <span class="algo-step-num">1</span>
-                                <span class="algo-step-text">Specifikace teoretického modelu na základě kauzální mapy</span>
-                            </li>
-                            <li class="algo-step">
-                                <span class="algo-step-num">2</span>
-                                <span class="algo-step-text">Estimace parametrů (ML, WLSMV pro nenormální data)</span>
-                            </li>
-                            <li class="algo-step">
-                                <span class="algo-step-num">3</span>
-                                <span class="algo-step-text">Hodnocení fit (χ², RMSEA, CFI, SRMR)</span>
-                            </li>
-                            <li class="algo-step">
-                                <span class="algo-step-num">4</span>
-                                <span class="algo-step-text">Dekompozice efektů: přímé, nepřímé, celkové</span>
-                            </li>
-                        </ul>
-                        <div class="algo-formula">Total effect = Direct effect + Σ(Indirect effects)</div>
-                    </div>
-                </div>
-                
-                <div class="algo-card animate-on-scroll">
-                    <div class="algo-header">
-                        <div class="algo-number">05</div>
-                        <div class="algo-title">Požární rizikový index</div>
-                    </div>
-                    <div class="algo-body">
-                        <p class="algo-purpose">Výpočet syntetického indexu požárního nebezpečí kombinující vlhkost paliva, objem CWD a meteorologické podmínky.</p>
-                        <ul class="algo-steps">
-                            <li class="algo-step">
-                                <span class="algo-step-num">1</span>
-                                <span class="algo-step-text">Standardizace vstupních proměnných (z-skóre nebo min-max)</span>
-                            </li>
-                            <li class="algo-step">
-                                <span class="algo-step-num">2</span>
-                                <span class="algo-step-text">Definice vah komponent na základě expertního odhadu/PCA</span>
-                            </li>
-                            <li class="algo-step">
-                                <span class="algo-step-num">3</span>
-                                <span class="algo-step-text">Kompozitní výpočet: FRI = w₁×(1-M) + w₂×V + w₃×T</span>
-                            </li>
-                            <li class="algo-step">
-                                <span class="algo-step-num">4</span>
-                                <span class="algo-step-text">Škálování na interval 0–1, validace proti skutečným událostem</span>
-                            </li>
-                        </ul>
-                        <div class="algo-formula">FRI = 0.4×(1-M_norm) + 0.35×V_norm + 0.25×T_norm</div>
-                    </div>
-                </div>
-                
-                <div class="algo-card animate-on-scroll">
-                    <div class="algo-header">
-                        <div class="algo-number">06</div>
-                        <div class="algo-title">Analýza časových řad</div>
-                    </div>
-                    <div class="algo-body">
-                        <p class="algo-purpose">Modelování růstových trajektorií sazenic a detekce trendů z časosběrných dat.</p>
-                        <ul class="algo-steps">
-                            <li class="algo-step">
-                                <span class="algo-step-num">1</span>
-                                <span class="algo-step-text">Dekompozice: trend + sezonní složka + reziduály</span>
-                            </li>
-                            <li class="algo-step">
-                                <span class="algo-step-num">2</span>
-                                <span class="algo-step-text">Nelineární růstové modely (Gompertz, logistický)</span>
-                            </li>
-                            <li class="algo-step">
-                                <span class="algo-step-num">3</span>
-                                <span class="algo-step-text">Porovnání parametrů růstu mezi variantami</span>
-                            </li>
-                            <li class="algo-step">
-                                <span class="algo-step-num">4</span>
-                                <span class="algo-step-text">Change-point detection pro identifikaci zlomových bodů</span>
-                            </li>
-                        </ul>
-                        <div class="algo-formula">Y(t) = K / (1 + exp(-r × (t - t₀)))</div>
+                        <div class="timeline-desc">Statistické testování hypotéz H1–H6. Porovnání meziročních trendů. Doporučení pro lesnickou praxi: má frézování prokazatelný vliv na zakořenění a přežívání sazenic?</div>
                     </div>
                 </div>
             </div>
@@ -3366,81 +2989,126 @@
     <section id="galerie">
         <div class="container">
             <div class="section-header">
-                <div class="section-tag">10 / Multispektrální snímky</div>
-                <h2 class="section-title">Galerie snímků z monitoringu</h2>
-                <p class="section-subtitle">Ukázky RGB, NIR a CIR kompozitních snímků z experimentálních ploch</p>
+                <div class="section-tag">Fotogalerie</div>
+                <h2 class="section-title">Fotodokumentace testovacích pozemků</h2>
+                <p class="section-subtitle">Reálné fotografie z terénního průzkumu testovacích pozemků</p>
             </div>
 
+            <!-- Frézovaný 2022 -->
+            <h3 style="font-family: 'Playfair Display', serif; font-size: 1.5rem; margin-bottom: 1.5rem; color: var(--forest-dark);">41Ca0 – Frézovaný pozemek (2022)</h3>
+            <div class="gallery-grid" style="margin-bottom: 3rem;">
+                <div class="gallery-card animate-on-scroll">
+                    <img src="assets/images/Fotky testovacích pozemků/Pozemek frézovaný_2022/Fréza_2022_f1.jpg" alt="Frézovaný pozemek 2022 - pohled 1" onclick="openLightbox(this.src)">
+                    <div class="gallery-card-body">
+                        <div class="gallery-card-title">Frézovaný pozemek – pohled 1</div>
+                        <div class="gallery-card-desc">Pozemek 41Ca0 po frézování v únoru 2022. Viditelná příprava půdy pro výsadbu dubu a modřínu.</div>
+                        <span class="gallery-card-tag tag-freza-2022">Fréza 2022</span>
+                    </div>
+                </div>
+                <div class="gallery-card animate-on-scroll">
+                    <img src="assets/images/Fotky testovacích pozemků/Pozemek frézovaný_2022/Fréza_2022_f2.jpg" alt="Frézovaný pozemek 2022 - pohled 2" onclick="openLightbox(this.src)">
+                    <div class="gallery-card-body">
+                        <div class="gallery-card-title">Frézovaný pozemek – pohled 2</div>
+                        <div class="gallery-card-desc">Detailní záběr na terén po frézování. Zapravení těžebních zbytků do půdy.</div>
+                        <span class="gallery-card-tag tag-freza-2022">Fréza 2022</span>
+                    </div>
+                </div>
+                <div class="gallery-card animate-on-scroll">
+                    <img src="assets/images/Fotky testovacích pozemků/Pozemek frézovaný_2022/Fréza_2022_f3.jpg" alt="Frézovaný pozemek 2022 - pohled 3" onclick="openLightbox(this.src)">
+                    <div class="gallery-card-body">
+                        <div class="gallery-card-title">Frézovaný pozemek – pohled 3</div>
+                        <div class="gallery-card-desc">Celkový pohled na pozemek 41Ca0. Vysazeno 230 ks dubu a 495 ks modřínu.</div>
+                        <span class="gallery-card-tag tag-freza-2022">Fréza 2022</span>
+                    </div>
+                </div>
+                <div class="gallery-card animate-on-scroll">
+                    <img src="assets/images/Fotky testovacích pozemků/Pozemek frézovaný_2022/Fréza_2022_f4.jpg" alt="Frézovaný pozemek 2022 - pohled 4" onclick="openLightbox(this.src)">
+                    <div class="gallery-card-body">
+                        <div class="gallery-card-title">Frézovaný pozemek – pohled 4</div>
+                        <div class="gallery-card-desc">Stav vegetace na frézovaném pozemku. Předchozí porost: borovice 55%, smrk 45% (93 let).</div>
+                        <span class="gallery-card-tag tag-freza-2022">Fréza 2022</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Nefrézovaný 2022 -->
+            <h3 style="font-family: 'Playfair Display', serif; font-size: 1.5rem; margin-bottom: 1.5rem; color: var(--forest-dark);">41Ka0 – Zalesněný pozemek bez frézy (2022)</h3>
+            <div class="gallery-grid" style="margin-bottom: 3rem;">
+                <div class="gallery-card animate-on-scroll">
+                    <img src="assets/images/Fotky testovacích pozemků/Pozemek nefrézovaný_2022/Nefréza_2022_f1.jpg" alt="Nefrézovaný pozemek 2022 - pohled 1" onclick="openLightbox(this.src)">
+                    <div class="gallery-card-body">
+                        <div class="gallery-card-title">Zalesněný pozemek – pohled 1</div>
+                        <div class="gallery-card-desc">Pozemek 41Ka0 zalesněný v roce 2022 bez předchozího frézování. Kontrolní plocha pro srovnání.</div>
+                        <span class="gallery-card-tag tag-nefreza-2022">Bez frézy 2022</span>
+                    </div>
+                </div>
+                <div class="gallery-card animate-on-scroll">
+                    <img src="assets/images/Fotky testovacích pozemků/Pozemek nefrézovaný_2022/Nefréza_2022_f2.jpg" alt="Nefrézovaný pozemek 2022 - pohled 2" onclick="openLightbox(this.src)">
+                    <div class="gallery-card-body">
+                        <div class="gallery-card-title">Zalesněný pozemek – pohled 2</div>
+                        <div class="gallery-card-desc">Stav vegetace bez přípravy frézou. Vysazeno 1 070 ks dubu a 60 ks modřínu.</div>
+                        <span class="gallery-card-tag tag-nefreza-2022">Bez frézy 2022</span>
+                    </div>
+                </div>
+                <div class="gallery-card animate-on-scroll">
+                    <img src="assets/images/Fotky testovacích pozemků/Pozemek nefrézovaný_2022/Nefréza_2022_f3.jpg" alt="Nefrézovaný pozemek 2022 - pohled 3" onclick="openLightbox(this.src)">
+                    <div class="gallery-card-body">
+                        <div class="gallery-card-title">Zalesněný pozemek – pohled 3</div>
+                        <div class="gallery-card-desc">Předchozí porost: smrk 75%, dub 10%, olše 10%, osika 10% (věk 33 let).</div>
+                        <span class="gallery-card-tag tag-nefreza-2022">Bez frézy 2022</span>
+                    </div>
+                </div>
+                <div class="gallery-card animate-on-scroll">
+                    <img src="assets/images/Fotky testovacích pozemků/Pozemek nefrézovaný_2022/Nefréza_2022_f4.jpg" alt="Nefrézovaný pozemek 2022 - pohled 4" onclick="openLightbox(this.src)">
+                    <div class="gallery-card-body">
+                        <div class="gallery-card-title">Zalesněný pozemek – pohled 4</div>
+                        <div class="gallery-card-desc">Detail terénu na nefrézovaném pozemku. Srovnání s frézovanou plochou 41Ca0.</div>
+                        <span class="gallery-card-tag tag-nefreza-2022">Bez frézy 2022</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Kombinovaný 2026 -->
+            <h3 style="font-family: 'Playfair Display', serif; font-size: 1.5rem; margin-bottom: 1.5rem; color: var(--forest-dark);">41Ca8 / 41La7 – Kombinovaný pozemek (jaro 2026)</h3>
             <div class="gallery-grid">
                 <div class="gallery-card animate-on-scroll">
-                    <img src="assets/images/nir_comparison.jpg" alt="NIR porovnání - Plocha 1" onclick="openLightbox(this.src)">
+                    <img src="assets/images/Fotky testovacích pozemků/Kombinovaný pozemek_frézování i nefrézování_2026/Kombo fréza_nefréza_2026_f1.jpg" alt="Kombinovaný pozemek 2026 - pohled 1" onclick="openLightbox(this.src)">
                     <div class="gallery-card-body">
-                        <div class="gallery-card-title">NIR porovnání – Plocha 1</div>
-                        <div class="gallery-card-desc">Porovnání blízkoinfračerveného snímku (850 nm) z kamery MAPIR Survey3W OCN. Zdravá vegetace reflektuje výrazně v NIR pásmu.</div>
-                        <span class="gallery-card-tag tag-nir">NIR 850 nm</span>
+                        <div class="gallery-card-title">Kombinovaný pozemek – pohled 1</div>
+                        <div class="gallery-card-desc">Pozemek připravený k frézování na jaře 2026. Bude rozdělen na frézovanou (41Ca8) a nefrézovanou (41La7) část.</div>
+                        <span class="gallery-card-tag tag-kombo-2026">Kombo 2026</span>
                     </div>
                 </div>
-
                 <div class="gallery-card animate-on-scroll">
-                    <img src="assets/images/ndvi_vegetation.jpg" alt="NDVI vegetační analýza" onclick="openLightbox(this.src)">
+                    <img src="assets/images/Fotky testovacích pozemků/Kombinovaný pozemek_frézování i nefrézování_2026/Kombo fréza_nefréza_2026_f2.jpg" alt="Kombinovaný pozemek 2026 - pohled 2" onclick="openLightbox(this.src)">
                     <div class="gallery-card-body">
-                        <div class="gallery-card-title">NDVI vegetační analýza</div>
-                        <div class="gallery-card-desc">Normalizovaný vegetační index (NDVI) vypočtený z NIR a červeného pásma. Vyšší hodnoty = zdravější vegetace.</div>
-                        <span class="gallery-card-tag tag-ndvi">NDVI</span>
+                        <div class="gallery-card-title">Kombinovaný pozemek – pohled 2</div>
+                        <div class="gallery-card-desc">Stav terénu před úpravou. Předchozí porost: smrk 45%, borovice 55% (věk 67 let).</div>
+                        <span class="gallery-card-tag tag-kombo-2026">Kombo 2026</span>
                     </div>
                 </div>
-
                 <div class="gallery-card animate-on-scroll">
-                    <img src="assets/images/cir_false_color.jpg" alt="CIR nepravé barvy - Plocha 1" onclick="openLightbox(this.src)">
+                    <img src="assets/images/Fotky testovacích pozemků/Kombinovaný pozemek_frézování i nefrézování_2026/Kombo fréza_nefréza_2026_f3.jpg" alt="Kombinovaný pozemek 2026 - pohled 3" onclick="openLightbox(this.src)">
                     <div class="gallery-card-body">
-                        <div class="gallery-card-title">CIR nepravé barvy – Plocha 1</div>
-                        <div class="gallery-card-desc">Color-infrared (CIR) kompozit zobrazující vegetaci v červených tónech. Aktivní fotosyntéza se projevuje sytou červenou barvou.</div>
-                        <span class="gallery-card-tag tag-cir">CIR kompozit</span>
+                        <div class="gallery-card-title">Kombinovaný pozemek – pohled 3</div>
+                        <div class="gallery-card-desc">Pohled na celou plochu 0.076 ha. Typ půdy: 3K4 (41Ca8) / 3K2 (41La7).</div>
+                        <span class="gallery-card-tag tag-kombo-2026">Kombo 2026</span>
                     </div>
                 </div>
-
                 <div class="gallery-card animate-on-scroll">
-                    <img src="assets/images/nir_comparison_plot2.jpg" alt="NIR porovnání - Plocha 2" onclick="openLightbox(this.src)">
+                    <img src="assets/images/Fotky testovacích pozemků/Kombinovaný pozemek_frézování i nefrézování_2026/Kombo fréza_nefréza_2026_f4.jpg" alt="Kombinovaný pozemek 2026 - pohled 4" onclick="openLightbox(this.src)">
                     <div class="gallery-card-body">
-                        <div class="gallery-card-title">NIR porovnání – Plocha 2</div>
-                        <div class="gallery-card-desc">Blízkoinfračervený snímek druhé experimentální plochy pro srovnání vegetačního pokryvu mezi variantami.</div>
-                        <span class="gallery-card-tag tag-nir">NIR 850 nm</span>
+                        <div class="gallery-card-title">Kombinovaný pozemek – pohled 4</div>
+                        <div class="gallery-card-desc">Detail terénu. Výsadba dosud neproběhla – čeká se na úpravu půdy frézou.</div>
+                        <span class="gallery-card-tag tag-kombo-2026">Kombo 2026</span>
                     </div>
                 </div>
-
                 <div class="gallery-card animate-on-scroll">
-                    <img src="assets/images/ndvi_plot2.jpg" alt="NDVI - Plocha 2" onclick="openLightbox(this.src)">
+                    <img src="assets/images/Fotky testovacích pozemků/Kombinovaný pozemek_frézování i nefrézování_2026/Kombo fréza_nefréza_2026_f5.jpg" alt="Kombinovaný pozemek 2026 - pohled 5" onclick="openLightbox(this.src)">
                     <div class="gallery-card-body">
-                        <div class="gallery-card-title">NDVI – Plocha 2</div>
-                        <div class="gallery-card-desc">NDVI analýza druhé plochy. Porovnání rozdílů ve vitalitě sazenic mezi frézovanými a nefrézovanými variantami.</div>
-                        <span class="gallery-card-tag tag-ndvi">NDVI</span>
-                    </div>
-                </div>
-
-                <div class="gallery-card animate-on-scroll">
-                    <img src="assets/images/cir_plot2.jpg" alt="CIR nepravé barvy - Plocha 2" onclick="openLightbox(this.src)">
-                    <div class="gallery-card-body">
-                        <div class="gallery-card-title">CIR nepravé barvy – Plocha 2</div>
-                        <div class="gallery-card-desc">CIR kompozit druhé experimentální plochy. Prostorový vzor vegetace odpovídá uspořádání výsadby.</div>
-                        <span class="gallery-card-tag tag-cir">CIR kompozit</span>
-                    </div>
-                </div>
-
-                <div class="gallery-card animate-on-scroll">
-                    <img src="assets/images/nir_comparison_plot3.jpg" alt="NIR porovnání - Plocha 3" onclick="openLightbox(this.src)">
-                    <div class="gallery-card-body">
-                        <div class="gallery-card-title">NIR porovnání – Plocha 3</div>
-                        <div class="gallery-card-desc">Třetí experimentální plocha v NIR pásmu. Slouží ke kalibraci a cross-validaci vegetačních indexů napříč lokalitami.</div>
-                        <span class="gallery-card-tag tag-nir">NIR 850 nm</span>
-                    </div>
-                </div>
-
-                <div class="gallery-card animate-on-scroll">
-                    <img src="assets/images/camera_coverage_analysis.png" alt="Analýza pokrytí kamerami" onclick="openLightbox(this.src)">
-                    <div class="gallery-card-body">
-                        <div class="gallery-card-title">Analýza pokrytí kamerami</div>
-                        <div class="gallery-card-desc">Vizualizace pokrytí experimentálních ploch časosběrnými kamerami Brinno TLC 2020 a MAPIR Survey3W OCN.</div>
-                        <span class="gallery-card-tag tag-coverage">Pokrytí</span>
+                        <div class="gallery-card-title">Kombinovaný pozemek – pohled 5</div>
+                        <div class="gallery-card-desc">Nadmořská výška 465–471 m n.m. GPS rohy zaměřeny včetně elevace.</div>
+                        <span class="gallery-card-tag tag-kombo-2026">Kombo 2026</span>
                     </div>
                 </div>
             </div>
@@ -3453,33 +3121,126 @@
         <img id="lightbox-img" src="" alt="Zvětšený snímek">
     </div>
 
+    <!-- Metodika Section -->
+    <section id="metodika">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-tag">Metodické dokumenty</div>
+                <h2 class="section-title">Metodiky monitoringu</h2>
+                <p class="section-subtitle">Integrované metodiky podle kterých budeme postupovat při monitoringu pomocí RGB/NIR kamer a půdních senzorů</p>
+            </div>
+
+            <div class="metodika-grid">
+                <div class="metodika-card animate-on-scroll">
+                    <h3>Integrovaná metodika RGB + NIR monitoringu</h3>
+                    <p>Komplexní metodický postup pro kombinaci RGB časosběrných snímků (Brinno TLC 2020) s blízkoinfračervenými daty z kamery MAPIR Survey 3W. Popisuje extrakci vegetačních indexů (GCC, NDVI, SAVI), kalibraci snímků a analýzu fenologických přechodů.</p>
+                    <p>Výstupy: fenologický monitoring, dvoukanálová stresová detekce (Early Warning System), porovnání variant fréza/nefréza.</p>
+                    <a href="assets/docs/Integrovana_metodika_RGB_NIR_monitoring.pdf" target="_blank">Otevřít PDF metodiku</a>
+                </div>
+
+                <div class="metodika-card animate-on-scroll">
+                    <h3>Metodika NIR + půdní senzory ALCEDO</h3>
+                    <p>Detailní návod pro propojení NIR dat z kamery MAPIR Survey 3W s kontinuálním záznamem půdních senzorů TOMST TMS. Popisuje korelační analýzu NDVI vs. VWC (volumetrický obsah vody) a teplotu v různých hloubkách.</p>
+                    <p>Výstupy: lag-korelace VWC→NDVI, hloubkové profily vlhkosti, detekce zakořenění sazenic.</p>
+                    <a href="assets/docs/metodika_NIR_pudni_senzory_alcedo.pdf" target="_blank">Otevřít PDF metodiku</a>
+                </div>
+            </div>
+
+            <div style="margin-top: 3rem; text-align: center;">
+                <div class="metodika-card animate-on-scroll" style="max-width: 800px; margin: 0 auto;">
+                    <h3>Sekvestrace uhlíku v půdě</h3>
+                    <p>Sledování sekvestrace (ukládání) uhlíku v půdě bude realizováno ve spolupráci s odborníky z České zemědělské univerzity v Praze (ČZU). Metodiky pro měření půdního uhlíku budou doplněny v dalších fázích projektu.</p>
+                    <p style="color: var(--leaf-light); font-family: 'JetBrains Mono', monospace; font-size: 0.85rem;">Partner: ČZU Praha | Stav: Metodika v přípravě</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Glossary Section -->
+    <section id="slovnicek">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-tag">Slovníček pojmů</div>
+                <h2 class="section-title">Vysvětlivky pro laiky</h2>
+                <p class="section-subtitle">Co znamenají zkratky a odborné termíny, které na této stránce používáme</p>
+            </div>
+
+            <div class="glossary-grid">
+                <div class="glossary-item animate-on-scroll">
+                    <span class="glossary-term">VWC</span>
+                    <span class="glossary-def"><strong>Volumetric Water Content</strong> – objemový obsah vody v půdě, udávaný v procentech. Hodnota 20 % znamená, že v daném objemu půdy je pětina voda. Měříme TMS senzory ve 3 hloubkách.</span>
+                </div>
+
+                <div class="glossary-item animate-on-scroll">
+                    <span class="glossary-term">NDVI</span>
+                    <span class="glossary-def"><strong>Normalized Difference Vegetation Index</strong> – číslo od −1 do +1, které vyjadřuje zdravotní stav vegetace. Zdravá zelená vegetace má NDVI kolem 0,6–0,9. Stresovaná nebo suchá vegetace klesá pod 0,3. Měříme NIR kamerou MAPIR.</span>
+                </div>
+
+                <div class="glossary-item animate-on-scroll">
+                    <span class="glossary-term">NIR</span>
+                    <span class="glossary-def"><strong>Near Infrared</strong> – blízké infračervené světlo (vlnová délka ~850 nm). Lidské oko ho nevidí, ale zdravé listy ho silně odrážejí. Když rostlina stresuje, odráží méně NIR – to detekujeme kamerou MAPIR ještě dříve, než je problém vidět okem.</span>
+                </div>
+
+                <div class="glossary-item animate-on-scroll">
+                    <span class="glossary-term">RGB</span>
+                    <span class="glossary-def"><strong>Red, Green, Blue</strong> – běžné barevné snímky, jaké pořizuje každý fotoaparát. Z RGB snímků z kamery Brinno extrahujeme vegetační indexy (GCC, ExG, VARI), které popisují „jak moc je plocha zelená".</span>
+                </div>
+
+                <div class="glossary-item animate-on-scroll">
+                    <span class="glossary-term">LAG</span>
+                    <span class="glossary-def"><strong>Časové zpoždění</strong> – počet dnů, než se změna v půdě (např. zvýšení vlhkosti po dešti) projeví na zdraví sazenice (změna NDVI). Krátký lag = dobré zakořenění, dlouhý lag = slabé kořeny. Klíčová metrika celého projektu.</span>
+                </div>
+
+                <div class="glossary-item animate-on-scroll">
+                    <span class="glossary-term">GCC</span>
+                    <span class="glossary-def"><strong>Green Chromatic Coordinate</strong> – podíl zelené složky v RGB snímku. Čím vyšší GCC, tím více chlorofylu a zelenější vegetace. Standard sítě PhenoCam pro sledování fenologie (zelenání na jaře, žloutnutí na podzim).</span>
+                </div>
+
+                <div class="glossary-item animate-on-scroll">
+                    <span class="glossary-term">TMS</span>
+                    <span class="glossary-def"><strong>TOMST Measuring System</strong> – půdní senzor české firmy TOMST. TMS standard měří teplotu ve 3 hloubkách a vlhkost půdy. TMS long (48 cm) sonduje i hlubokou zásobní zónu. Zaznamenává každých 15 minut, baterie vydrží celou sezónu.</span>
+                </div>
+
+                <div class="glossary-item animate-on-scroll">
+                    <span class="glossary-term">GDD</span>
+                    <span class="glossary-def"><strong>Growing Degree Days</strong> – akumulace tepla nad prahovou teplotou 5 °C. Suma „efektivních" teplot za sezónu. Více GDD = delší vegetační období. Frézovaná půda by měla akumulovat GDD rychleji (tmavší povrch, rychlejší ohřev).</span>
+                </div>
+
+                <div class="glossary-item animate-on-scroll">
+                    <span class="glossary-term">LVS</span>
+                    <span class="glossary-def"><strong>Lesní vegetační stupeň</strong> – klasifikace podle nadmořské výšky a klimatu (1 = dubový, 3 = dubovo-bukový, 4 = bukový). Naše pozemky jsou v LVS 3–4, tedy v přechodné zóně mezi duby a buky.</span>
+                </div>
+
+                <div class="glossary-item animate-on-scroll">
+                    <span class="glossary-term">HS</span>
+                    <span class="glossary-def"><strong>Hospodářský soubor</strong> – číslo popisující typologické zařazení lesa (stanoviště). HS 433 = svěží dubová bučina, HS 471 = obohacená buková doubrava. Udává, jaké dřeviny se na daném místě přirozeně vyskytují.</span>
+                </div>
+
+                <div class="glossary-item animate-on-scroll">
+                    <span class="glossary-term">3K4</span>
+                    <span class="glossary-def"><strong>Typ půdy</strong> – kód v české klasifikaci lesních půd. 3 = kambizemě (hnědé lesní půdy), K = kambická varieta, 4 = střední skeletovitost. Jsou to nejrozšířenější lesní půdy v ČR, typické pro pahorkatiny.</span>
+                </div>
+
+                <div class="glossary-item animate-on-scroll">
+                    <span class="glossary-term">SAVI</span>
+                    <span class="glossary-def"><strong>Soil Adjusted Vegetation Index</strong> – modifikace NDVI, která koriguje vliv holé půdy v záběru. Vhodný pro mladé sazenice, kde je hodně viditelného podkladu (pokryv vegetací &lt; 30 %). Používáme korekční faktor L = 0.5.</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Footer -->
     <footer>
         <div class="container">
-            <div class="footer-logo">🌲 Lesnický monitoring</div>
+            <div class="footer-logo">Lesnický monitoring – Frézování</div>
             <p class="footer-text">Vliv frézování půdy po těžbě dřeva na růst a vývoj sazenic</p>
-            <p class="footer-text">Období realizace: leden 2026 – prosinec 2027</p>
+            <p class="footer-text">4 testovací pozemky | Oblast Podolí I | Období: 2026–2027</p>
+            <p class="footer-text">Měření: TMS senzory (TOMST) + Brinno TLC 2020 + MAPIR Survey 3W + ČZU sekvestrace C</p>
             <p class="footer-copy">© 2026 Výzkumný projekt | Dokumentace vytvořena pro účely lesnické praxe</p>
         </div>
     </footer>
 
     <script>
-        // Tab functionality
-        document.querySelectorAll('.tab-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                // Remove active from all buttons
-                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-                // Add active to clicked button
-                btn.classList.add('active');
-                
-                // Hide all tab contents
-                document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
-                // Show selected tab content
-                const tabId = btn.getAttribute('data-tab');
-                document.getElementById(tabId).classList.add('active');
-            });
-        });
-
         // Scroll animation
         const observerOptions = {
             root: null,
@@ -3518,34 +3279,69 @@
             card.style.transitionDelay = `${index * 0.1}s`;
         });
 
-        document.querySelectorAll('.protocols-grid .protocol-card').forEach((card, index) => {
-            card.style.transitionDelay = `${index * 0.05}s`;
+        // ===== SATELLITE MAP WITH REAL PLOT POLYGONS =====
+
+        // Plot GPS data
+        const plots = {
+            '41Ca0': {
+                name: '41Ca0 – Frézovaný 2022',
+                color: '#dc3232',
+                fillColor: '#dc3232',
+                coords: [
+                    [49.3624025666667, 14.2994830666667],
+                    [49.3628212166667, 14.2995420055556],
+                    [49.3628414611111, 14.2989140027778],
+                    [49.3624129861111, 14.2989995722222],
+                    [49.3624025666667, 14.2994830666667]
+                ],
+                altitudes: [466, 468, 470, 466],
+                area: '0.190 ha',
+                info: 'Frézováno 12. 2. 2022 | Dub 230 ks + Modřín 495 ks | 3K4 | LVS 3 / HS 433'
+            },
+            '41Ka0': {
+                name: '41Ka0 – Zalesněný 2022',
+                color: '#3278dc',
+                fillColor: '#3278dc',
+                coords: [
+                    [49.3558988805556, 14.3310777861111],
+                    [49.3564269583333, 14.3309996305556],
+                    [49.3564980722222, 14.3307230916667],
+                    [49.3559314472222, 14.3306776916667],
+                    [49.3558988805556, 14.3310777861111]
+                ],
+                altitudes: [486, 485, 485, 491],
+                area: '0.149 ha',
+                info: 'Zalesněno 2022 (bez frézy) | Dub 1070 ks + Modřín 60 ks | 3K4 | LVS 4 / HS 471'
+            },
+            '41Ca8': {
+                name: '41Ca8/41La7 – Jaro 2026',
+                color: '#dca532',
+                fillColor: '#dca532',
+                coords: [
+                    [49.3625504611111, 14.2989144],
+                    [49.3624500333333, 14.2984597861111],
+                    [49.3622748472222, 14.2985827222222],
+                    [49.3622994861111, 14.2989603666667],
+                    [49.3625504611111, 14.2989144]
+                ],
+                altitudes: [467, 469, 471, 465],
+                area: '0.076 ha',
+                info: 'Připraveno k frézování jaro 2026 | Rozděleno: fréza (41Ca8) + kontrola (41La7) | SM 45%, BO 55%'
+            }
+        };
+
+        // Calculate overall center for initial view
+        let allLats = [], allLngs = [];
+        Object.values(plots).forEach(p => {
+            p.coords.forEach(c => { allLats.push(c[0]); allLngs.push(c[1]); });
         });
-
-        document.querySelectorAll('.risks-grid .risk-card').forEach((card, index) => {
-            card.style.transitionDelay = `${index * 0.1}s`;
-        });
-
-        document.querySelectorAll('.algo-cards .algo-card').forEach((card, index) => {
-            card.style.transitionDelay = `${index * 0.1}s`;
-        });
-
-        // ===== SATELLITE MAP =====
-        const centerLat = 49.363115490683654;
-        const centerLng = 14.298905871827733;
-
-        const polygonCoords = [
-            [49.365483090355454, 14.300742154163428],
-            [49.35997802431898, 14.30239942152552],
-            [49.3601114206073, 14.292426390953636],
-            [49.365400207948404, 14.292516156818191],
-            [49.365483090355454, 14.300742154163428]
-        ];
+        const centerLat = (Math.min(...allLats) + Math.max(...allLats)) / 2;
+        const centerLng = (Math.min(...allLngs) + Math.max(...allLngs)) / 2;
 
         // Initialize Leaflet map with fractional zoom
         const map = L.map('satellite-map', {
             center: [centerLat, centerLng],
-            zoom: 16,
+            zoom: 14,
             zoomSnap: 0.1,
             zoomDelta: 0.1,
             wheelPxPerZoomLevel: 120,
@@ -3568,40 +3364,67 @@
             opacity: 0.6
         }).addTo(map);
 
-        // Draw polygon
-        const polygon = L.polygon(polygonCoords, {
-            color: '#8cb369',
-            weight: 3,
-            fillColor: '#8cb369',
-            fillOpacity: 0.2,
-            dashArray: '8, 4'
-        }).addTo(map);
+        // Draw all plot polygons and corner markers
+        const plotLayers = {};
+        const allBounds = L.latLngBounds([]);
 
-        // Center marker
-        const centerMarker = L.circleMarker([centerLat, centerLng], {
-            radius: 8,
-            fillColor: '#d4a574',
-            color: '#fff',
-            weight: 2,
-            fillOpacity: 1
-        }).addTo(map);
+        Object.entries(plots).forEach(([key, plot]) => {
+            // Polygon fill
+            const polygon = L.polygon(plot.coords, {
+                color: plot.color,
+                weight: 3,
+                fillColor: plot.fillColor,
+                fillOpacity: 0.2,
+                dashArray: null
+            }).addTo(map);
 
-        centerMarker.bindPopup(
-            '<div style="font-family: Source Sans 3, sans-serif; font-size: 14px;">' +
-            '<strong style="color: #1a2f1a;">Střed pozemků</strong><br>' +
-            '<span style="font-family: JetBrains Mono, monospace; font-size: 12px; color: #4a6741;">' +
-            '49.3631°N, 14.2989°E</span></div>'
-        );
+            // Polyline border (thicker, solid red-ish)
+            L.polyline(plot.coords, {
+                color: plot.color,
+                weight: 4,
+                opacity: 0.9
+            }).addTo(map);
 
-        polygon.bindPopup(
-            '<div style="font-family: Source Sans 3, sans-serif; font-size: 14px;">' +
-            '<strong style="color: #1a2f1a;">Polygon pokusných ploch</strong><br>' +
-            'Celková plocha experimentu<br>' +
-            '<span style="color: #4a6741;">9 lokalit × 3 replikace = 27 ploch</span></div>'
-        );
+            // Popup on polygon
+            polygon.bindPopup(
+                '<div style="font-family: Source Sans 3, sans-serif; font-size: 14px; min-width: 220px;">' +
+                '<strong style="color: #1a2f1a;">' + plot.name + '</strong><br>' +
+                '<span style="font-family: JetBrains Mono, monospace; font-size: 12px; color: #4a6741;">Plocha: ' + plot.area + '</span><br>' +
+                '<span style="font-size: 12px; color: #6b5344;">' + plot.info + '</span></div>'
+            );
 
-        // Fit to polygon initially
-        map.fitBounds(polygon.getBounds().pad(0.15));
+            // Corner markers with altitude labels
+            plot.coords.slice(0, -1).forEach((coord, i) => {
+                const alt = plot.altitudes[i];
+                const marker = L.circleMarker(coord, {
+                    radius: 6,
+                    fillColor: plot.color,
+                    color: '#fff',
+                    weight: 2,
+                    fillOpacity: 1
+                }).addTo(map);
+
+                marker.bindTooltip(alt + ' m', {
+                    permanent: false,
+                    direction: 'top',
+                    className: 'elev-tooltip'
+                });
+
+                marker.bindPopup(
+                    '<div style="font-family: JetBrains Mono, monospace; font-size: 12px;">' +
+                    'Roh ' + (i + 1) + '<br>' +
+                    'LAT: ' + coord[0].toFixed(7) + '<br>' +
+                    'LON: ' + coord[1].toFixed(7) + '<br>' +
+                    'Altitude: ' + alt + ' m n.m.</div>'
+                );
+            });
+
+            plotLayers[key] = polygon;
+            allBounds.extend(polygon.getBounds());
+        });
+
+        // Fit to all polygons initially
+        map.fitBounds(allBounds.pad(0.15));
 
         // Zoom display
         const zoomDisplay = L.control({position: 'topright'});
@@ -3619,7 +3442,11 @@
 
         // Map control functions
         function toggleView(btn, mode) {
-            document.querySelectorAll('.map-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.map-btn').forEach(b => {
+                if (b.onclick && b.getAttribute('title') && (b.getAttribute('title') === 'Semi-3D pohled' || b.getAttribute('title') === 'Plochý pohled')) {
+                    b.classList.remove('active');
+                }
+            });
             btn.classList.add('active');
             const container = document.getElementById('map3dContainer');
             if (mode === 'flat') {
@@ -3627,18 +3454,15 @@
             } else {
                 container.classList.remove('flat-view');
             }
-            // Invalidate map size after transform transition
             setTimeout(() => map.invalidateSize(), 700);
         }
 
-        function zoomToPolygon() {
-            map.fitBounds(polygon.getBounds().pad(0.05));
-        }
-
-        function zoomStep(delta) {
-            const currentZoom = map.getZoom();
-            const newZoom = Math.round((currentZoom + delta) * 10) / 10;
-            map.setZoom(Math.max(10, Math.min(23, newZoom)));
+        function zoomToPlot(plotKey) {
+            if (plotKey === 'all') {
+                map.fitBounds(allBounds.pad(0.15));
+            } else if (plotLayers[plotKey]) {
+                map.fitBounds(plotLayers[plotKey].getBounds().pad(0.3));
+            }
         }
 
         // Fix map rendering in perspective container
