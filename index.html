@@ -2137,6 +2137,65 @@
         .sensor-mapir { background: rgba(138, 58, 122, 0.15); color: #8a3a7a; }
         .sensor-czu { background: rgba(212, 165, 116, 0.15); color: var(--amber); }
 
+        /* Team / Operační skupina */
+        #tym {
+            background: linear-gradient(180deg, var(--cream-dark) 0%, var(--cream) 100%);
+        }
+
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 2rem;
+        }
+
+        .team-card {
+            background: var(--cream);
+            border-radius: 16px;
+            padding: 2.5rem 2rem;
+            text-align: center;
+            box-shadow: 0 4px 20px var(--shadow);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border-top: 4px solid var(--moss);
+        }
+
+        .team-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 8px 32px var(--shadow);
+        }
+
+        .team-avatar {
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            margin: 0 auto 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+        }
+
+        .team-card h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.1rem;
+            color: var(--forest-dark);
+            margin-bottom: 0.4rem;
+        }
+
+        .team-card .role {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--moss);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 0.8rem;
+        }
+
+        .team-card p {
+            font-size: 0.9rem;
+            color: var(--bark-light);
+            line-height: 1.6;
+        }
+
         @media (max-width: 768px) {
             .passport-grid {
                 grid-template-columns: 1fr;
@@ -2151,6 +2210,9 @@
                 grid-template-columns: 1fr;
             }
             .glossary-grid {
+                grid-template-columns: 1fr;
+            }
+            .team-grid {
                 grid-template-columns: 1fr;
             }
         }
@@ -2168,6 +2230,7 @@
             </div>
             <ul class="nav-links">
                 <li><a href="#cile">Cíle</a></li>
+                <li><a href="#tym">Tým</a></li>
                 <li><a href="#design">Pozemky</a></li>
                 <li><a href="#mapa">Mapa</a></li>
                 <li><a href="#pasportizace">Pasportizace</a></li>
@@ -2278,6 +2341,43 @@
                     </div>
                     <h3>Sekvestrace uhlíku (ČZU Praha)</h3>
                     <p>Odborníci z České zemědělské univerzity budou sledovat ukládání uhlíku v půdě na frézovaných vs. nefrézovaných plochách. Metodika bude upřesněna v dalších fázích projektu.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Operační skupina -->
+    <section id="tym">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-tag">Operační skupina</div>
+                <h2 class="section-title">Operační skupina</h2>
+                <p class="section-subtitle">Multidisciplinární tým odborníků propojující praxi, technologie a vědu</p>
+            </div>
+            <div class="team-grid">
+                <div class="team-card animate-on-scroll">
+                    <div class="team-avatar" style="background: #e8f5e9;">&#x1F332;</div>
+                    <h3>ALCEDO s.r.o.</h3>
+                    <div class="role">Žadatel</div>
+                    <p>Firma zabývající se lesnictvím, správou lesů a těžbou dřeva se sídlem v Milevsku.</p>
+                </div>
+                <div class="team-card animate-on-scroll">
+                    <div class="team-avatar" style="background: #e3f2fd;">&#x1F4E1;</div>
+                    <h3>České Radiokomunikace</h3>
+                    <div class="role">Innovation of Things</div>
+                    <p>Výzkumná a vývojová činnost, aplikace nových technologií a jejich integrace, aplikace AI modelů a datová analýza.</p>
+                </div>
+                <div class="team-card animate-on-scroll">
+                    <div class="team-avatar" style="background: #fff3e0;">&#x1F4BB;</div>
+                    <h3>Quanti</h3>
+                    <div class="role">Vývojáři</div>
+                    <p>Skupina vývojářů. Softwarové řešení, analytické nástroje, webová vizualizace a datové zpracování.</p>
+                </div>
+                <div class="team-card animate-on-scroll">
+                    <div class="team-avatar" style="background: #f3e5f5;">&#x1F52C;</div>
+                    <h3>ČZU Praha</h3>
+                    <div class="role">Vědecký partner</div>
+                    <p>Česká zemědělská univerzita v Praze. Oblast pedologie a analýzy lesní půdy, odborné vedení, metodika.</p>
                 </div>
             </div>
         </div>
