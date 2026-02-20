@@ -278,6 +278,79 @@
             margin: 0 auto;
         }
 
+        /* Preamble Section */
+        #preambule {
+            background: linear-gradient(180deg, var(--cream-dark) 0%, var(--cream) 100%);
+        }
+
+        .preamble-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .preamble-card {
+            background: white;
+            border-radius: 16px;
+            padding: 2.5rem;
+            box-shadow: 0 4px 20px var(--shadow);
+            border-left: 4px solid var(--moss);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .preamble-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 32px var(--shadow);
+        }
+
+        .preamble-card.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .preamble-card.accent {
+            border-left-color: var(--amber);
+            background: linear-gradient(135deg, #fffbf5 0%, #fff8ee 100%);
+        }
+
+        .preamble-card.highlight {
+            border-left-color: var(--leaf-fresh);
+            background: linear-gradient(135deg, #f5faf2 0%, #eef5ea 100%);
+        }
+
+        .preamble-card h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.25rem;
+            color: var(--forest-dark);
+            margin-bottom: 1rem;
+        }
+
+        .preamble-card p {
+            font-size: 0.95rem;
+            color: var(--bark-light);
+            line-height: 1.8;
+            margin-bottom: 0.8rem;
+        }
+
+        .preamble-card p:last-child {
+            margin-bottom: 0;
+        }
+
+        .preamble-intro {
+            max-width: 900px;
+            margin: 0 auto 2rem;
+            font-size: 1.1rem;
+            color: var(--forest-dark);
+            line-height: 1.9;
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            .preamble-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
         /* Objectives Section */
         #cile {
             background: linear-gradient(180deg, var(--cream) 0%, var(--cream-dark) 100%);
@@ -2229,6 +2302,7 @@
                 Lesnický monitoring
             </div>
             <ul class="nav-links">
+                <li><a href="#preambule">Proč?</a></li>
                 <li><a href="#cile">Cíle</a></li>
                 <li><a href="#tym">Tým</a></li>
                 <li><a href="#design">Pozemky</a></li>
@@ -2280,6 +2354,41 @@
                 <div class="stat-item">
                     <span class="stat-number">2</span>
                     <span class="stat-label">Roky (2026–2027)</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Preambule Section -->
+    <section id="preambule">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-tag">Proč se půda po těžbě frézuje &mdash; a proč to chceme měřit</div>
+                <h2 class="section-title">Úvod do problematiky</h2>
+            </div>
+
+            <p class="preamble-intro animate-on-scroll">
+                Obnova lesa nezačíná sazenicí, ale stanovištěm. Po těžbě dřeva zůstává na holině směs těžebních zbytků, pařezů, rozježděná místa a rychle nastupující buřeň. Právě první roky rozhodují, jestli se nová generace lesa &bdquo;chytí&ldquo;, nebo se výsadba bude opakovaně opravovat.
+            </p>
+
+            <div class="preamble-grid">
+                <div class="preamble-card full-width animate-on-scroll">
+                    <h3>Co je frézování a proč se dělá</h3>
+                    <p>Frézování je mechanická příprava půdy před výsadbou. Půdní fréza na ploše rozmělní zbytky po těžbě (a často i povrchové části pařezů), promíchá organický materiál s vrchní vrstvou půdy a vytvoří souvislou kyprou strukturu &mdash; často s mulčem na povrchu. Smyslem je vytvořit sazenicím lepší startovní podmínky: snadnější výsadbu, lepší kontakt kořenů s půdou, omezení konkurence buřeně a změnu vodního i teplotního režimu v kořenové zóně.</p>
+                    <p>Důležité je, že &bdquo;fréza&ldquo; není automaticky plus. Její efekt se mění podle typu půdy, vlhkosti, sklonu, expozice i průběhu počasí v konkrétním roce. Na jedné ploše může frézování pomoci (rychlejší vsak vody po dešti, dřívější prohřátí půdy, menší konkurence vegetace), na jiné může zvýšit stres (rychlejší vysychání, větší teplotní výkyvy, místy i silný zásah do půdního prostředí). Navíc jde o intenzivní zásah, který může měnit složení vegetace a další složky ekosystému &mdash; a proto má smysl vědět, kdy je přínos reálný a kdy je riziko zbytečné.</p>
+                </div>
+
+                <div class="preamble-card accent animate-on-scroll">
+                    <h3>Proč nestačí zkušenost &bdquo;od oka&ldquo;</h3>
+                    <p>Lesnická praxe je plná správných postřehů &mdash; ale frézování se často hodnotí podle toho, &bdquo;jak to vypadá&ldquo; na povrchu nebo jak dopadla jedna sezóna. Jenže sazenice reagují na kombinaci faktorů, které okem nevidíme: co se děje v 10&ndash;20 cm půdy s vodou a teplotou, jak rychle se půda po dešti nasytí, kdy přijdou přízemní mrazy, jak silně konkuruje buřeň atd.</p>
+                    <p>Bez měření snadno zaměníme příčinu a následek: vidíme slabé sazenice, ale nevíme, jestli to způsobil nedostatek vody, mráz, konkurence vegetace, škůdci &mdash; nebo samotná příprava půdy.</p>
+                    <p>Proto je klíčové férové srovnání &bdquo;fréza vs. nefréza&ldquo; na podobném stanovišti a na pevných datech z terénu. Teprve kontrolní plocha vedle frézované plochy nám umožní říct: co se změnilo, o kolik, kdy a proč &mdash; a hlavně jestli se rozdíl skutečně projevil na růstu a vitalitě sazenic.</p>
+                </div>
+
+                <div class="preamble-card highlight animate-on-scroll">
+                    <h3>Kde je motivace pro lesníka: ekonomika rozhodnutí</h3>
+                    <p>Frézování je náklad. Pokud ale zvýší ujímavost a zrychlí růst v prvních letech, může ušetřit mnohem větší peníze: méně dosadeb, méně opakovaných zásahů proti buřeni, rychlejší zapojení kultury a menší riziko, že se obnova &bdquo;rozpadne&ldquo;. Naopak, pokud frézování na daném typu stanoviště nepomáhá (nebo škodí), je to čistý výdaj bez návratnosti.</p>
+                    <p>Smysl analýzy je tedy jednoduchý: oddělit situace, kde fréza přináší měřitelný přínos, od situací, kde je lepší zvolit jiný postup nebo nezasahovat. Cílem projektu je převést debatu z dojmů na data &mdash; tak, aby se rozhodnutí o přípravě půdy dalo obhájit, zopakovat a ekonomicky plánovat.</p>
                 </div>
             </div>
         </div>
