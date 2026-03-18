@@ -318,6 +318,46 @@
             background: linear-gradient(135deg, #f5faf2 0%, #eef5ea 100%);
         }
 
+        .preamble-card.warning {
+            border-left-color: #c0392b;
+            background: linear-gradient(135deg, #fdf2f0 0%, #fbe8e5 100%);
+        }
+
+        .preamble-card.warning h3 {
+            color: #922b21;
+        }
+
+        .risk-approaches {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .risk-approach {
+            padding: 1rem;
+            border-radius: 8px;
+            background: rgba(255,255,255,0.6);
+            border: 1px solid rgba(192, 57, 43, 0.12);
+        }
+
+        .risk-approach h4 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1rem;
+            color: var(--forest-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .risk-approach p {
+            font-size: 0.85rem !important;
+        }
+
+        @media (max-width: 768px) {
+            .risk-approaches {
+                grid-template-columns: 1fr;
+            }
+        }
+
         .preamble-card h3 {
             font-family: 'Playfair Display', serif;
             font-size: 1.25rem;
@@ -2497,6 +2537,25 @@
                     <h3>Kde je motivace pro lesníka: ekonomika rozhodnutí</h3>
                     <p>Frézování je náklad. Pokud ale zvýší ujímavost a zrychlí růst v prvních letech, může ušetřit mnohem větší peníze: méně dosadeb, méně opakovaných zásahů proti buřeni, rychlejší zapojení kultury a menší riziko, že se obnova &bdquo;rozpadne&ldquo;. Naopak, pokud frézování na daném typu stanoviště nepomáhá (nebo škodí), je to čistý výdaj bez návratnosti.</p>
                     <p>Smysl analýzy je tedy jednoduchý: oddělit situace, kde fréza přináší měřitelný přínos, od situací, kde je lepší zvolit jiný postup nebo nezasahovat. Cílem projektu je převést debatu z dojmů na data &mdash; tak, aby se rozhodnutí o přípravě půdy dalo obhájit, zopakovat a ekonomicky plánovat.</p>
+                </div>
+
+                <div class="preamble-card warning full-width animate-on-scroll">
+                    <h3>Skryté riziko frézování: klikoroh borový (Hylobius abietis)</h3>
+                    <p>Frézování přináší nezpochybnitelné výhody &mdash; odstraní překážky, zpřístupní půdu kořenům a podpoří rozklad organické hmoty. Méně viditelným, ale závažným důsledkem je však <strong>plošné šíření larev klikoroha borového</strong>.</p>
+                    <p>Klikoroh borový je přirozeným následovníkem kůrovcových kalamit. Samičky kladou vajíčka do odumírajících kořenů čerstvých pařezů jehličnanů &mdash; jedna samice až 100 vajíček. Zatímco nefrézovaný pařez je uzavřený systém, kde se larvy vyvíjejí lokálně, <strong>fréza rozmetá dřevní materiál i s larvami do okolí v poloměru několika metrů</strong>. Kolonizační potenciál z jednoho pařezu se tak přerozdělí plošně do celého prostoru budoucí výsadby. Dospělci pak okoušou lýko mladých sazenic &mdash; při silném napadení (odhadují se stovky tisíc jedinců na hektar) mohou zničit veškerou výsadbu včetně přirozeného zmlazení.</p>
+
+                    <div class="risk-approaches">
+                        <div class="risk-approach">
+                            <h4>1. Chemická / biologická ochrana</h4>
+                            <p>Bezprostředně po frézování se aplikuje individuální postřik sazenic syntetickými pyrethroidy (Vaztak, Karate, Cymbush &mdash; 0,5% koncentrace, směrovaný k dolním partiím kmínku; celoplošné ošetření je zákonem zakázáno). Jako biologická alternativa jsou v ČR registrovány entomopatogenní hlístice <em>Heterorhabditis downesi</em> (obchodní název Nemamax).</p>
+                        </div>
+                        <div class="risk-approach">
+                            <h4>2. Pasečný klid &mdash; rok čekání</h4>
+                            <p>Po vyfrézování se s výsadbou záměrně počká celou vegetační sezónu. Přezimování v rozptýleném materiálu výrazně decimuje larvy i dospělce &mdash; mráz, predátoři a vysychání svedou část práce samy. Teprve na jaře druhého roku, kdy je tlak škůdce výrazně nižší, se přistupuje k výsadbě. Tato varianta eliminuje chemický zásah, ale prodlužuje obnovu o rok.</p>
+                        </div>
+                    </div>
+
+                    <p style="margin-top: 1rem; font-size: 0.9rem; color: var(--bark-light);"><strong>Proč je to aktuální:</strong> Po kůrovcové kalamitě zůstaly v ČR rozsáhlé holiny, frézování se masivně rozšířilo a kombinace těchto faktorů vytváří pro klikoroha téměř ideální podmínky. Zodpovědná příprava výsadby proto musí toto riziko vědomě zahrnout do celého plánu obnovy lesa &mdash; ještě před tím, než první sazenice zamíří do země.</p>
                 </div>
             </div>
         </div>
