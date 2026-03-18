@@ -1932,6 +1932,8 @@
         /* Photo gallery tags */
         .tag-freza-2022 { background: rgba(45, 106, 61, 0.15); color: #2d6a3d; }
         .tag-nefreza-2022 { background: rgba(74, 55, 40, 0.15); color: var(--bark-brown); }
+        .tag-nefreza { background: rgba(74, 55, 40, 0.15); color: var(--bark-brown); }
+        .tag-nova-2026 { background: rgba(220, 165, 50, 0.15); color: #b8860b; }
         .tag-kombo-2026 { background: rgba(212, 165, 116, 0.15); color: #9a7040; }
 
         /* Metodika Section */
@@ -2210,6 +2212,111 @@
         .sensor-mapir { background: rgba(138, 58, 122, 0.15); color: #8a3a7a; }
         .sensor-czu { background: rgba(212, 165, 116, 0.15); color: var(--amber); }
 
+        /* Sensor Deployment Table */
+        #senzory-toms {
+            background: linear-gradient(180deg, var(--cream) 0%, var(--cream-dark) 100%);
+        }
+        .sensor-deploy-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(26, 47, 26, 0.08);
+            font-size: 0.9rem;
+        }
+        .sensor-deploy-table thead {
+            background: var(--forest-dark);
+            color: var(--cream);
+        }
+        .sensor-deploy-table th {
+            padding: 0.9rem 0.7rem;
+            text-align: left;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.78rem;
+            font-weight: 600;
+            letter-spacing: 0.03em;
+            white-space: nowrap;
+        }
+        .sensor-deploy-table td {
+            padding: 0.75rem 0.7rem;
+            border-bottom: 1px solid rgba(26, 47, 26, 0.06);
+            vertical-align: middle;
+        }
+        .sensor-deploy-table tbody tr:hover {
+            background: rgba(140, 179, 105, 0.06);
+        }
+        .sensor-deploy-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+        .sensor-type-badge {
+            display: inline-block;
+            padding: 0.25rem 0.6rem;
+            border-radius: 6px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.78rem;
+            font-weight: 600;
+        }
+        .sensor-type-std {
+            background: rgba(90, 143, 168, 0.15);
+            color: var(--water);
+        }
+        .sensor-type-long {
+            background: rgba(212, 165, 116, 0.15);
+            color: var(--amber);
+        }
+        .treatment-freza {
+            color: var(--leaf-fresh);
+            font-weight: 600;
+        }
+        .treatment-nefreza {
+            color: var(--water);
+            font-weight: 600;
+        }
+        .sensor-gps-code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            color: var(--bark-light);
+        }
+        .sensor-deploy-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.3rem 0.7rem;
+            border-radius: 20px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            background: rgba(93, 138, 74, 0.12);
+            color: var(--leaf-fresh);
+        }
+        .sensor-deploy-status::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--leaf-fresh);
+            animation: pulse-dot 2s infinite;
+        }
+        @keyframes pulse-dot {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+        .sensor-group-separator td {
+            background: rgba(26, 47, 26, 0.03);
+            padding: 0.4rem 0.7rem;
+            font-weight: 700;
+            font-size: 0.82rem;
+            color: var(--forest-dark);
+            font-family: 'Playfair Display', serif;
+        }
+        @media (max-width: 768px) {
+            .sensor-deploy-table {
+                display: block;
+                overflow-x: auto;
+            }
+        }
+
         /* Team / Operační skupina */
         #tym {
             background: linear-gradient(180deg, var(--cream-dark) 0%, var(--cream) 100%);
@@ -2309,6 +2416,7 @@
                 <li><a href="#mapa">Mapa</a></li>
                 <li><a href="#pasportizace">Pasportizace</a></li>
                 <li><a href="#monitoring">Monitoring</a></li>
+                <li><a href="#senzory-toms">Senzory TOMS</a></li>
                 <li><a href="#parametry">Co měříme</a></li>
                 <li><a href="#hypotezy">Hypotézy</a></li>
                 <li><a href="#harmonogram">Harmonogram</a></li>
@@ -2637,6 +2745,14 @@
                 <div class="legend-item">
                     <div class="legend-color" style="background: rgba(220, 165, 50, 0.3); border: 2px solid #dca532;"></div>
                     <span>41Ca8 – Jaro 2026</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #5a8fa8; border: 2px solid #1a2f1a; border-radius: 50%; width: 14px; height: 14px;"></div>
+                    <span>TOMS Standard 10 cm</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #d4a574; border: 2px solid #1a2f1a; border-radius: 50%; width: 14px; height: 14px;"></div>
+                    <span>TOMS Oštěp 48 cm</span>
                 </div>
             </div>
 
@@ -3025,6 +3141,255 @@
         </div>
     </section>
 
+    <!-- Sensor Deployment Section -->
+    <section id="senzory-toms">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-tag">03a / Nasazení senzorů</div>
+                <h2 class="section-title">Nasazené senzory TOMS na testovacích pozemcích</h2>
+                <p class="section-subtitle">Na každý ze 4 testovacích pozemků byly nasazeny 2 senzory TOMS: Standard 10 cm (měření v povrchové vrstvě) a Oštěp 48 cm (hloubkový profil). Celkem 8 senzorů s kontinuálním záznamem.</p>
+            </div>
+
+            <div class="sensor-deploy-status" style="margin-bottom: 2rem; display: inline-flex;">
+                Senzory aktivní – průběžný sběr dat od března 2026
+            </div>
+
+            <div class="animate-on-scroll" style="overflow-x: auto;">
+                <table class="sensor-deploy-table">
+                    <thead>
+                        <tr>
+                            <th>Kód</th>
+                            <th>Ošetření pozemku</th>
+                            <th>Typ senzoru</th>
+                            <th>GPS souřadnice</th>
+                            <th>Porost</th>
+                            <th>Typ půdy</th>
+                            <th>Nadm. výška</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Pozemek 41Ca0 – Fréza 2022 -->
+                        <tr class="sensor-group-separator">
+                            <td colspan="7">Pozemek 41Ca0 – Frézovaný 2022</td>
+                        </tr>
+                        <tr>
+                            <td><strong>2022_10_F</strong></td>
+                            <td><span class="treatment-freza">Fréza 2022</span></td>
+                            <td><span class="sensor-type-badge sensor-type-std">Standard 10 cm</span></td>
+                            <td class="sensor-gps-code">49.362758, 14.299185</td>
+                            <td>41Ca0</td>
+                            <td>3K4</td>
+                            <td>463 m</td>
+                        </tr>
+                        <tr>
+                            <td><strong>2022_48_F</strong></td>
+                            <td><span class="treatment-freza">Fréza 2022</span></td>
+                            <td><span class="sensor-type-badge sensor-type-long">Oštěp 48 cm</span></td>
+                            <td class="sensor-gps-code">49.362581, 14.299215</td>
+                            <td>41Ca1</td>
+                            <td>–</td>
+                            <td>463 m</td>
+                        </tr>
+
+                        <!-- Pozemek 41Ca8 – Fréza 2026 -->
+                        <tr class="sensor-group-separator">
+                            <td colspan="7">Pozemek 41Ca8 – Frézovaný 2026</td>
+                        </tr>
+                        <tr>
+                            <td><strong>2026_10_F</strong></td>
+                            <td><span class="treatment-freza">Fréza 2026</span></td>
+                            <td><span class="sensor-type-badge sensor-type-std">Standard 10 cm</span></td>
+                            <td class="sensor-gps-code">49.362491, 14.298674</td>
+                            <td>41Ca8</td>
+                            <td>3K4</td>
+                            <td>467 m</td>
+                        </tr>
+                        <tr>
+                            <td><strong>2026_48_F</strong></td>
+                            <td><span class="treatment-freza">Fréza 2026</span></td>
+                            <td><span class="sensor-type-badge sensor-type-long">Oštěp 48 cm</span></td>
+                            <td class="sensor-gps-code">49.362354, 14.298777</td>
+                            <td>41Ca9</td>
+                            <td>–</td>
+                            <td>466 m</td>
+                        </tr>
+
+                        <!-- Pozemek 41Ca8 – Nefréza 2026 -->
+                        <tr class="sensor-group-separator">
+                            <td colspan="7">Pozemek 41Ca8 – Nefrézovaný 2026</td>
+                        </tr>
+                        <tr>
+                            <td><strong>2026_10_NF</strong></td>
+                            <td><span class="treatment-nefreza">Nefréza 2026</span></td>
+                            <td><span class="sensor-type-badge sensor-type-std">Standard 10 cm</span></td>
+                            <td class="sensor-gps-code">49.362533, 14.298873</td>
+                            <td>41Ca8</td>
+                            <td>3K4</td>
+                            <td>464 m</td>
+                        </tr>
+                        <tr>
+                            <td><strong>2026_48_NF</strong></td>
+                            <td><span class="treatment-nefreza">Nefréza 2026</span></td>
+                            <td><span class="sensor-type-badge sensor-type-long">Oštěp 48 cm</span></td>
+                            <td class="sensor-gps-code">49.362357, 14.298919</td>
+                            <td>41Ca9</td>
+                            <td>–</td>
+                            <td>464 m</td>
+                        </tr>
+
+                        <!-- Pozemek 41Ka0 – Nefréza 2022 -->
+                        <tr class="sensor-group-separator">
+                            <td colspan="7">Pozemek 41Ka0 – Nefrézovaný 2022</td>
+                        </tr>
+                        <tr>
+                            <td><strong>2022_10_NF</strong></td>
+                            <td><span class="treatment-nefreza">Nefréza 2022</span></td>
+                            <td><span class="sensor-type-badge sensor-type-std">Standard 10 cm</span></td>
+                            <td class="sensor-gps-code">49.356000, 14.330828</td>
+                            <td>41Ka0</td>
+                            <td>3K4</td>
+                            <td>486 m</td>
+                        </tr>
+                        <tr>
+                            <td><strong>2022_48_NF</strong></td>
+                            <td><span class="treatment-nefreza">Nefréza 2022</span></td>
+                            <td><span class="sensor-type-badge sensor-type-long">Oštěp 48 cm</span></td>
+                            <td class="sensor-gps-code">49.356236, 14.330911</td>
+                            <td>41Ka1</td>
+                            <td>–</td>
+                            <td>485 m</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="design-features" style="margin-top: 2rem;">
+                <div class="feature-box">
+                    <div class="feature-box-value">8 senzorů</div>
+                    <div class="feature-box-label">TOMS na 4 pozemcích</div>
+                </div>
+                <div class="feature-box">
+                    <div class="feature-box-value">4× Standard</div>
+                    <div class="feature-box-label">10 cm – povrchová teplota a vlhkost</div>
+                </div>
+                <div class="feature-box">
+                    <div class="feature-box-value">4× Oštěp</div>
+                    <div class="feature-box-label">48 cm – hloubkový profil</div>
+                </div>
+                <div class="feature-box">
+                    <div class="feature-box-value">15 min</div>
+                    <div class="feature-box-label">Interval záznamu dat</div>
+                </div>
+            </div>
+
+            <!-- Sensor Application Photos -->
+            <h3 style="font-family: 'Playfair Display', serif; font-size: 1.5rem; margin: 3rem 0 1.5rem; color: var(--forest-dark);">Fotodokumentace z nasazení senzorů</h3>
+            <p class="section-subtitle" style="margin-bottom: 2rem;">Reálné fotografie z instalace senzorů TOMS na jednotlivých testovacích pozemcích v březnu 2026</p>
+
+            <div class="gallery-grid">
+                <!-- General sensor photos -->
+                <div class="gallery-card animate-on-scroll">
+                    <img src="assets/images/sensors application/TOMS standard 10cm.png" alt="TOMS Standard 10cm senzor" onclick="openLightbox(this.src)" loading="lazy">
+                    <div class="gallery-card-body">
+                        <div class="gallery-card-title">TOMS Standard 10 cm</div>
+                        <div class="gallery-card-desc">Detail senzoru TOMS Standard pro měření teploty a vlhkosti v povrchové vrstvě půdy (do 10 cm).</div>
+                        <span class="gallery-card-tag" style="background: rgba(90, 143, 168, 0.15); color: #5a8fa8;">Standard 10 cm</span>
+                    </div>
+                </div>
+                <div class="gallery-card animate-on-scroll">
+                    <img src="assets/images/sensors application/TOMS 48cm.png" alt="TOMS Oštěp 48cm senzor" onclick="openLightbox(this.src)" loading="lazy">
+                    <div class="gallery-card-body">
+                        <div class="gallery-card-title">TOMS Oštěp 48 cm</div>
+                        <div class="gallery-card-desc">Detail senzoru TOMS Oštěp pro měření hloubkového profilu teploty a vlhkosti (do 48 cm).</div>
+                        <span class="gallery-card-tag" style="background: rgba(212, 165, 116, 0.15); color: #d4a574;">Oštěp 48 cm</span>
+                    </div>
+                </div>
+
+                <!-- 41Ca0 – Fréza 2022 -->
+                <div class="gallery-card animate-on-scroll">
+                    <img src="assets/images/sensors application/2022_10_F.png" alt="Aplikace TOMS 10cm – Fréza 2022" onclick="openLightbox(this.src)" loading="lazy">
+                    <div class="gallery-card-body">
+                        <div class="gallery-card-title">2022_10_F – Fréza 2022, Standard 10 cm</div>
+                        <div class="gallery-card-desc">Instalace senzoru TOMS Standard 10 cm na frézovaném pozemku 41Ca0 (frézováno 2022).</div>
+                        <span class="gallery-card-tag tag-freza-2022">Fréza 2022</span>
+                    </div>
+                </div>
+                <div class="gallery-card animate-on-scroll">
+                    <img src="assets/images/sensors application/2022_48_F.png" alt="Aplikace TOMS 48cm – Fréza 2022" onclick="openLightbox(this.src)" loading="lazy">
+                    <div class="gallery-card-body">
+                        <div class="gallery-card-title">2022_48_F – Fréza 2022, Oštěp 48 cm</div>
+                        <div class="gallery-card-desc">Instalace senzoru TOMS Oštěp 48 cm na frézovaném pozemku 41Ca0 (frézováno 2022).</div>
+                        <span class="gallery-card-tag tag-freza-2022">Fréza 2022</span>
+                    </div>
+                </div>
+
+                <!-- 41Ca8 – Fréza 2026 -->
+                <div class="gallery-card animate-on-scroll">
+                    <img src="assets/images/sensors application/2026_10_F.png" alt="Aplikace TOMS 10cm – Fréza 2026" onclick="openLightbox(this.src)" loading="lazy">
+                    <div class="gallery-card-body">
+                        <div class="gallery-card-title">2026_10_F – Fréza 2026, Standard 10 cm</div>
+                        <div class="gallery-card-desc">Instalace senzoru TOMS Standard 10 cm na frézované polovině pozemku 41Ca8 (fréza jaro 2026).</div>
+                        <span class="gallery-card-tag tag-nova-2026">Fréza 2026</span>
+                    </div>
+                </div>
+                <div class="gallery-card animate-on-scroll">
+                    <img src="assets/images/sensors application/2026_48_F.png" alt="Aplikace TOMS 48cm – Fréza 2026" onclick="openLightbox(this.src)" loading="lazy">
+                    <div class="gallery-card-body">
+                        <div class="gallery-card-title">2026_48_F – Fréza 2026, Oštěp 48 cm</div>
+                        <div class="gallery-card-desc">Instalace senzoru TOMS Oštěp 48 cm na frézované polovině pozemku 41Ca8 (fréza jaro 2026).</div>
+                        <span class="gallery-card-tag tag-nova-2026">Fréza 2026</span>
+                    </div>
+                </div>
+
+                <!-- 41Ca8 – Nefréza 2026 -->
+                <div class="gallery-card animate-on-scroll">
+                    <img src="assets/images/sensors application/2026_48_NF.png" alt="Aplikace TOMS 48cm – Nefréza 2026" onclick="openLightbox(this.src)" loading="lazy">
+                    <div class="gallery-card-body">
+                        <div class="gallery-card-title">2026_48_NF – Nefréza 2026, Oštěp 48 cm</div>
+                        <div class="gallery-card-desc">Instalace senzoru TOMS Oštěp 48 cm na nefrézované polovině pozemku 41Ca8 (kontrolní plocha 2026).</div>
+                        <span class="gallery-card-tag tag-nefreza">Nefréza 2026</span>
+                    </div>
+                </div>
+
+                <!-- 41Ka0 – Nefréza 2022 -->
+                <div class="gallery-card animate-on-scroll">
+                    <img src="assets/images/sensors application/2022_10_NF.png" alt="Aplikace TOMS 10cm – Nefréza 2022" onclick="openLightbox(this.src)" loading="lazy">
+                    <div class="gallery-card-body">
+                        <div class="gallery-card-title">2022_10_NF – Nefréza 2022, Standard 10 cm</div>
+                        <div class="gallery-card-desc">Instalace senzoru TOMS Standard 10 cm na nefrézovaném pozemku 41Ka0 (zalesněno 2022 bez frézy).</div>
+                        <span class="gallery-card-tag tag-nefreza">Nefréza 2022</span>
+                    </div>
+                </div>
+                <div class="gallery-card animate-on-scroll">
+                    <img src="assets/images/sensors application/2022_48_NF.png" alt="Aplikace TOMS 48cm – Nefréza 2022" onclick="openLightbox(this.src)" loading="lazy">
+                    <div class="gallery-card-body">
+                        <div class="gallery-card-title">2022_48_NF – Nefréza 2022, Oštěp 48 cm</div>
+                        <div class="gallery-card-desc">Instalace senzoru TOMS Oštěp 48 cm na nefrézovaném pozemku 41Ka0 (zalesněno 2022 bez frézy).</div>
+                        <span class="gallery-card-tag tag-nefreza">Nefréza 2022</span>
+                    </div>
+                </div>
+
+                <!-- Pozemek overview photos -->
+                <div class="gallery-card animate-on-scroll">
+                    <img src="assets/images/sensors application/Pozemek 41Ka0.png" alt="Pozemek 41Ka0 – celkový pohled" onclick="openLightbox(this.src)" loading="lazy">
+                    <div class="gallery-card-body">
+                        <div class="gallery-card-title">Pozemek 41Ka0 – celkový pohled</div>
+                        <div class="gallery-card-desc">Celkový pohled na nefrézovaný pozemek 41Ka0 v době nasazení senzorů.</div>
+                        <span class="gallery-card-tag tag-nefreza">41Ka0</span>
+                    </div>
+                </div>
+                <div class="gallery-card animate-on-scroll">
+                    <img src="assets/images/sensors application/senzory na 41Ka0.png" alt="Senzory na pozemku 41Ka0" onclick="openLightbox(this.src)" loading="lazy">
+                    <div class="gallery-card-body">
+                        <div class="gallery-card-title">Senzory na pozemku 41Ka0</div>
+                        <div class="gallery-card-desc">Oba senzory TOMS (Standard 10 cm + Oštěp 48 cm) po instalaci na pozemku 41Ka0.</div>
+                        <span class="gallery-card-tag tag-nefreza">41Ka0</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Parameters Section -->
     <section id="parametry">
         <div class="container">
@@ -3161,10 +3526,10 @@
                 </div>
 
                 <div class="timeline-item animate-on-scroll">
-                    <div class="timeline-content">
-                        <div class="timeline-date">Březen–Duben 2026</div>
-                        <div class="timeline-title">Instalace senzorů a kamer</div>
-                        <div class="timeline-desc">Instalace TMS senzorů na všech 4 pozemcích (2× na pozemek). Kontrola a kalibrace Brinno a MAPIR kamer na pozemcích 2022 (41Ca0, 41Ka0).</div>
+                    <div class="timeline-content" style="border-left: 4px solid var(--leaf-fresh);">
+                        <div class="timeline-date">Březen 2026 ✓</div>
+                        <div class="timeline-title">Nasazení senzorů TOMS na všechny pozemky</div>
+                        <div class="timeline-desc"><strong>Splněno.</strong> Na každý ze 4 testovacích pozemků nasazeny 2 senzory TOMS: Standard 10 cm (povrchová vrstva) a Oštěp 48 cm (hloubkový profil). Celkem 8 senzorů s GPS lokalizací a kontinuálním záznamem (15min interval). Kontrola a kalibrace Brinno a MAPIR kamer na pozemcích 2022 (41Ca0, 41Ka0).</div>
                     </div>
                 </div>
 
@@ -3627,6 +3992,38 @@
 
         // Fit to all polygons initially
         map.fitBounds(allBounds.pad(0.15));
+
+        // ===== TOMS SENSOR MARKERS =====
+        const sensors = [
+            { code: '2022_10_F', type: 'Standard 10cm', treatment: 'Fréza 2022', lat: 49.362758, lng: 14.299185, plot: '41Ca0', alt: 463 },
+            { code: '2022_48_F', type: 'Oštěp 48cm', treatment: 'Fréza 2022', lat: 49.362581, lng: 14.299215, plot: '41Ca0', alt: 463 },
+            { code: '2026_10_F', type: 'Standard 10cm', treatment: 'Fréza 2026', lat: 49.362491, lng: 14.298674, plot: '41Ca8', alt: 467 },
+            { code: '2026_48_F', type: 'Oštěp 48cm', treatment: 'Fréza 2026', lat: 49.362354, lng: 14.298777, plot: '41Ca8', alt: 466 },
+            { code: '2026_10_NF', type: 'Standard 10cm', treatment: 'Nefréza 2026', lat: 49.362533, lng: 14.298873, plot: '41Ca8', alt: 464 },
+            { code: '2026_48_NF', type: 'Oštěp 48cm', treatment: 'Nefréza 2026', lat: 49.362357, lng: 14.298919, plot: '41Ca8', alt: 464 },
+            { code: '2022_10_NF', type: 'Standard 10cm', treatment: 'Nefréza 2022', lat: 49.356000, lng: 14.330828, plot: '41Ka0', alt: 486 },
+            { code: '2022_48_NF', type: 'Oštěp 48cm', treatment: 'Nefréza 2022', lat: 49.356236, lng: 14.330911, plot: '41Ka0', alt: 485 }
+        ];
+
+        sensors.forEach(s => {
+            const isStd = s.type.includes('Standard');
+            const color = isStd ? '#5a8fa8' : '#d4a574';
+            const radius = isStd ? 5 : 7;
+            L.circleMarker([s.lat, s.lng], {
+                radius: radius,
+                fillColor: color,
+                color: '#1a2f1a',
+                weight: 2,
+                opacity: 1,
+                fillOpacity: 0.85
+            }).addTo(map).bindPopup(
+                '<div style="font-family: Source Sans 3, sans-serif; min-width: 200px;">' +
+                '<strong style="color: #1a2f1a; font-size: 14px;">TOMS ' + s.type + '</strong><br>' +
+                '<span style="font-family: JetBrains Mono, monospace; font-size: 12px; color: #4a6741;">' + s.code + '</span><br>' +
+                '<span style="font-size: 12px;">' + s.treatment + ' | ' + s.plot + ' | ' + s.alt + ' m n.m.</span><br>' +
+                '<span style="font-family: JetBrains Mono, monospace; font-size: 11px; color: #6b5344;">' + s.lat + ', ' + s.lng + '</span></div>'
+            );
+        });
 
         // Zoom display
         const zoomDisplay = L.control({position: 'topright'});
