@@ -1975,6 +1975,49 @@
         .tag-nefreza { background: rgba(74, 55, 40, 0.15); color: var(--bark-brown); }
         .tag-nova-2026 { background: rgba(220, 165, 50, 0.15); color: #b8860b; }
         .tag-kombo-2026 { background: rgba(212, 165, 116, 0.15); color: #9a7040; }
+        .tag-frezovani-2026 { background: rgba(196, 92, 59, 0.15); color: #c45c3b; }
+
+        /* Video card */
+        .gallery-card video {
+            width: 100%;
+            border-radius: 12px 12px 0 0;
+            display: block;
+            cursor: pointer;
+        }
+
+        .frezovani-highlight {
+            background: linear-gradient(135deg, rgba(196, 92, 59, 0.06) 0%, rgba(212, 165, 116, 0.06) 100%);
+            border: 2px solid rgba(196, 92, 59, 0.15);
+            border-radius: 20px;
+            padding: 2.5rem 2rem;
+            margin-top: 3rem;
+        }
+
+        .frezovani-highlight .section-badge {
+            display: inline-block;
+            background: rgba(196, 92, 59, 0.12);
+            color: #c45c3b;
+            font-weight: 600;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            padding: 0.4rem 1rem;
+            border-radius: 50px;
+            margin-bottom: 1rem;
+        }
+
+        .video-hero {
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 8px 40px rgba(26, 47, 26, 0.2);
+            margin-bottom: 2rem;
+        }
+
+        .video-hero video {
+            width: 100%;
+            display: block;
+            border-radius: 16px;
+        }
 
         /* Metodika Section */
         #metodika {
@@ -2715,8 +2758,8 @@
                         </tr>
                         <tr>
                             <td><strong>41Ca8</strong></td>
-                            <td><span class="variant-badge variant-nova">Fréza jaro 2026</span></td>
-                            <td>Jaro 2026</td>
+                            <td><span class="variant-badge variant-freza">Frézováno 2. 4. 2026</span></td>
+                            <td>2. 4. 2026</td>
                             <td rowspan="2">0.076</td>
                             <td rowspan="2">Dosud nevysazeno</td>
                             <td>3K4</td>
@@ -2943,8 +2986,8 @@
                 <!-- 41Ca8 -->
                 <div class="passport-card animate-on-scroll">
                     <div class="passport-card-header nova">
-                        <h3>41Ca8 – Frézování jaro 2026</h3>
-                        <div class="passport-subtitle">Připraveno k frézování | Část společného pozemku</div>
+                        <h3>41Ca8 – Frézováno 2. 4. 2026</h3>
+                        <div class="passport-subtitle">Frézování provedeno | Část společného pozemku</div>
                     </div>
                     <div class="passport-card-body">
                         <div class="passport-row">
@@ -3577,10 +3620,10 @@
             
             <div class="timeline">
                 <div class="timeline-item animate-on-scroll">
-                    <div class="timeline-content">
-                        <div class="timeline-date">Jaro 2026</div>
-                        <div class="timeline-title">Frézování a výsadba pozemku 41Ca8</div>
-                        <div class="timeline-desc">Plocha 41Ca8 rozdělena na dvě poloviny – jedna frézována, druhá ponechána bez zásahu. Výsadba sazenic. Instalace TMS senzorů (standard + long 48 cm) na obou polovinách.</div>
+                    <div class="timeline-content" style="border-left: 4px solid var(--leaf-fresh);">
+                        <div class="timeline-date">2. dubna 2026 ✓</div>
+                        <div class="timeline-title">Frézování pozemku 41Ca8</div>
+                        <div class="timeline-desc"><strong>Splněno.</strong> Dne 2. 4. 2026 provedeno frézování poloviny pozemku 41Ca8. Plocha rozdělena na dvě poloviny – jedna frézována, druhá ponechána bez zásahu jako kontrolní. Výsadba sazenic plánována. Instalace TMS senzorů (standard + long 48 cm) na obou polovinách proběhla v březnu 2026.</div>
                     </div>
                 </div>
 
@@ -3762,6 +3805,49 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Frézování 41Ca8 – 2. dubna 2026 -->
+            <div class="frezovani-highlight">
+                <span class="section-badge">Realizováno 2. 4. 2026</span>
+                <h3 style="font-family: 'Playfair Display', serif; font-size: 1.5rem; margin-bottom: 0.5rem; color: var(--forest-dark);">Frézování pozemku 41Ca8 – fotodokumentace</h3>
+                <p style="color: var(--bark-light); margin-bottom: 2rem; max-width: 700px;">Dne 2. dubna 2026 bylo provedeno frézování poloviny pozemku 41Ca8. Níže je videozáznam z průběhu frézování a fotografie z terénu.</p>
+
+                <div class="video-hero">
+                    <video controls preload="metadata" poster="assets/images/frezovani/IMG_20260402_104407.jpg">
+                        <source src="assets/images/frezovani/freza.mp4" type="video/mp4">
+                        Váš prohlížeč nepodporuje přehrávání videa.
+                    </video>
+                </div>
+                <p style="text-align: center; color: var(--bark-light); font-size: 0.9rem; margin-bottom: 2rem;">Videozáznam z frézování pozemku 41Ca8 – 2. dubna 2026</p>
+
+                <div class="gallery-grid">
+                    <div class="gallery-card animate-on-scroll">
+                        <img src="assets/images/frezovani/IMG_20260402_104407.jpg" alt="Frézování 41Ca8 – pohled 1" onclick="openLightbox(this.src)" loading="lazy">
+                        <div class="gallery-card-body">
+                            <div class="gallery-card-title">Frézování pozemku – pohled 1</div>
+                            <div class="gallery-card-desc">Probíhající frézování na pozemku 41Ca8. Fréza zpracovává povrchovou vrstvu půdy pro přípravu k výsadbě.</div>
+                            <span class="gallery-card-tag tag-frezovani-2026">Frézování 2026</span>
+                        </div>
+                    </div>
+                    <div class="gallery-card animate-on-scroll">
+                        <img src="assets/images/frezovani/IMG_20260402_102920.jpg" alt="Frézování 41Ca8 – pohled 2" onclick="openLightbox(this.src)" loading="lazy">
+                        <div class="gallery-card-body">
+                            <div class="gallery-card-title">Frézování pozemku – pohled 2</div>
+                            <div class="gallery-card-desc">Stav terénu během frézování. Plocha 41Ca8 připravována pro obnovu lesa po kůrovcové kalamitě.</div>
+                            <span class="gallery-card-tag tag-frezovani-2026">Frézování 2026</span>
+                        </div>
+                    </div>
+                    <div class="gallery-card animate-on-scroll">
+                        <img src="assets/images/frezovani/IMG_20260402_103007.jpg" alt="Frézování 41Ca8 – pohled 3" onclick="openLightbox(this.src)" loading="lazy">
+                        <div class="gallery-card-body">
+                            <div class="gallery-card-title">Frézování pozemku – pohled 3</div>
+                            <div class="gallery-card-desc">Detail terénu po průchodu frézy. Viditelná mechanická úprava půdního povrchu pro lepší příjem vody a sazenic.</div>
+                            <span class="gallery-card-tag tag-frezovani-2026">Frézování 2026</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </section>
 
