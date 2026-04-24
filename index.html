@@ -2400,77 +2400,79 @@
             }
         }
 
-        /* EU Funding Card */
+        /* EU Funding Card – fixed in top-right of hero */
         .eu-card {
-            display: inline-flex;
+            position: absolute;
+            top: 92px;
+            right: 1.5rem;
+            display: flex;
             align-items: center;
-            gap: 0.9rem;
+            gap: 0.7rem;
             background: rgba(0, 51, 153, 0.92);
             color: #ffffff;
-            padding: 0.6rem 1.1rem;
+            text-decoration: none;
+            padding: 0.55rem 0.85rem;
             border-radius: 10px;
-            border: 1px solid rgba(255, 204, 0, 0.6);
-            box-shadow: 0 6px 24px rgba(0, 0, 0, 0.25);
-            margin-bottom: 1.75rem;
-            max-width: 100%;
-            animation: fadeInDown 1s ease-out;
+            border: 1px solid rgba(255, 204, 0, 0.55);
+            box-shadow: 0 6px 24px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(4px);
+            max-width: 260px;
+            z-index: 10;
+            animation: fadeInDown 1s ease-out 0.3s both;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+        }
+
+        .eu-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 32px rgba(0, 0, 0, 0.4);
+            background: rgba(0, 51, 153, 1);
         }
 
         .eu-flag {
-            width: 36px;
-            height: 24px;
+            width: 30px;
+            height: 20px;
             flex-shrink: 0;
-            border-radius: 3px;
-            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+            border-radius: 2px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
         }
 
         .eu-card-text {
             display: flex;
             flex-direction: column;
             text-align: left;
-            line-height: 1.3;
+            line-height: 1.25;
         }
 
         .eu-card-text strong {
             font-weight: 600;
-            font-size: 0.88rem;
+            font-size: 0.74rem;
             color: #ffffff;
+            letter-spacing: 0.2px;
         }
 
         .eu-card-text span {
-            font-size: 0.72rem;
+            font-size: 0.62rem;
             color: #FFCC00;
-            letter-spacing: 0.5px;
+            letter-spacing: 0.4px;
+            text-transform: uppercase;
+            margin-top: 2px;
         }
 
-        .eu-card a.eu-link {
-            color: #ffffff;
-            text-decoration: none;
-            background: rgba(255, 255, 255, 0.15);
-            padding: 0.3rem 0.75rem;
-            border-radius: 4px;
-            font-size: 0.75rem;
-            font-weight: 500;
-            border: 1px solid rgba(255, 204, 0, 0.5);
-            transition: all 0.3s ease;
-            white-space: nowrap;
-        }
-
-        .eu-card a.eu-link:hover {
-            background: #FFCC00;
-            color: #003399;
-            border-color: #FFCC00;
-        }
-
-        @media (max-width: 640px) {
+        @media (max-width: 768px) {
             .eu-card {
-                flex-direction: column;
-                text-align: center;
-                gap: 0.6rem;
-                padding: 0.75rem 1rem;
+                top: auto;
+                bottom: 1rem;
+                right: 1rem;
+                left: 1rem;
+                max-width: none;
+                padding: 0.5rem 0.75rem;
+                justify-content: center;
             }
-            .eu-card-text {
-                text-align: center;
+            .eu-card-text strong {
+                font-size: 0.72rem;
+            }
+            .eu-card-text span {
+                font-size: 0.6rem;
             }
         }
 
@@ -2644,31 +2646,31 @@
             <path d="M17,8C8,10 5.9,16.17 3.82,21.34L5.71,22L6.66,19.7C7.14,19.87 7.64,20 8,20C19,20 22,3 22,3C21,5 14,5.25 9,6.25C4,7.25 2,11.5 2,13.5C2,15.5 3.75,17.25 3.75,17.25C7,8 17,8 17,8Z"/>
         </svg>
         
-        <div class="hero-content">
-            <div class="eu-card" role="complementary" aria-label="Informace o financování z EU">
-                <svg class="eu-flag" viewBox="0 0 60 40" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                    <rect width="60" height="40" fill="#003399"/>
-                    <g fill="#FFCC00">
-                        <circle cx="30" cy="8" r="1.6"/>
-                        <circle cx="38.5" cy="10.3" r="1.6"/>
-                        <circle cx="44.7" cy="16.5" r="1.6"/>
-                        <circle cx="47" cy="25" r="1.6"/>
-                        <circle cx="44.7" cy="33.5" r="1.6"/>
-                        <circle cx="38.5" cy="39.7" r="1.6"/>
-                        <circle cx="21.5" cy="10.3" r="1.6"/>
-                        <circle cx="15.3" cy="16.5" r="1.6"/>
-                        <circle cx="13" cy="25" r="1.6"/>
-                        <circle cx="15.3" cy="33.5" r="1.6"/>
-                        <circle cx="21.5" cy="39.7" r="1.6"/>
-                        <circle cx="30" cy="42" r="1.6"/>
-                    </g>
-                </svg>
-                <div class="eu-card-text">
-                    <strong>Projekt spolufinancovaný Evropskou unií</strong>
-                    <span>Program rozvoje venkova ČR</span>
-                </div>
-                <a class="eu-link" href="assets/images/EU anotace projektu/EU LES.pdf" target="_blank" rel="noopener">Anotace projektu (PDF)</a>
+        <a class="eu-card" href="assets/images/EU anotace projektu/EU LES.pdf" target="_blank" rel="noopener" aria-label="Anotace projektu (PDF) – spolufinancováno EU">
+            <svg class="eu-flag" viewBox="0 0 60 40" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <rect width="60" height="40" fill="#003399"/>
+                <g fill="#FFCC00">
+                    <circle cx="30" cy="8" r="1.6"/>
+                    <circle cx="38.5" cy="10.3" r="1.6"/>
+                    <circle cx="44.7" cy="16.5" r="1.6"/>
+                    <circle cx="47" cy="25" r="1.6"/>
+                    <circle cx="44.7" cy="33.5" r="1.6"/>
+                    <circle cx="38.5" cy="39.7" r="1.6"/>
+                    <circle cx="21.5" cy="10.3" r="1.6"/>
+                    <circle cx="15.3" cy="16.5" r="1.6"/>
+                    <circle cx="13" cy="25" r="1.6"/>
+                    <circle cx="15.3" cy="33.5" r="1.6"/>
+                    <circle cx="21.5" cy="39.7" r="1.6"/>
+                    <circle cx="30" cy="42" r="1.6"/>
+                </g>
+            </svg>
+            <div class="eu-card-text">
+                <strong>Spolufinancováno EU</strong>
+                <span>Program rozvoje venkova · Anotace (PDF)</span>
             </div>
+        </a>
+
+        <div class="hero-content">
             <div class="hero-badge">Výzkumný projekt 2026–2027</div>
             <h1>Vliv <span>frézování půdy</span> po těžbě dřeva na růst sazenic</h1>
             <p class="hero-subtitle">Monitoring půdní teploty a vlhkosti (TMS senzory TOMST), časosběrná fotodokumentace (Brinno TLC 2020), NIR analýza vegetace (MAPIR Survey 3W) a sekvestrace uhlíku (ČZU Praha) na 4 testovacích pozemcích</p>
