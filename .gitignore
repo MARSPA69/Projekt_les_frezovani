@@ -3,3 +3,6 @@ node_modules
 .DS_Store
 Thumbs.db
 *.log
+
+# Velká videa nad GitHub limit 100 MB – nepoužívaná na webu
+assets/images/Odvěr půdních vzorků_ČZÚ/VID_20260422_102801.mp4

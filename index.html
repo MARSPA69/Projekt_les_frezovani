@@ -2400,6 +2400,124 @@
             }
         }
 
+        /* EU Funding Card */
+        .eu-card {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.9rem;
+            background: rgba(0, 51, 153, 0.92);
+            color: #ffffff;
+            padding: 0.6rem 1.1rem;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 204, 0, 0.6);
+            box-shadow: 0 6px 24px rgba(0, 0, 0, 0.25);
+            margin-bottom: 1.75rem;
+            max-width: 100%;
+            animation: fadeInDown 1s ease-out;
+        }
+
+        .eu-flag {
+            width: 36px;
+            height: 24px;
+            flex-shrink: 0;
+            border-radius: 3px;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .eu-card-text {
+            display: flex;
+            flex-direction: column;
+            text-align: left;
+            line-height: 1.3;
+        }
+
+        .eu-card-text strong {
+            font-weight: 600;
+            font-size: 0.88rem;
+            color: #ffffff;
+        }
+
+        .eu-card-text span {
+            font-size: 0.72rem;
+            color: #FFCC00;
+            letter-spacing: 0.5px;
+        }
+
+        .eu-card a.eu-link {
+            color: #ffffff;
+            text-decoration: none;
+            background: rgba(255, 255, 255, 0.15);
+            padding: 0.3rem 0.75rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            border: 1px solid rgba(255, 204, 0, 0.5);
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .eu-card a.eu-link:hover {
+            background: #FFCC00;
+            color: #003399;
+            border-color: #FFCC00;
+        }
+
+        @media (max-width: 640px) {
+            .eu-card {
+                flex-direction: column;
+                text-align: center;
+                gap: 0.6rem;
+                padding: 0.75rem 1rem;
+            }
+            .eu-card-text {
+                text-align: center;
+            }
+        }
+
+        /* Aktuálně z terénu */
+        #aktualne {
+            background: linear-gradient(180deg, var(--cream-dark) 0%, var(--cream) 100%);
+            padding-top: 4rem;
+            padding-bottom: 4rem;
+        }
+
+        #aktualne .section-tag {
+            color: var(--fire-warning);
+            font-weight: 700;
+        }
+
+        .welcome-video-wrap {
+            max-width: 960px;
+            margin: 0 auto 1rem;
+            border-radius: 18px;
+            overflow: hidden;
+            box-shadow: 0 12px 48px rgba(26, 47, 26, 0.25);
+            background: #000;
+        }
+
+        .welcome-video-wrap video {
+            width: 100%;
+            display: block;
+        }
+
+        .welcome-video-caption {
+            text-align: center;
+            color: var(--bark-light);
+            font-size: 0.95rem;
+            font-style: italic;
+            max-width: 780px;
+            margin: 0 auto 3rem;
+        }
+
+        .aktualne-intro {
+            text-align: center;
+            max-width: 880px;
+            margin: 0 auto 2.5rem;
+            color: var(--forest-dark);
+            font-size: 1.05rem;
+            line-height: 1.7;
+        }
+
         /* Team / Operační skupina */
         #tym {
             background: linear-gradient(180deg, var(--cream-dark) 0%, var(--cream) 100%);
@@ -2492,6 +2610,7 @@
                 Lesnický monitoring
             </div>
             <ul class="nav-links">
+                <li><a href="#aktualne">Aktuálně</a></li>
                 <li><a href="#preambule">Proč?</a></li>
                 <li><a href="#cile">Cíle</a></li>
                 <li><a href="#tym">Tým</a></li>
@@ -2499,7 +2618,7 @@
                 <li><a href="#mapa">Mapa</a></li>
                 <li><a href="#pasportizace">Pasportizace</a></li>
                 <li><a href="#monitoring">Monitoring</a></li>
-                <li><a href="#senzory-toms">Senzory TOMS</a></li>
+                <li><a href="#senzory-toms">Senzory TOMST</a></li>
                 <li><a href="#parametry">Co měříme</a></li>
                 <li><a href="#hypotezy">Hypotézy</a></li>
                 <li><a href="#harmonogram">Harmonogram</a></li>
@@ -2526,6 +2645,30 @@
         </svg>
         
         <div class="hero-content">
+            <div class="eu-card" role="complementary" aria-label="Informace o financování z EU">
+                <svg class="eu-flag" viewBox="0 0 60 40" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <rect width="60" height="40" fill="#003399"/>
+                    <g fill="#FFCC00">
+                        <circle cx="30" cy="8" r="1.6"/>
+                        <circle cx="38.5" cy="10.3" r="1.6"/>
+                        <circle cx="44.7" cy="16.5" r="1.6"/>
+                        <circle cx="47" cy="25" r="1.6"/>
+                        <circle cx="44.7" cy="33.5" r="1.6"/>
+                        <circle cx="38.5" cy="39.7" r="1.6"/>
+                        <circle cx="21.5" cy="10.3" r="1.6"/>
+                        <circle cx="15.3" cy="16.5" r="1.6"/>
+                        <circle cx="13" cy="25" r="1.6"/>
+                        <circle cx="15.3" cy="33.5" r="1.6"/>
+                        <circle cx="21.5" cy="39.7" r="1.6"/>
+                        <circle cx="30" cy="42" r="1.6"/>
+                    </g>
+                </svg>
+                <div class="eu-card-text">
+                    <strong>Projekt spolufinancovaný Evropskou unií</strong>
+                    <span>Program rozvoje venkova ČR</span>
+                </div>
+                <a class="eu-link" href="assets/images/EU anotace projektu/EU LES.pdf" target="_blank" rel="noopener">Anotace projektu (PDF)</a>
+            </div>
             <div class="hero-badge">Výzkumný projekt 2026–2027</div>
             <h1>Vliv <span>frézování půdy</span> po těžbě dřeva na růst sazenic</h1>
             <p class="hero-subtitle">Monitoring půdní teploty a vlhkosti (TMS senzory TOMST), časosběrná fotodokumentace (Brinno TLC 2020), NIR analýza vegetace (MAPIR Survey 3W) a sekvestrace uhlíku (ČZU Praha) na 4 testovacích pozemcích</p>
@@ -2545,6 +2688,52 @@
                 <div class="stat-item">
                     <span class="stat-number">2</span>
                     <span class="stat-label">Roky (2026–2027)</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Aktuálně z terénu -->
+    <section id="aktualne">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-tag">Aktuálně z terénu</div>
+                <h2 class="section-title">Odběry půdních vzorků – 22. 4. 2026</h2>
+            </div>
+
+            <div class="welcome-video-wrap animate-on-scroll">
+                <video controls preload="metadata">
+                    <source src="assets/images/Odvěr půdních vzorků_ČZÚ/odběr vzorků.mp4" type="video/mp4">
+                    Váš prohlížeč nepodporuje přehrávání videa.
+                </video>
+            </div>
+            <p class="welcome-video-caption">Odběry půdy na pozemcích kolegy z VÚ meliorací a ochrany půdy dne 22. 4. 2026</p>
+
+            <p class="aktualne-intro animate-on-scroll">
+                Dne 22. 4. 2026 provedl tým vedený Doc. Vopravilem z VÚMOP/ČZU sérii odběru vzorků ze všech testovaných pozemků k analýze.
+            </p>
+
+            <div class="gallery-grid">
+                <div class="gallery-card animate-on-scroll">
+                    <img src="assets/images/Odvěr půdních vzorků_ČZÚ/IMG_20260422_102723.jpg" alt="Odběr půdních vzorků – pohled 1" onclick="openLightbox(this.src)" loading="lazy">
+                    <div class="gallery-card-body">
+                        <div class="gallery-card-title">Odběr vzorků – pohled 1</div>
+                        <div class="gallery-card-desc">Terénní práce při odběru půdních vzorků na testovacích pozemcích. Spolupráce s VÚMOP/ČZU, 22. 4. 2026.</div>
+                    </div>
+                </div>
+                <div class="gallery-card animate-on-scroll">
+                    <img src="assets/images/Odvěr půdních vzorků_ČZÚ/IMG_20260422_102740.jpg" alt="Odběr půdních vzorků – pohled 2" onclick="openLightbox(this.src)" loading="lazy">
+                    <div class="gallery-card-body">
+                        <div class="gallery-card-title">Odběr vzorků – pohled 2</div>
+                        <div class="gallery-card-desc">Odběry pro laboratorní analýzu se vztahem k sekvestraci uhlíku a pedologickým parametrům.</div>
+                    </div>
+                </div>
+                <div class="gallery-card animate-on-scroll">
+                    <img src="assets/images/Odvěr půdních vzorků_ČZÚ/IMG_20260422_102742.jpg" alt="Odběr půdních vzorků – pohled 3" onclick="openLightbox(this.src)" loading="lazy">
+                    <div class="gallery-card-body">
+                        <div class="gallery-card-title">Odběr vzorků – pohled 3</div>
+                        <div class="gallery-card-desc">Reprezentativní vzorky ze všech čtyř testovacích pozemků (frézované i kontrolní varianty).</div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -2676,27 +2865,33 @@
             <div class="team-grid">
                 <div class="team-card animate-on-scroll">
                     <div class="team-avatar" style="background: #e8f5e9;">&#x1F332;</div>
-                    <h3>ALCEDO s.r.o.</h3>
+                    <h3>ALCEDO MC, s.r.o.</h3>
                     <div class="role">Žadatel</div>
                     <p>Firma zabývající se lesnictvím, správou lesů a těžbou dřeva se sídlem v Milevsku.</p>
                 </div>
                 <div class="team-card animate-on-scroll">
                     <div class="team-avatar" style="background: #e3f2fd;">&#x1F4E1;</div>
-                    <h3>České Radiokomunikace</h3>
+                    <h3>České Radiokomunikace, a.s.</h3>
                     <div class="role">Innovation of Things</div>
                     <p>Výzkumná a vývojová činnost, aplikace nových technologií a jejich integrace, aplikace AI modelů a datová analýza.</p>
                 </div>
                 <div class="team-card animate-on-scroll">
                     <div class="team-avatar" style="background: #fff3e0;">&#x1F4BB;</div>
-                    <h3>Quanti</h3>
+                    <h3>Quanti, s.r.o.</h3>
                     <div class="role">Vývojáři</div>
                     <p>Skupina vývojářů. Softwarové řešení, analytické nástroje, webová vizualizace a datové zpracování.</p>
                 </div>
                 <div class="team-card animate-on-scroll">
                     <div class="team-avatar" style="background: #f3e5f5;">&#x1F52C;</div>
-                    <h3>ČZU Praha</h3>
+                    <h3>Česká zemědělská univerzita, Praha</h3>
                     <div class="role">Vědecký partner</div>
                     <p>Česká zemědělská univerzita v Praze. Oblast pedologie a analýzy lesní půdy, odborné vedení, metodika.</p>
+                </div>
+                <div class="team-card animate-on-scroll">
+                    <div class="team-avatar" style="background: #fdecea;">&#x1F91D;</div>
+                    <h3>Ing. Jan Habart, Ph.D.</h3>
+                    <div class="role">Broker</div>
+                    <p>Inovační broker projektu – koordinace mezi výzkumem, praxí a administrativou programu.</p>
                 </div>
             </div>
         </div>
@@ -2850,11 +3045,11 @@
                 </div>
                 <div class="legend-item">
                     <div class="legend-color" style="background: #5a8fa8; border: 2px solid #1a2f1a; border-radius: 50%; width: 14px; height: 14px;"></div>
-                    <span>TOMS Standard 10 cm</span>
+                    <span>TOMST Standard 10 cm</span>
                 </div>
                 <div class="legend-item">
                     <div class="legend-color" style="background: #d4a574; border: 2px solid #1a2f1a; border-radius: 50%; width: 14px; height: 14px;"></div>
-                    <span>TOMS Oštěp 48 cm</span>
+                    <span>TOMST Oštěp 48 cm</span>
                 </div>
             </div>
 
@@ -3248,8 +3443,8 @@
         <div class="container">
             <div class="section-header">
                 <div class="section-tag">03a / Nasazení senzorů</div>
-                <h2 class="section-title">Nasazené senzory TOMS na testovacích pozemcích</h2>
-                <p class="section-subtitle">Na každý ze 4 testovacích pozemků byly nasazeny 2 senzory TOMS: Standard 10 cm (měření v povrchové vrstvě) a Oštěp 48 cm (hloubkový profil). Celkem 8 senzorů s kontinuálním záznamem.</p>
+                <h2 class="section-title">Nasazené senzory TOMST na testovacích pozemcích</h2>
+                <p class="section-subtitle">Na každý ze 4 testovacích pozemků byly nasazeny 2 senzory TOMST: Standard 10 cm (měření v povrchové vrstvě) a Oštěp 48 cm (hloubkový profil). Celkem 8 senzorů s kontinuálním záznamem.</p>
             </div>
 
             <div class="sensor-deploy-status" style="margin-bottom: 2rem; display: inline-flex;">
@@ -3368,7 +3563,7 @@
             <div class="design-features" style="margin-top: 2rem;">
                 <div class="feature-box">
                     <div class="feature-box-value">8 senzorů</div>
-                    <div class="feature-box-label">TOMS na 4 pozemcích</div>
+                    <div class="feature-box-label">TOMST na 4 pozemcích</div>
                 </div>
                 <div class="feature-box">
                     <div class="feature-box-value">4× Standard</div>
@@ -3386,87 +3581,87 @@
 
             <!-- Sensor Application Photos -->
             <h3 style="font-family: 'Playfair Display', serif; font-size: 1.5rem; margin: 3rem 0 1.5rem; color: var(--forest-dark);">Fotodokumentace z nasazení senzorů</h3>
-            <p class="section-subtitle" style="margin-bottom: 2rem;">Reálné fotografie z instalace senzorů TOMS na jednotlivých testovacích pozemcích v březnu 2026</p>
+            <p class="section-subtitle" style="margin-bottom: 2rem;">Reálné fotografie z instalace senzorů TOMST na jednotlivých testovacích pozemcích v březnu 2026</p>
 
             <div class="gallery-grid">
                 <!-- General sensor photos -->
                 <div class="gallery-card animate-on-scroll">
-                    <img src="assets/images/sensors application/TOMS standard 10cm.png" alt="TOMS Standard 10cm senzor" onclick="openLightbox(this.src)" loading="lazy">
+                    <img src="assets/images/sensors application/TOMST standard 10cm.png" alt="TOMST Standard 10cm senzor" onclick="openLightbox(this.src)" loading="lazy">
                     <div class="gallery-card-body">
-                        <div class="gallery-card-title">TOMS Standard 10 cm</div>
-                        <div class="gallery-card-desc">Detail senzoru TOMS Standard pro měření teploty a vlhkosti v povrchové vrstvě půdy (do 10 cm).</div>
+                        <div class="gallery-card-title">TOMST Standard 10 cm</div>
+                        <div class="gallery-card-desc">Detail senzoru TOMST Standard pro měření teploty a vlhkosti v povrchové vrstvě půdy (do 10 cm).</div>
                         <span class="gallery-card-tag" style="background: rgba(90, 143, 168, 0.15); color: #5a8fa8;">Standard 10 cm</span>
                     </div>
                 </div>
                 <div class="gallery-card animate-on-scroll">
-                    <img src="assets/images/sensors application/TOMS 48cm.png" alt="TOMS Oštěp 48cm senzor" onclick="openLightbox(this.src)" loading="lazy">
+                    <img src="assets/images/sensors application/TOMST 48cm.png" alt="TOMST Oštěp 48cm senzor" onclick="openLightbox(this.src)" loading="lazy">
                     <div class="gallery-card-body">
-                        <div class="gallery-card-title">TOMS Oštěp 48 cm</div>
-                        <div class="gallery-card-desc">Detail senzoru TOMS Oštěp pro měření hloubkového profilu teploty a vlhkosti (do 48 cm).</div>
+                        <div class="gallery-card-title">TOMST Oštěp 48 cm</div>
+                        <div class="gallery-card-desc">Detail senzoru TOMST Oštěp pro měření hloubkového profilu teploty a vlhkosti (do 48 cm).</div>
                         <span class="gallery-card-tag" style="background: rgba(212, 165, 116, 0.15); color: #d4a574;">Oštěp 48 cm</span>
                     </div>
                 </div>
 
                 <!-- 41Ca0 – Fréza 2022 -->
                 <div class="gallery-card animate-on-scroll">
-                    <img src="assets/images/sensors application/2022_10_F.png" alt="Aplikace TOMS 10cm – Fréza 2022" onclick="openLightbox(this.src)" loading="lazy">
+                    <img src="assets/images/sensors application/2022_10_F.png" alt="Aplikace TOMST 10cm – Fréza 2022" onclick="openLightbox(this.src)" loading="lazy">
                     <div class="gallery-card-body">
                         <div class="gallery-card-title">2022_10_F – Fréza 2022, Standard 10 cm</div>
-                        <div class="gallery-card-desc">Instalace senzoru TOMS Standard 10 cm na frézovaném pozemku 41Ca0 (frézováno 2022).</div>
+                        <div class="gallery-card-desc">Instalace senzoru TOMST Standard 10 cm na frézovaném pozemku 41Ca0 (frézováno 2022).</div>
                         <span class="gallery-card-tag tag-freza-2022">Fréza 2022</span>
                     </div>
                 </div>
                 <div class="gallery-card animate-on-scroll">
-                    <img src="assets/images/sensors application/2022_48_F.png" alt="Aplikace TOMS 48cm – Fréza 2022" onclick="openLightbox(this.src)" loading="lazy">
+                    <img src="assets/images/sensors application/2022_48_F.png" alt="Aplikace TOMST 48cm – Fréza 2022" onclick="openLightbox(this.src)" loading="lazy">
                     <div class="gallery-card-body">
                         <div class="gallery-card-title">2022_48_F – Fréza 2022, Oštěp 48 cm</div>
-                        <div class="gallery-card-desc">Instalace senzoru TOMS Oštěp 48 cm na frézovaném pozemku 41Ca0 (frézováno 2022).</div>
+                        <div class="gallery-card-desc">Instalace senzoru TOMST Oštěp 48 cm na frézovaném pozemku 41Ca0 (frézováno 2022).</div>
                         <span class="gallery-card-tag tag-freza-2022">Fréza 2022</span>
                     </div>
                 </div>
 
                 <!-- 41Ca8 – Fréza 2026 -->
                 <div class="gallery-card animate-on-scroll">
-                    <img src="assets/images/sensors application/2026_10_F.png" alt="Aplikace TOMS 10cm – Fréza 2026" onclick="openLightbox(this.src)" loading="lazy">
+                    <img src="assets/images/sensors application/2026_10_F.png" alt="Aplikace TOMST 10cm – Fréza 2026" onclick="openLightbox(this.src)" loading="lazy">
                     <div class="gallery-card-body">
                         <div class="gallery-card-title">2026_10_F – Fréza 2026, Standard 10 cm</div>
-                        <div class="gallery-card-desc">Instalace senzoru TOMS Standard 10 cm na frézované polovině pozemku 41Ca8 (fréza jaro 2026).</div>
+                        <div class="gallery-card-desc">Instalace senzoru TOMST Standard 10 cm na frézované polovině pozemku 41Ca8 (fréza jaro 2026).</div>
                         <span class="gallery-card-tag tag-nova-2026">Fréza 2026</span>
                     </div>
                 </div>
                 <div class="gallery-card animate-on-scroll">
-                    <img src="assets/images/sensors application/2026_48_F.png" alt="Aplikace TOMS 48cm – Fréza 2026" onclick="openLightbox(this.src)" loading="lazy">
+                    <img src="assets/images/sensors application/2026_48_F.png" alt="Aplikace TOMST 48cm – Fréza 2026" onclick="openLightbox(this.src)" loading="lazy">
                     <div class="gallery-card-body">
                         <div class="gallery-card-title">2026_48_F – Fréza 2026, Oštěp 48 cm</div>
-                        <div class="gallery-card-desc">Instalace senzoru TOMS Oštěp 48 cm na frézované polovině pozemku 41Ca8 (fréza jaro 2026).</div>
+                        <div class="gallery-card-desc">Instalace senzoru TOMST Oštěp 48 cm na frézované polovině pozemku 41Ca8 (fréza jaro 2026).</div>
                         <span class="gallery-card-tag tag-nova-2026">Fréza 2026</span>
                     </div>
                 </div>
 
                 <!-- 41Ca8 – Nefréza 2026 -->
                 <div class="gallery-card animate-on-scroll">
-                    <img src="assets/images/sensors application/2026_48_NF.png" alt="Aplikace TOMS 48cm – Nefréza 2026" onclick="openLightbox(this.src)" loading="lazy">
+                    <img src="assets/images/sensors application/2026_48_NF.png" alt="Aplikace TOMST 48cm – Nefréza 2026" onclick="openLightbox(this.src)" loading="lazy">
                     <div class="gallery-card-body">
                         <div class="gallery-card-title">2026_48_NF – Nefréza 2026, Oštěp 48 cm</div>
-                        <div class="gallery-card-desc">Instalace senzoru TOMS Oštěp 48 cm na nefrézované polovině pozemku 41Ca8 (kontrolní plocha 2026).</div>
+                        <div class="gallery-card-desc">Instalace senzoru TOMST Oštěp 48 cm na nefrézované polovině pozemku 41Ca8 (kontrolní plocha 2026).</div>
                         <span class="gallery-card-tag tag-nefreza">Nefréza 2026</span>
                     </div>
                 </div>
 
                 <!-- 41Ka0 – Nefréza 2022 -->
                 <div class="gallery-card animate-on-scroll">
-                    <img src="assets/images/sensors application/2022_10_NF.png" alt="Aplikace TOMS 10cm – Nefréza 2022" onclick="openLightbox(this.src)" loading="lazy">
+                    <img src="assets/images/sensors application/2022_10_NF.png" alt="Aplikace TOMST 10cm – Nefréza 2022" onclick="openLightbox(this.src)" loading="lazy">
                     <div class="gallery-card-body">
                         <div class="gallery-card-title">2022_10_NF – Nefréza 2022, Standard 10 cm</div>
-                        <div class="gallery-card-desc">Instalace senzoru TOMS Standard 10 cm na nefrézovaném pozemku 41Ka0 (zalesněno 2022 bez frézy).</div>
+                        <div class="gallery-card-desc">Instalace senzoru TOMST Standard 10 cm na nefrézovaném pozemku 41Ka0 (zalesněno 2022 bez frézy).</div>
                         <span class="gallery-card-tag tag-nefreza">Nefréza 2022</span>
                     </div>
                 </div>
                 <div class="gallery-card animate-on-scroll">
-                    <img src="assets/images/sensors application/2022_48_NF.png" alt="Aplikace TOMS 48cm – Nefréza 2022" onclick="openLightbox(this.src)" loading="lazy">
+                    <img src="assets/images/sensors application/2022_48_NF.png" alt="Aplikace TOMST 48cm – Nefréza 2022" onclick="openLightbox(this.src)" loading="lazy">
                     <div class="gallery-card-body">
                         <div class="gallery-card-title">2022_48_NF – Nefréza 2022, Oštěp 48 cm</div>
-                        <div class="gallery-card-desc">Instalace senzoru TOMS Oštěp 48 cm na nefrézovaném pozemku 41Ka0 (zalesněno 2022 bez frézy).</div>
+                        <div class="gallery-card-desc">Instalace senzoru TOMST Oštěp 48 cm na nefrézovaném pozemku 41Ka0 (zalesněno 2022 bez frézy).</div>
                         <span class="gallery-card-tag tag-nefreza">Nefréza 2022</span>
                     </div>
                 </div>
@@ -3484,7 +3679,7 @@
                     <img src="assets/images/sensors application/senzory na 41Ka0.png" alt="Senzory na pozemku 41Ka0" onclick="openLightbox(this.src)" loading="lazy">
                     <div class="gallery-card-body">
                         <div class="gallery-card-title">Senzory na pozemku 41Ka0</div>
-                        <div class="gallery-card-desc">Oba senzory TOMS (Standard 10 cm + Oštěp 48 cm) po instalaci na pozemku 41Ka0.</div>
+                        <div class="gallery-card-desc">Oba senzory TOMST (Standard 10 cm + Oštěp 48 cm) po instalaci na pozemku 41Ka0.</div>
                         <span class="gallery-card-tag tag-nefreza">41Ka0</span>
                     </div>
                 </div>
@@ -3630,8 +3825,8 @@
                 <div class="timeline-item animate-on-scroll">
                     <div class="timeline-content" style="border-left: 4px solid var(--leaf-fresh);">
                         <div class="timeline-date">Březen 2026 ✓</div>
-                        <div class="timeline-title">Nasazení senzorů TOMS na všechny pozemky</div>
-                        <div class="timeline-desc"><strong>Splněno.</strong> Na každý ze 4 testovacích pozemků nasazeny 2 senzory TOMS: Standard 10 cm (povrchová vrstva) a Oštěp 48 cm (hloubkový profil). Celkem 8 senzorů s GPS lokalizací a kontinuálním záznamem (15min interval). Kontrola a kalibrace Brinno a MAPIR kamer na pozemcích 2022 (41Ca0, 41Ka0).</div>
+                        <div class="timeline-title">Nasazení senzorů TOMST na všechny pozemky</div>
+                        <div class="timeline-desc"><strong>Splněno.</strong> Na každý ze 4 testovacích pozemků nasazeny 2 senzory TOMST: Standard 10 cm (povrchová vrstva) a Oštěp 48 cm (hloubkový profil). Celkem 8 senzorů s GPS lokalizací a kontinuálním záznamem (15min interval). Kontrola a kalibrace Brinno a MAPIR kamer na pozemcích 2022 (41Ca0, 41Ka0).</div>
                     </div>
                 </div>
 
@@ -4138,7 +4333,7 @@
         // Fit to all polygons initially
         map.fitBounds(allBounds.pad(0.15));
 
-        // ===== TOMS SENSOR MARKERS =====
+        // ===== TOMST SENSOR MARKERS =====
         const sensors = [
             { code: '2022_10_F', type: 'Standard 10cm', treatment: 'Fréza 2022', lat: 49.362758, lng: 14.299185, plot: '41Ca0', alt: 463 },
             { code: '2022_48_F', type: 'Oštěp 48cm', treatment: 'Fréza 2022', lat: 49.362581, lng: 14.299215, plot: '41Ca0', alt: 463 },
@@ -4163,7 +4358,7 @@
                 fillOpacity: 0.85
             }).addTo(map).bindPopup(
                 '<div style="font-family: Source Sans 3, sans-serif; min-width: 200px;">' +
-                '<strong style="color: #1a2f1a; font-size: 14px;">TOMS ' + s.type + '</strong><br>' +
+                '<strong style="color: #1a2f1a; font-size: 14px;">TOMST ' + s.type + '</strong><br>' +
                 '<span style="font-family: JetBrains Mono, monospace; font-size: 12px; color: #4a6741;">' + s.code + '</span><br>' +
                 '<span style="font-size: 12px;">' + s.treatment + ' | ' + s.plot + ' | ' + s.alt + ' m n.m.</span><br>' +
                 '<span style="font-family: JetBrains Mono, monospace; font-size: 11px; color: #6b5344;">' + s.lat + ', ' + s.lng + '</span></div>'
