@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prihlaseni | Lesnicky monitoring</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Source+Sans+3:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --forest-dark: #1a2f1a;
+            --forest-deep: #0f1f0f;
+            --moss: #4a6741;
+            --leaf-light: #8cb369;
+            --cream: #f5f1e8;
+            --cream-dark: #e8e2d5;
+            --amber: #d4a574;
+            --text: #2a3a2a;
+            --text-light: #5a6a5a;
+            --red: #c0392b;
+        }
+
+        body {
+            font-family: 'Source Sans 3', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--forest-dark) 0%, var(--forest-deep) 50%, #243824 100%);
+            padding: 24px;
+            color: var(--text);
+        }
+
+        /* Subtle leaf overlay */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image:
+                radial-gradient(circle at 12% 18%, rgba(140, 179, 105, 0.08) 0, transparent 18%),
+                radial-gradient(circle at 88% 78%, rgba(212, 165, 116, 0.06) 0, transparent 22%);
+            pointer-events: none;
+        }
+
+        .login-card {
+            position: relative;
+            background: var(--cream);
+            border-radius: 16px;
+            padding: 48px 40px;
+            max-width: 440px;
+            width: 100%;
+            box-shadow: 0 24px 64px rgba(0, 0, 0, 0.4);
+            text-align: center;
+        }
+
+        .login-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--moss), var(--leaf-light), var(--amber));
+            border-radius: 16px 16px 0 0;
+        }
+
+        .login-icon {
+            width: 64px; height: 64px;
+            margin: 0 auto 18px;
+            background: var(--moss);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 4px 16px rgba(74, 103, 65, 0.3);
+        }
+
+        .login-icon svg { fill: var(--cream); width: 32px; height: 32px; }
+
+        .login-card h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.6rem;
+            color: var(--forest-dark);
+            margin-bottom: 6px;
+        }
+
+        .login-card .subtitle {
+            font-size: 0.92rem;
+            color: var(--text-light);
+            margin-bottom: 32px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 8px;
+            letter-spacing: 0.02em;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 13px 16px;
+            border: 2px solid var(--cream-dark);
+            background: #fff;
+            border-radius: 8px;
+            font-family: 'Source Sans 3', sans-serif;
+            font-size: 1rem;
+            color: var(--text);
+            transition: border-color 0.25s ease, box-shadow 0.25s ease;
+            outline: none;
+        }
+
+        .form-group input:focus {
+            border-color: var(--moss);
+            box-shadow: 0 0 0 4px rgba(74, 103, 65, 0.15);
+        }
+
+        .error-msg {
+            color: var(--red);
+            font-size: 0.85rem;
+            margin-bottom: 14px;
+            min-height: 20px;
+            font-weight: 600;
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 14px;
+            background: var(--moss);
+            color: var(--cream);
+            border: none;
+            border-radius: 8px;
+            font-family: 'Source Sans 3', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            letter-spacing: 0.03em;
+            transition: background 0.25s ease, transform 0.15s ease;
+        }
+
+        .btn-submit:hover {
+            background: var(--forest-dark);
+            transform: translateY(-1px);
+        }
+
+        .btn-submit:active { transform: translateY(0); }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 26px;
+            color: var(--text-light);
+            font-size: 0.85rem;
+            text-decoration: none;
+            transition: color 0.25s ease;
+        }
+
+        .back-link:hover { color: var(--moss); }
+
+        .meta-note {
+            margin-top: 28px;
+            padding-top: 20px;
+            border-top: 1px solid var(--cream-dark);
+            font-size: 0.78rem;
+            color: var(--text-light);
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-card">
+        <div class="login-icon">
+            <svg viewBox="0 0 24 24"><path d="M17,8C8,10 5.9,16.17 3.82,21.34L5.71,22L6.66,19.7C7.14,19.87 7.64,20 8,20C19,20 22,3 22,3C21,5 14,5.25 9,6.25C4,7.25 2,11.5 2,13.5C2,15.5 3.75,17.25 3.75,17.25C7,8 17,8 17,8Z"/></svg>
+        </div>
+        <h1>Pristup do dashboardu</h1>
+        <p class="subtitle">Analyticke nastroje projektu Alcedo Frezovani</p>
+
+        <form id="loginForm" onsubmit="return handleLogin(event)">
+            <div class="form-group">
+                <label for="password">Heslo</label>
+                <input type="password" id="password" placeholder="Zadejte heslo" autocomplete="current-password" required autofocus>
+            </div>
+            <div class="error-msg" id="errorMsg"></div>
+            <button type="submit" class="btn-submit">Prihlasit se</button>
+        </form>
+
+        <a href="index.html" class="back-link">&larr; Zpet na hlavni stranku</a>
+
+        <div class="meta-note">
+            Pristup pro vyzkumny tym CRA s.r.o.<br>
+            Projekt: Vliv frezovani pudy po tezbe dreva na rust sazenic (2026&ndash;2027)
+        </div>
+    </div>
+
+    <script>
+    function handleLogin(e) {
+        e.preventDefault();
+        var pw = document.getElementById('password').value;
+        var err = document.getElementById('errorMsg');
+
+        if (pw === 'AlcedoMC0308') {
+            sessionStorage.setItem('alcedo_auth', 'true');
+            window.location.href = 'dashboard.html';
+        } else {
+            err.textContent = 'Nespravne heslo. Zkuste to znovu.';
+            document.getElementById('password').value = '';
+            document.getElementById('password').focus();
+        }
+        return false;
+    }
+
+    // Pokud uz je prihlasen, presmeruj rovnou
+    if (sessionStorage.getItem('alcedo_auth') === 'true') {
+        window.location.href = 'dashboard.html';
+    }
+    </script>
+</body>
+</html>

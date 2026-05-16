@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | Lesnicky monitoring</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Source+Sans+3:wght@300;400;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --forest-dark: #1a2f1a;
+            --forest-deep: #0f1f0f;
+            --moss: #4a6741;
+            --moss-light: #5d8253;
+            --leaf-light: #8cb369;
+            --cream: #f5f1e8;
+            --cream-dark: #e8e2d5;
+            --amber: #d4a574;
+            --amber-light: #e8c9a0;
+            --text: #2a3a2a;
+            --text-light: #5a6a5a;
+            --green: #2e7d32;
+            --red: #c0392b;
+            --yellow: #f9a825;
+        }
+
+        body {
+            font-family: 'Source Sans 3', sans-serif;
+            background: var(--cream);
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .dash-header {
+            background: linear-gradient(135deg, var(--forest-dark), var(--forest-deep));
+            padding: 0 32px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 68px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+        }
+
+        .dash-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-family: 'Playfair Display', serif;
+            font-size: 1.2rem;
+            color: var(--cream);
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .dash-brand svg { fill: var(--leaf-light); width: 26px; height: 26px; }
+
+        .dash-actions {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+        }
+
+        .dash-actions a {
+            color: var(--cream-dark);
+            font-size: 0.88rem;
+            text-decoration: none;
+            transition: color 0.25s ease;
+        }
+
+        .dash-actions a:hover { color: var(--cream); }
+
+        .btn-logout {
+            background: rgba(255, 255, 255, 0.12);
+            color: var(--cream) !important;
+            padding: 9px 18px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            font-family: 'Source Sans 3', sans-serif;
+            font-size: 0.85rem;
+            transition: background 0.25s ease, border-color 0.25s ease;
+        }
+
+        .btn-logout:hover {
+            background: rgba(255, 255, 255, 0.22);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        /* Main */
+        .dash-main {
+            max-width: 1180px;
+            margin: 0 auto;
+            padding: 48px 24px 64px;
+        }
+
+        .dash-welcome {
+            margin-bottom: 42px;
+        }
+
+        .dash-welcome h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.2rem;
+            color: var(--forest-dark);
+            margin-bottom: 10px;
+        }
+
+        .dash-welcome p {
+            color: var(--text-light);
+            font-size: 1.02rem;
+            max-width: 760px;
+            line-height: 1.6;
+        }
+
+        /* Section title */
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            color: var(--forest-dark);
+            margin: 40px 0 22px 0;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--leaf-light);
+        }
+
+        /* Tool cards */
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 24px;
+        }
+
+        .tool-card {
+            background: #fff;
+            border-radius: 14px;
+            padding: 28px 26px;
+            box-shadow: 0 2px 12px rgba(26, 47, 26, 0.07);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tool-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--moss), var(--leaf-light));
+        }
+
+        .tool-card.featured::before {
+            background: linear-gradient(90deg, var(--amber), var(--leaf-light), var(--moss));
+            height: 4px;
+        }
+
+        .tool-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 28px rgba(26, 47, 26, 0.14);
+        }
+
+        .tool-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            margin-bottom: 14px;
+        }
+
+        .tool-icon {
+            width: 52px; height: 52px;
+            background: var(--cream);
+            border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.7rem;
+        }
+
+        .tool-badge {
+            display: inline-block;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.68rem;
+            padding: 4px 10px;
+            border-radius: 50px;
+            background: var(--cream);
+            color: var(--moss);
+            font-weight: 600;
+            letter-spacing: 0.04em;
+        }
+
+        .tool-card h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.25rem;
+            color: var(--forest-dark);
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .tool-card p {
+            font-size: 0.92rem;
+            color: var(--text-light);
+            line-height: 1.55;
+            flex: 1;
+            margin-bottom: 18px;
+        }
+
+        .tool-features {
+            list-style: none;
+            margin: 12px 0 18px 0;
+            padding: 0;
+        }
+
+        .tool-features li {
+            font-size: 0.85rem;
+            color: var(--text);
+            padding: 4px 0 4px 24px;
+            position: relative;
+        }
+
+        .tool-features li::before {
+            content: '\2713';
+            position: absolute;
+            left: 4px;
+            color: var(--moss);
+            font-weight: 700;
+        }
+
+        /* Status pill */
+        .status-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 14px;
+            background: var(--cream);
+            border-radius: 8px;
+            margin-bottom: 16px;
+            font-size: 0.86rem;
+        }
+
+        .status-dot {
+            width: 11px; height: 11px;
+            border-radius: 50%;
+            background: var(--text-light);
+            flex-shrink: 0;
+            position: relative;
+        }
+
+        .status-dot.online {
+            background: var(--green);
+            box-shadow: 0 0 0 4px rgba(46, 125, 50, 0.15);
+        }
+
+        .status-dot.offline {
+            background: var(--red);
+            box-shadow: 0 0 0 4px rgba(192, 57, 43, 0.15);
+        }
+
+        .status-dot.checking {
+            background: var(--yellow);
+            box-shadow: 0 0 0 4px rgba(249, 168, 37, 0.15);
+            animation: pulse 1.4s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+
+        .status-text { color: var(--text); font-weight: 600; }
+        .status-detail { color: var(--text-light); margin-left: auto; font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; }
+
+        /* Action buttons */
+        .btn-row {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .btn-open {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--moss);
+            color: var(--cream);
+            padding: 11px 22px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.92rem;
+            border: none;
+            cursor: pointer;
+            font-family: 'Source Sans 3', sans-serif;
+            transition: background 0.25s ease, transform 0.15s ease;
+            flex: 1;
+            justify-content: center;
+            min-width: 120px;
+        }
+
+        .btn-open:hover:not(:disabled) {
+            background: var(--forest-dark);
+            color: var(--cream);
+            transform: translateY(-1px);
+        }
+
+        .btn-open:disabled {
+            background: var(--cream-dark);
+            color: var(--text-light);
+            cursor: not-allowed;
+        }
+
+        .btn-help {
+            background: transparent;
+            color: var(--moss);
+            border: 2px solid var(--moss);
+            padding: 9px 18px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.88rem;
+            cursor: pointer;
+            font-family: 'Source Sans 3', sans-serif;
+            transition: background 0.25s ease;
+        }
+
+        .btn-help:hover { background: var(--moss); color: var(--cream); }
+
+        /* Instructions panel */
+        .instructions {
+            margin-top: 14px;
+            padding: 16px 18px;
+            background: #fef9e7;
+            border-left: 4px solid var(--amber);
+            border-radius: 6px;
+            font-size: 0.85rem;
+            color: var(--text);
+            line-height: 1.6;
+            display: none;
+        }
+
+        .instructions.visible { display: block; }
+
+        .instructions code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.82rem;
+            padding: 2px 6px;
+            background: rgba(0,0,0,0.07);
+            border-radius: 4px;
+            word-break: break-all;
+        }
+
+        .instructions h4 {
+            color: var(--forest-dark);
+            font-size: 0.92rem;
+            margin-bottom: 8px;
+        }
+
+        .instructions ol {
+            padding-left: 22px;
+            margin-top: 6px;
+        }
+
+        .instructions li { margin: 4px 0; }
+
+        /* Info panel */
+        .dash-info {
+            margin-top: 48px;
+            padding: 28px 32px;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(26, 47, 26, 0.07);
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 28px;
+        }
+
+        .dash-info h3 {
+            font-family: 'Playfair Display', serif;
+            color: var(--forest-dark);
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+
+        .dash-info p {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            line-height: 1.6;
+        }
+
+        .info-block strong { color: var(--moss); }
+
+        /* Coming-soon card */
+        .tool-card.coming-soon {
+            opacity: 0.62;
+            background: var(--cream);
+        }
+
+        .tool-card.coming-soon::before {
+            background: var(--cream-dark);
+        }
+
+        @media (max-width: 768px) {
+            .dash-header { padding: 0 16px; }
+            .dash-main { padding: 32px 16px; }
+            .dash-welcome h1 { font-size: 1.7rem; }
+            .tools-grid { grid-template-columns: 1fr; }
+            .dash-info { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="dash-header">
+        <a href="index.html" class="dash-brand">
+            <svg viewBox="0 0 24 24"><path d="M17,8C8,10 5.9,16.17 3.82,21.34L5.71,22L6.66,19.7C7.14,19.87 7.64,20 8,20C19,20 22,3 22,3C21,5 14,5.25 9,6.25C4,7.25 2,11.5 2,13.5C2,15.5 3.75,17.25 3.75,17.25C7,8 17,8 17,8Z"/></svg>
+            Alcedo Frezovani
+        </a>
+        <div class="dash-actions">
+            <a href="index.html">Hlavni stranka</a>
+            <button class="btn-logout" onclick="logout()">Odhlasit se</button>
+        </div>
+    </header>
+
+    <main class="dash-main">
+        <div class="dash-welcome">
+            <h1>Analyticky dashboard</h1>
+            <p>
+                Interaktivni nastroje pro vyhodnoceni dat z monitoringu lesniho biotopu &mdash;
+                multispektralni snimky MAPIR Survey 3N, casove rady NDVI, fenologie sazenic
+                a fyzikalne-mechanicke vlastnosti pudy. Aplikace bezi lokalne na vasem PC.
+            </p>
+        </div>
+
+        <h2 class="section-title">Aplikace</h2>
+
+        <div class="tools-grid">
+
+            <!-- MAPIR Survey 3N Analyser -->
+            <div class="tool-card featured">
+                <div class="tool-header">
+                    <div class="tool-icon">&#x1F33F;</div>
+                    <span class="tool-badge">NDVI &middot; MULTI-INDEX</span>
+                </div>
+                <h3>MAPIR NIR Analyser</h3>
+                <p>
+                    Vyhodnoceni fotosynteticke aktivity lesniho biotopu ze snimku MAPIR Survey 3N.
+                    Vypocet 6 vegetacnich indexu vcetne biologicke a fyziologicke interpretace pro
+                    jehlicnaty, listnaty nebo smiseny porost.
+                </p>
+                <ul class="tool-features">
+                    <li>NDVI, WDRVI, MSAVI2, OSAVI, FCI2, RDVI</li>
+                    <li>Kalibrace pomoci tercku MAPIR T4-R50</li>
+                    <li>Sezonni interpretace dle typu porostu</li>
+                    <li>HTML report + CSV pro casove rady</li>
+                </ul>
+
+                <div class="status-row" id="statusRow">
+                    <div class="status-dot checking" id="statusDot"></div>
+                    <span class="status-text" id="statusText">Kontroluji stav aplikace&hellip;</span>
+                    <span class="status-detail" id="statusDetail">localhost:8501</span>
+                </div>
+
+                <div class="btn-row">
+                    <button class="btn-open" id="btnOpen" disabled onclick="openApp()">
+                        Otevrit aplikaci
+                    </button>
+                    <button class="btn-help" onclick="toggleInstructions()">Jak spustit?</button>
+                </div>
+
+                <div class="instructions" id="instructions">
+                    <h4>Spusteni aplikace na vasem PC</h4>
+                    <ol>
+                        <li>Otevrete slozku <code>C:\Users\mspan\Desktop\Projekt_les_frezovani\analysis_pictues_MAPIR\</code></li>
+                        <li>Dvojklik na <code>run_app.bat</code></li>
+                        <li>Pockejte az se v konzoli objevi text <code>http://localhost:8501</code></li>
+                        <li>Vratte se sem a kliknete na <strong>Otevrit aplikaci</strong></li>
+                    </ol>
+                    <p style="margin-top:10px;">
+                        Pri prvnim spusteni se stahnou Python zavislosti (Streamlit, NumPy, OpenCV
+                        atd.) &mdash; cca 300 MB, trva 2&ndash;5 minut. Dalsi spusteni jsou okamzita.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Coming soon - placeholder for future tools -->
+            <div class="tool-card coming-soon">
+                <div class="tool-header">
+                    <div class="tool-icon">&#x1F4CA;</div>
+                    <span class="tool-badge">PRIPRAVUJE SE</span>
+                </div>
+                <h3>NDVI casove rady</h3>
+                <p>
+                    Sezonni baseline + Z-score detekce anomalii NDVI per pokusna plocha.
+                    Napojeni na CSV vystupy z MAPIR Analyseru.
+                </p>
+                <ul class="tool-features">
+                    <li>Polynomicky / spline baseline fit</li>
+                    <li>2&sigma; alert pri odchylce</li>
+                    <li>Mesicni reporty per plocha</li>
+                </ul>
+                <button class="btn-open" disabled>Brzy dostupne</button>
+            </div>
+
+            <div class="tool-card coming-soon">
+                <div class="tool-header">
+                    <div class="tool-icon">&#x1F321;</div>
+                    <span class="tool-badge">PRIPRAVUJE SE</span>
+                </div>
+                <h3>TOMST senzory &mdash; pudni profil</h3>
+                <p>
+                    Vyhodnoceni dat z pudnich senzoru (vlhkost, teplota, vodivost) napric
+                    hloubkami a lokalitami L1&ndash;L9.
+                </p>
+                <ul class="tool-features">
+                    <li>Korelace s NDVI casovymi radami</li>
+                    <li>Early Warning System pro sucho</li>
+                    <li>Hloubkove profily teplot</li>
+                </ul>
+                <button class="btn-open" disabled>Brzy dostupne</button>
+            </div>
+
+        </div>
+
+        <div class="dash-info">
+            <div class="info-block">
+                <h3>O dashboardu</h3>
+                <p>
+                    Analyticke nastroje bezi <strong>lokalne na vasem PC</strong> &mdash; data nikam
+                    neodchazi a fungovat budou i bez pripojeni k internetu. Dashboard slouzi
+                    jako rozcestnik a status monitor.
+                </p>
+            </div>
+            <div class="info-block">
+                <h3>Pristup</h3>
+                <p>
+                    Pristup je urceny pro vyzkumny tym <strong>CRA s.r.o.</strong> v ramci projektu
+                    Vliv frezovani pudy po tezbe dreva na rust sazenic (2026&ndash;2027), 9 lokalit,
+                    27 pokusnych ploch.
+                </p>
+            </div>
+        </div>
+    </main>
+
+    <script>
+    // ============ AUTH GATE ============
+    if (sessionStorage.getItem('alcedo_auth') !== 'true') {
+        window.location.href = 'login.html';
+    }
+
+    function logout() {
+        sessionStorage.removeItem('alcedo_auth');
+        window.location.href = 'index.html';
+    }
+
+    // ============ STREAMLIT STATUS CHECK ============
+    var APP_URL = 'http://localhost:8501';
+    var statusDot = document.getElementById('statusDot');
+    var statusText = document.getElementById('statusText');
+    var btnOpen = document.getElementById('btnOpen');
+
+    async function checkAppRunning() {
+        // Pouzivame no-cors aby Streamlit nemusel mit explicitni CORS hlavicku
+        // Pokud fetch projde bez chyby (i opaque response), aplikace zije
+        var controller = new AbortController();
+        var timeoutId = setTimeout(function() { controller.abort(); }, 2500);
+        try {
+            await fetch(APP_URL + '/_stcore/health', {
+                mode: 'no-cors',
+                cache: 'no-store',
+                signal: controller.signal,
+            });
+            clearTimeout(timeoutId);
+            return true;
+        } catch (e) {
+            clearTimeout(timeoutId);
+            return false;
+        }
+    }
+
+    async function updateStatus() {
+        var running = await checkAppRunning();
+        if (running) {
+            statusDot.className = 'status-dot online';
+            statusText.textContent = 'Aplikace bezi';
+            btnOpen.disabled = false;
+        } else {
+            statusDot.className = 'status-dot offline';
+            statusText.textContent = 'Aplikace neni spustena';
+            btnOpen.disabled = true;
+        }
+    }
+
+    function openApp() {
+        window.open(APP_URL, '_blank', 'noopener');
+    }
+
+    function toggleInstructions() {
+        document.getElementById('instructions').classList.toggle('visible');
+    }
+
+    // Pravidelna kontrola stavu kazdych 5 s
+    updateStatus();
+    setInterval(updateStatus, 5000);
+    </script>
+
+</body>
+</html>
