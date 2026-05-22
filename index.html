@@ -343,7 +343,7 @@
 
         .risk-approaches {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: repeat(3, 1fr);
             gap: 1rem;
             margin-top: 1rem;
         }
@@ -364,6 +364,32 @@
 
         .risk-approach p {
             font-size: 0.85rem !important;
+        }
+
+        .risk-conclusion {
+            margin-top: 1.25rem;
+            padding: 1rem 1.25rem;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.7);
+            border-left: 4px solid var(--forest-dark);
+        }
+
+        .risk-conclusion h4 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.05rem;
+            color: var(--forest-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .risk-conclusion p {
+            font-size: 0.9rem !important;
+            margin-bottom: 0;
+        }
+
+        @media (max-width: 1024px) {
+            .risk-approaches {
+                grid-template-columns: 1fr 1fr;
+            }
         }
 
         @media (max-width: 768px) {
@@ -2732,6 +2758,111 @@
         </div>
     </section>
 
+    <!-- Aktuálně z terénu – instalace časosběrných kamer Brinno + vyčítání dat ze senzorů TOMST -->
+    <section id="aktualne-brinno">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-tag">Aktuálně z terénu</div>
+                <h2 class="section-title">Instalace časosběrných kamer Brinno &ndash; 20. 5. 2026</h2>
+            </div>
+
+            <p class="aktualne-intro animate-on-scroll">
+                Dne 20. 5. 2026 proběhla akce <strong>instalace časosběrných kamer Brinno</strong> a to na pozemcích <strong>41Ca0</strong> (frézovaný 2022 &ndash; výsadba dub a modřín) a <strong>41Ka0</strong> (zalesněný ale nefrézovaný 2022 &ndash; výsadba dub a modřín). Zároveň na všech lokalitách došlo k <strong>načtení dat ze senzorů</strong> &ndash; teploty a půdní vlhkost.
+            </p>
+
+            <h3 style="font-family: 'Playfair Display', serif; font-size: 1.5rem; margin: 2.5rem 0 1.5rem; color: var(--forest-dark);">Fotodokumentace &ndash; instalace kamer Brinno</h3>
+            <div class="gallery-grid">
+                <div class="gallery-card animate-on-scroll">
+                    <img src="assets/images/instalace časosběrné kamery Brinno/Instalace kamera Brinno_41Ca0 fréza 2022.png" alt="Instalace kamery Brinno na pozemku 41Ca0 (fréza 2022) – pohled 1" onclick="openLightbox(this.src)" loading="lazy">
+                    <div class="gallery-card-body">
+                        <div class="gallery-card-title">Instalace Brinno &ndash; 41Ca0 (fréza 2022), pohled 1</div>
+                        <div class="gallery-card-desc">Časosběrná kamera Brinno TLC 2020 instalována na frézovaném pozemku 41Ca0 s výsadbou dub + modřín z roku 2022.</div>
+                    </div>
+                </div>
+                <div class="gallery-card animate-on-scroll">
+                    <img src="assets/images/instalace časosběrné kamery Brinno/Instalace kamera Brinno_41Ca0 fréza 2022_2.png" alt="Instalace kamery Brinno na pozemku 41Ca0 (fréza 2022) – pohled 2" onclick="openLightbox(this.src)" loading="lazy">
+                    <div class="gallery-card-body">
+                        <div class="gallery-card-title">Instalace Brinno &ndash; 41Ca0 (fréza 2022), pohled 2</div>
+                        <div class="gallery-card-desc">Detail upevnění kamery a směrování záběru na sledovanou výsadbu.</div>
+                    </div>
+                </div>
+                <div class="gallery-card animate-on-scroll">
+                    <img src="assets/images/instalace časosběrné kamery Brinno/Instalace kamera Brinno_41Ca0 fréza 2022_3.png" alt="Instalace kamery Brinno na pozemku 41Ca0 (fréza 2022) – pohled 3" onclick="openLightbox(this.src)" loading="lazy">
+                    <div class="gallery-card-body">
+                        <div class="gallery-card-title">Instalace Brinno &ndash; 41Ca0 (fréza 2022), pohled 3</div>
+                        <div class="gallery-card-desc">Dokončená instalace na frézované ploše &ndash; kamera připravena pro sezónní časosběr.</div>
+                    </div>
+                </div>
+                <div class="gallery-card animate-on-scroll">
+                    <img src="assets/images/instalace časosběrné kamery Brinno/Instalace kamera Brinno_41Ka0 nefréza 2022.png" alt="Instalace kamery Brinno na pozemku 41Ka0 (nefréza 2022)" onclick="openLightbox(this.src)" loading="lazy">
+                    <div class="gallery-card-body">
+                        <div class="gallery-card-title">Instalace Brinno &ndash; 41Ka0 (nefréza 2022)</div>
+                        <div class="gallery-card-desc">Instalace kontrolní kamery na nefrézovaném pozemku 41Ka0 (zalesněno 2022, výsadba dub + modřín) &ndash; protějšek k frézované ploše 41Ca0.</div>
+                    </div>
+                </div>
+            </div>
+
+            <h3 style="font-family: 'Playfair Display', serif; font-size: 1.5rem; margin: 2.5rem 0 1.5rem; color: var(--forest-dark);">Fotodokumentace &ndash; vyčítání dat ze senzorů TOMST</h3>
+            <div class="gallery-grid">
+                <div class="gallery-card animate-on-scroll">
+                    <img src="assets/images/vyčítání naměřených dat ze senzorů TOMST/vyčítání dat_pozemek 41Ca0.png" alt="Vyčítání dat ze senzorů TOMST – pozemek 41Ca0" onclick="openLightbox(this.src)" loading="lazy">
+                    <div class="gallery-card-body">
+                        <div class="gallery-card-title">Vyčítání dat &ndash; pozemek 41Ca0</div>
+                        <div class="gallery-card-desc">Stahování naměřených dat (teplota a půdní vlhkost) ze senzorů TOMST TMS na pozemku 41Ca0.</div>
+                    </div>
+                </div>
+                <div class="gallery-card animate-on-scroll">
+                    <img src="assets/images/vyčítání naměřených dat ze senzorů TOMST/Vyčítání dat_pozemek 41Ca8.png" alt="Vyčítání dat ze senzorů TOMST – pozemek 41Ca8" onclick="openLightbox(this.src)" loading="lazy">
+                    <div class="gallery-card-body">
+                        <div class="gallery-card-title">Vyčítání dat &ndash; pozemek 41Ca8</div>
+                        <div class="gallery-card-desc">Načítání záznamů z TMS senzorů na kombinovaném pozemku 41Ca8 (fréza + kontrola jaro 2026).</div>
+                    </div>
+                </div>
+                <div class="gallery-card animate-on-scroll">
+                    <img src="assets/images/vyčítání naměřených dat ze senzorů TOMST/realizační tým ALCEDO MC a ČRa_pozemek 41Ca8.png" alt="Realizační tým ALCEDO MC a ČRa na pozemku 41Ca8" onclick="openLightbox(this.src)" loading="lazy">
+                    <div class="gallery-card-body">
+                        <div class="gallery-card-title">Realizační tým &ndash; ALCEDO MC a ČRa (pozemek 41Ca8)</div>
+                        <div class="gallery-card-desc">Společná akce realizačního týmu ALCEDO MC a ČRa při instalaci a vyčítání dat na pozemku 41Ca8.</div>
+                    </div>
+                </div>
+                <div class="gallery-card animate-on-scroll">
+                    <img src="assets/images/vyčítání naměřených dat ze senzorů TOMST/realizační tým žadatele a ČRa.png" alt="Realizační tým žadatele a ČRa" onclick="openLightbox(this.src)" loading="lazy">
+                    <div class="gallery-card-body">
+                        <div class="gallery-card-title">Realizační tým žadatele a ČRa</div>
+                        <div class="gallery-card-desc">Společné foto realizačního týmu žadatele (ALCEDO MC) a ČRa po dokončení terénních prací 20. 5. 2026.</div>
+                    </div>
+                </div>
+            </div>
+
+            <h3 style="font-family: 'Playfair Display', serif; font-size: 1.5rem; margin: 3rem 0 1rem; color: var(--forest-dark);">První analýzy dat ze senzorů &ndash; březen a duben 2026</h3>
+            <p class="aktualne-intro animate-on-scroll" style="margin-bottom: 1.5rem;">
+                Z vyčtených dat ze senzorů TOMST jsme zpracovali první analýzy půdní vlhkosti a teploty za období <strong>10. 3. &ndash; 20. 5. 2026</strong> na pozemcích s výsadbou z 12. 2. 2022. K dispozici je samostatná analýza pro každý pozemek a navíc komparativní studie srovnávající frézovanou a nefrézovanou variantu.
+            </p>
+
+            <div class="metodika-grid">
+                <div class="metodika-card animate-on-scroll">
+                    <h3>Pozemek 41Ca0 (fréza 2022)</h3>
+                    <p>Analýza záznamů ze senzorů TOMST FED5 a FED6 (raw data) na <strong>frézovaném pozemku 41Ca0</strong> za období 10. 3. &ndash; 20. 5. 2026. Půdní teplota a volumetrický obsah vody (VWC) v profilu kořenové zóny.</p>
+                    <a href="assets/docs/Analyza_TOMST_FED5_FED6_RAW_FREZA_10_3_20_5_2026.pdf" target="_blank">Otevřít PDF analýzu</a>
+                </div>
+
+                <div class="metodika-card animate-on-scroll">
+                    <h3>Pozemek 41Ka0 (nefréza 2022)</h3>
+                    <p>Analýza záznamů ze senzorů TOMST FED7 a FED8 (raw data) na <strong>nefrézovaném (kontrolním) pozemku 41Ka0</strong> za období 10. 3. &ndash; 20. 5. 2026. Referenční dataset pro porovnání s frézovanou variantou.</p>
+                    <a href="assets/docs/Analyza_TOMST_FED7_FED8_RAW_NEFR_10_3_20_5_2026.pdf" target="_blank">Otevřít PDF analýzu</a>
+                </div>
+            </div>
+
+            <div style="margin-top: 2rem; text-align: center;">
+                <div class="metodika-card animate-on-scroll" style="max-width: 900px; margin: 0 auto; border-left: 4px solid var(--amber);">
+                    <h3>Komparativní analýza &ndash; fréza vs. nefréza (výsadba 12. 2. 2022)</h3>
+                    <p>Společné porovnání dat ze senzorů <strong>FED5 + FED6 (fréza)</strong> a <strong>FED7 + FED8 (nefréza)</strong> za období 10. 3. &ndash; 20. 5. 2026. Srovnání teplotního a vlhkostního režimu kořenové zóny mezi frézovanou a nefrézovanou plochou se stejnou výsadbou z 12. 2. 2022 (dub + modřín).</p>
+                    <a href="assets/docs/Komparacni_analyza_TOMST_FREZA_vs_NEFR_FED5_FED6_FED7_FED8_10_3_20_5_2026.pdf" target="_blank">Otevřít PDF komparativní analýzu</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Aktuálně z terénu – odběry vzorků -->
     <section id="aktualne-vzorky">
         <div class="container">
@@ -2824,6 +2955,17 @@
                             <h4>2. Pasečný klid &mdash; rok čekání</h4>
                             <p>Po vyfrézování se s výsadbou záměrně počká celou vegetační sezónu. Přezimování v rozptýleném materiálu výrazně decimuje larvy i dospělce &mdash; mráz, predátoři a vysychání svedou část práce samy. Teprve na jaře druhého roku, kdy je tlak škůdce výrazně nižší, se přistupuje k výsadbě. Tato varianta eliminuje chemický zásah, ale prodlužuje obnovu o rok.</p>
                         </div>
+                        <div class="risk-approach">
+                            <h4>3. Okamžité frézování jako preventivní opatření &mdash; otázka načasování</h4>
+                            <p>Zkušení lesníci upozorňují na další strategii, která s výše popsanými riziky pracuje odlišně: místo pasečného klidu nebo chemické ochrany navrhují frézovat co nejdříve po vykácení, ještě předtím, než klikoroh stihne čerstvé pařezy osídlit.</p>
+                            <p>Biologický základ tohoto přístupu je věrohodný. Klikoroh je na holiny lákán těkavými látkami &mdash; monoterpeny a ethanolem &mdash; které čerstvé pařezy uvolňují; samičky kladou vajíčka zejména v období od června do začátku srpna. Pokud je porost vykácen v zimě nebo brzy na jaře a frézování proběhne neprodleně, je substrát fyzicky zničen ještě před nástupem ovipoziční sezóny. Samičkám pak zbývá rozmetaný dřevní mulč bez intaktní kůry a kambium, které larvy ke svému vývoji nezbytně potřebují &mdash; i případné rozptýlení brouků do větší plochy tak nevede k úspěšnému rozmnožení.</p>
+                            <p>Tento argument má ale důležitou podmínku: záleží na ročním období těžby. Výzkumy upozorňují, že frézování samo o sobě krátkodobě zvyšuje produkci těkavých látek, a čerstvě vyfrézované holiny proto přitahují více jedinců než holiny s ponechanými pařezy &mdash; pokud k frézování dojde právě v době aktivního rojení (léto), efekt může být opačný, než se zamýšlelo. Naopak holiny frézované rok po těžbě vykazují nižší abundance klikoroha. Strategie okamžitého frézování je tedy nejúčinnější při <strong>zimní těžbě s okamžitým zpracováním na jaře</strong>, kdy časové okno předchází ovipoziční sezóně.</p>
+                        </div>
+                    </div>
+
+                    <div class="risk-conclusion">
+                        <h4>Závěr: kterou strategii zvolit?</h4>
+                        <p>V praxi to znamená, že žádná z dostupných metod není univerzálně nejlepší: <strong>chemická/biologická ochrana</strong> chrání sazenice bez ohledu na termín frézování, <strong>pasečný klid</strong> využívá přirozenou decimaci přes zimu, a <strong>okamžité frézování</strong> funguje jako preventivní eliminace substrátu &mdash; ale pouze je-li dodrženo správné načasování vůči bionomice škůdce.</p>
                     </div>
 
                     <p style="margin-top: 1rem; font-size: 0.9rem; color: var(--bark-light);"><strong>Proč je to aktuální:</strong> Po kůrovcové kalamitě zůstaly v ČR rozsáhlé holiny, frézování se masivně rozšířilo a kombinace těchto faktorů vytváří pro klikoroha téměř ideální podmínky. Zodpovědná příprava výsadby proto musí toto riziko vědomě zahrnout do celého plánu obnovy lesa &mdash; ještě před tím, než první sazenice zamíří do země.</p>
