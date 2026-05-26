@@ -7,6 +7,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Source+Sans+3:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
     <style>
         :root {
             --forest-dark: #1a2f1a;
@@ -1546,6 +1548,214 @@
             margin-bottom: 4px;
             font-family: 'Playfair Display', serif;
             font-size: 13px;
+        }
+
+        /* === Sensor chart modal === */
+        .sensor-modal {
+            position: fixed;
+            inset: 0;
+            z-index: 9000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+        }
+
+        .sensor-modal.open {
+            display: flex;
+        }
+
+        .sensor-modal-backdrop {
+            position: absolute;
+            inset: 0;
+            background: rgba(10, 20, 10, 0.75);
+            backdrop-filter: blur(4px);
+        }
+
+        .sensor-modal-content {
+            position: relative;
+            background: var(--cream);
+            border-radius: 16px;
+            max-width: 1100px;
+            width: 100%;
+            max-height: 92vh;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 20px 80px rgba(0,0,0,0.6);
+            overflow: hidden;
+            border-top: 4px solid var(--leaf-fresh);
+        }
+
+        .sensor-modal-close {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--forest-dark);
+            color: var(--cream);
+            border: none;
+            font-size: 1.4rem;
+            line-height: 1;
+            cursor: pointer;
+            z-index: 10;
+            transition: background 0.2s ease;
+        }
+
+        .sensor-modal-close:hover {
+            background: var(--fire-warning);
+        }
+
+        .sensor-modal-header {
+            padding: 1.5rem 2rem 1rem;
+            border-bottom: 1px solid var(--cream-dark);
+        }
+
+        .sensor-modal-label {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            color: var(--forest-dark);
+            margin-bottom: 0.25rem;
+        }
+
+        .sensor-modal-meta {
+            font-size: 0.9rem;
+            color: var(--bark-light);
+            margin-bottom: 0.35rem;
+        }
+
+        .sensor-modal-source {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--moss);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .sensor-modal-controls {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.25rem;
+            padding: 1rem 2rem;
+            background: var(--cream-dark);
+            border-bottom: 1px solid var(--cream-dark);
+        }
+
+        .control-group label {
+            display: block;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--forest-dark);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.4rem;
+        }
+
+        .control-group select,
+        .control-group input[type="date"] {
+            background: white;
+            border: 1px solid var(--cream-dark);
+            border-radius: 8px;
+            padding: 0.55rem 0.75rem;
+            font-family: 'Source Sans 3', sans-serif;
+            font-size: 0.9rem;
+            color: var(--forest-dark);
+            width: 100%;
+        }
+
+        .range-inputs {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        .range-inputs span {
+            color: var(--bark-light);
+            font-weight: 600;
+        }
+
+        .control-hint {
+            grid-column: 1 / -1;
+            font-size: 0.8rem;
+            color: var(--bark-light);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .control-hint .status-text {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--moss);
+        }
+
+        .control-hint .status-text.error {
+            color: var(--fire-warning);
+        }
+
+        .sensor-modal-chart-wrapper {
+            position: relative;
+            flex: 1;
+            min-height: 380px;
+            padding: 1.25rem 2rem;
+            background: white;
+        }
+
+        .sensor-modal-chart-wrapper canvas {
+            max-height: 100%;
+        }
+
+        .sensor-modal-footer {
+            padding: 0.75rem 2rem;
+            background: var(--cream-dark);
+            font-size: 0.75rem;
+            color: var(--bark-light);
+            border-top: 1px solid #d6cfbf;
+        }
+
+        .popup-chart-btn {
+            display: inline-block;
+            margin-top: 0.5rem;
+            background: var(--leaf-fresh);
+            color: white;
+            border: none;
+            padding: 0.4rem 0.85rem;
+            border-radius: 50px;
+            font-family: 'Source Sans 3', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+
+        .popup-chart-btn:hover {
+            background: var(--moss);
+        }
+
+        @media (max-width: 768px) {
+            .sensor-modal {
+                padding: 0.5rem;
+            }
+            .sensor-modal-content {
+                max-height: 96vh;
+            }
+            .sensor-modal-controls {
+                grid-template-columns: 1fr;
+                padding: 1rem;
+            }
+            .sensor-modal-header,
+            .sensor-modal-footer {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+            .sensor-modal-chart-wrapper {
+                padding: 1rem;
+                min-height: 320px;
+            }
         }
 
         .map-controls {
@@ -5107,6 +5317,390 @@
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape') closeLightbox();
         });
+    </script>
+
+    <!-- ===== Sensor data chart modal ===== -->
+    <div id="sensorChartModal" class="sensor-modal" role="dialog" aria-modal="true" aria-labelledby="sensorModalLabel">
+        <div class="sensor-modal-backdrop" onclick="closeSensorModal()"></div>
+        <div class="sensor-modal-content">
+            <button type="button" class="sensor-modal-close" onclick="closeSensorModal()" aria-label="Zavřít">×</button>
+
+            <div class="sensor-modal-header">
+                <div class="sensor-modal-label" id="sensorModalLabel">—</div>
+                <div class="sensor-modal-meta" id="sensorModalMeta">—</div>
+                <div class="sensor-modal-source" id="sensorModalSource">—</div>
+            </div>
+
+            <div class="sensor-modal-controls">
+                <div class="control-group">
+                    <label for="chartTypeSelect">Veličina</label>
+                    <select id="chartTypeSelect">
+                        <option value="t1">Teplota T1 (horní úroveň)</option>
+                        <option value="t2">Teplota T2 (střední úroveň)</option>
+                        <option value="t3">Teplota T3 (spodní úroveň)</option>
+                        <option value="all_temps">Teploty T1 + T2 + T3</option>
+                        <option value="moisture">Půdní vlhkost (raw)</option>
+                    </select>
+                </div>
+                <div class="control-group">
+                    <label>Datový rozsah (max 30 dní)</label>
+                    <div class="range-inputs">
+                        <input type="date" id="rangeStartInput">
+                        <span>—</span>
+                        <input type="date" id="rangeEndInput">
+                    </div>
+                </div>
+                <div class="control-hint">
+                    <span>Surová data bez kalibrace · interval 15 min · TOMST TMS.</span>
+                    <span class="status-text" id="chartStatusText">Načítání…</span>
+                </div>
+            </div>
+
+            <div class="sensor-modal-chart-wrapper">
+                <canvas id="sensorChartCanvas"></canvas>
+            </div>
+
+            <div class="sensor-modal-footer">
+                Soubor: <span id="chartFilename" style="font-family: 'JetBrains Mono', monospace;">—</span>
+                · Validní data od 17. 3. 2026 (starší záznamy mohou obsahovat instalační šum).
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ===== SENSOR DATA CHART (CSV → Chart.js) =====
+        const sensorToFile = {
+            'T10-F2026':  'FED2_F2026_T10.csv',
+            'T48-F2026':  'FED4_F2026_T48.csv',
+            'T10-NF2026': 'FED3_N2026_T10.csv',
+            'T48-NF2026': 'FED1_N2026_T48.csv',
+            'T10-F2022':  'FED5_F2022_T10.csv',
+            'T48-F2022':  'FED6_F2022_T48.csv',
+            'T10-NF2022': 'FED7_NF2022_T10.csv',
+            'T48-NF2022': 'FED8_NF2022_T48.csv'
+        };
+
+        // Probe depths shown in chart labels per sensor model
+        const probeDepths = {
+            'Standard 10cm': { t1: '+10 cm (nad povrchem)', t2: '−2 cm (povrch)',   t3: '−8 cm (kořenová zóna)' },
+            'Oštěp 48cm':    { t1: '−2 cm (povrch)',        t2: '−15 cm (střed)',   t3: '−48 cm (hloubka)' }
+        };
+
+        const sensorByLabelGlobal = {};
+        sensorsAll.forEach(s => { sensorByLabelGlobal[s.label] = s; });
+
+        const csvCache = {};
+        let currentChart = null;
+        let currentSensor = null;
+        let currentData = null;
+        let dataMin = null;
+        let dataMax = null;
+
+        const MAX_RANGE_DAYS = 30;
+        const MS_PER_DAY = 86400000;
+
+        function parseCsv(text) {
+            return text.trim().split(/\r?\n/).map(line => {
+                const parts = line.split(';');
+                const ts = (parts[1] || '').trim();
+                const sp = ts.split(' ');
+                if (sp.length !== 2) return null;
+                const [Y, M, D] = sp[0].split('.').map(Number);
+                const [h, m] = sp[1].split(':').map(Number);
+                return {
+                    date: new Date(Y, M - 1, D, h, m),
+                    t1: parseFloat(parts[2]),
+                    t2: parseFloat(parts[3]),
+                    t3: parseFloat(parts[4]),
+                    moisture: parseFloat(parts[5])
+                };
+            }).filter(r => r && !isNaN(r.date.getTime()));
+        }
+
+        async function loadCsv(filename) {
+            if (csvCache[filename]) return csvCache[filename];
+            const resp = await fetch('assets/docs/Datasety/' + filename);
+            if (!resp.ok) throw new Error('HTTP ' + resp.status + ' – ' + filename);
+            const text = await resp.text();
+            const data = parseCsv(text);
+            csvCache[filename] = data;
+            return data;
+        }
+
+        function toDateInputValue(d) {
+            const pad = n => String(n).padStart(2, '0');
+            return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate());
+        }
+
+        function setStatus(text, isError) {
+            const el = document.getElementById('chartStatusText');
+            el.textContent = text;
+            el.classList.toggle('error', !!isError);
+        }
+
+        function openSensorModal(label) {
+            const sensor = sensorByLabelGlobal[label];
+            if (!sensor) return;
+            currentSensor = sensor;
+
+            const file = sensorToFile[label];
+            document.getElementById('sensorModalLabel').textContent = label;
+            document.getElementById('sensorModalMeta').textContent =
+                'TOMST ' + sensor.type + ' · ' + sensor.treatment + ' · pozemek ' + sensor.plot;
+            document.getElementById('sensorModalSource').textContent = file || 'bez datového souboru';
+            document.getElementById('chartFilename').textContent = file || '—';
+
+            // Update T1/T2/T3 labels per sensor type
+            const depths = probeDepths[sensor.type] || { t1: 'T1', t2: 'T2', t3: 'T3' };
+            const sel = document.getElementById('chartTypeSelect');
+            sel.options[0].text = 'Teplota T1 – ' + depths.t1;
+            sel.options[1].text = 'Teplota T2 – ' + depths.t2;
+            sel.options[2].text = 'Teplota T3 – ' + depths.t3;
+
+            document.getElementById('sensorChartModal').classList.add('open');
+            document.body.style.overflow = 'hidden';
+            setStatus('Načítání ' + file + '…');
+
+            if (!file) {
+                setStatus('Pro tento senzor není k dispozici datový soubor.', true);
+                return;
+            }
+
+            loadCsv(file).then(data => {
+                currentData = data;
+                if (!data.length) {
+                    setStatus('Soubor je prázdný.', true);
+                    return;
+                }
+                dataMin = data[0].date;
+                dataMax = data[data.length - 1].date;
+
+                // Default range: last 30 days of available data
+                const endDefault = dataMax;
+                const startDefault = new Date(Math.max(dataMin.getTime(), endDefault.getTime() - 29 * MS_PER_DAY));
+
+                const startInput = document.getElementById('rangeStartInput');
+                const endInput = document.getElementById('rangeEndInput');
+                startInput.min = toDateInputValue(dataMin);
+                startInput.max = toDateInputValue(dataMax);
+                endInput.min = toDateInputValue(dataMin);
+                endInput.max = toDateInputValue(dataMax);
+                startInput.value = toDateInputValue(startDefault);
+                endInput.value = toDateInputValue(endDefault);
+
+                renderChart();
+            }).catch(err => {
+                setStatus('Chyba načítání: ' + err.message, true);
+                if (currentChart) { currentChart.destroy(); currentChart = null; }
+            });
+        }
+
+        function closeSensorModal() {
+            document.getElementById('sensorChartModal').classList.remove('open');
+            document.body.style.overflow = '';
+            if (currentChart) { currentChart.destroy(); currentChart = null; }
+            currentSensor = null;
+            currentData = null;
+        }
+
+        function clampRange(changedSide) {
+            const startInput = document.getElementById('rangeStartInput');
+            const endInput = document.getElementById('rangeEndInput');
+            let start = new Date(startInput.value);
+            let end = new Date(endInput.value);
+            if (isNaN(start.getTime()) || isNaN(end.getTime())) return;
+            if (end < start) {
+                if (changedSide === 'start') end = new Date(start);
+                else start = new Date(end);
+            }
+            const diffDays = (end - start) / MS_PER_DAY;
+            if (diffDays > MAX_RANGE_DAYS - 1) {
+                if (changedSide === 'start') {
+                    end = new Date(start.getTime() + (MAX_RANGE_DAYS - 1) * MS_PER_DAY);
+                    if (end > dataMax) end = new Date(dataMax);
+                } else {
+                    start = new Date(end.getTime() - (MAX_RANGE_DAYS - 1) * MS_PER_DAY);
+                    if (start < dataMin) start = new Date(dataMin);
+                }
+            }
+            startInput.value = toDateInputValue(start);
+            endInput.value = toDateInputValue(end);
+        }
+
+        function renderChart() {
+            if (!currentData || !currentData.length) return;
+            const startInput = document.getElementById('rangeStartInput');
+            const endInput = document.getElementById('rangeEndInput');
+            const start = new Date(startInput.value + 'T00:00:00');
+            const end = new Date(endInput.value + 'T23:59:59');
+            const chartType = document.getElementById('chartTypeSelect').value;
+
+            const filtered = currentData.filter(r => r.date >= start && r.date <= end);
+            if (!filtered.length) {
+                setStatus('Žádné záznamy v daném rozsahu.', true);
+                if (currentChart) { currentChart.destroy(); currentChart = null; }
+                return;
+            }
+
+            const colors = {
+                t1: '#dc3232',
+                t2: '#dca532',
+                t3: '#3278dc',
+                moisture: '#5a8fa8'
+            };
+            const depths = probeDepths[currentSensor.type] || { t1: 'T1', t2: 'T2', t3: 'T3' };
+            const names = {
+                t1: 'T1 ' + depths.t1,
+                t2: 'T2 ' + depths.t2,
+                t3: 'T3 ' + depths.t3,
+                moisture: 'Půdní vlhkost (raw)'
+            };
+
+            let datasets = [];
+            let yAxisTitle = '°C';
+            let showLegend = false;
+
+            if (chartType === 'all_temps') {
+                showLegend = true;
+                ['t1', 't2', 't3'].forEach(k => {
+                    datasets.push({
+                        label: names[k],
+                        data: filtered.map(r => ({ x: r.date, y: r[k] })),
+                        borderColor: colors[k],
+                        backgroundColor: colors[k] + '22',
+                        borderWidth: 1.6,
+                        pointRadius: 0,
+                        tension: 0.25
+                    });
+                });
+            } else if (chartType === 'moisture') {
+                yAxisTitle = 'Raw moisture (bezrozměrná jednotka)';
+                datasets.push({
+                    label: names.moisture,
+                    data: filtered.map(r => ({ x: r.date, y: r.moisture })),
+                    borderColor: colors.moisture,
+                    backgroundColor: colors.moisture + '33',
+                    borderWidth: 1.6,
+                    pointRadius: 0,
+                    tension: 0.25,
+                    fill: true
+                });
+            } else {
+                datasets.push({
+                    label: names[chartType],
+                    data: filtered.map(r => ({ x: r.date, y: r[chartType] })),
+                    borderColor: colors[chartType],
+                    backgroundColor: colors[chartType] + '33',
+                    borderWidth: 1.6,
+                    pointRadius: 0,
+                    tension: 0.25,
+                    fill: true
+                });
+            }
+
+            if (currentChart) currentChart.destroy();
+            const ctx = document.getElementById('sensorChartCanvas').getContext('2d');
+            currentChart = new Chart(ctx, {
+                type: 'line',
+                data: { datasets: datasets },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    animation: false,
+                    interaction: { mode: 'index', intersect: false },
+                    scales: {
+                        x: {
+                            type: 'time',
+                            time: {
+                                unit: (end - start) / MS_PER_DAY > 10 ? 'day' : 'hour',
+                                tooltipFormat: 'd.M.yyyy HH:mm',
+                                displayFormats: { day: 'd.M.', hour: 'd.M. HH:mm' }
+                            },
+                            grid: { color: 'rgba(0,0,0,0.05)' },
+                            ticks: { color: '#4a3728', maxRotation: 0, autoSkip: true, maxTicksLimit: 12 }
+                        },
+                        y: {
+                            title: { display: true, text: yAxisTitle, color: '#1a2f1a', font: { weight: '600' } },
+                            grid: { color: 'rgba(0,0,0,0.05)' },
+                            ticks: { color: '#4a3728' }
+                        }
+                    },
+                    plugins: {
+                        legend: { display: showLegend, position: 'top', labels: { color: '#1a2f1a' } },
+                        tooltip: { mode: 'index', intersect: false, backgroundColor: 'rgba(26,47,26,0.92)' }
+                    }
+                }
+            });
+
+            const days = Math.round((end - start) / MS_PER_DAY) + 1;
+            setStatus(filtered.length + ' záznamů · ' + days + ' dní');
+        }
+
+        // Wire up UI
+        document.getElementById('chartTypeSelect').addEventListener('change', renderChart);
+        document.getElementById('rangeStartInput').addEventListener('change', function () {
+            clampRange('start');
+            renderChart();
+        });
+        document.getElementById('rangeEndInput').addEventListener('change', function () {
+            clampRange('end');
+            renderChart();
+        });
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape' && document.getElementById('sensorChartModal').classList.contains('open')) {
+                closeSensorModal();
+            }
+        });
+
+        // Hook sensor markers: replace popup with chart-opening button
+        Object.values(mapState).forEach(state => {
+            state.layers.sensors.add(); // ensure layer is on map for traversal (it already is by default)
+        });
+
+        // Re-bind popups on sensor markers across both maps to include a chart-open button
+        function attachChartPopups() {
+            [1, 2].forEach(id => {
+                const st = mapState[id];
+                if (!st) return;
+                // Traverse the sensorsLayer group to find markers
+                // We re-grab markers by re-creating popups
+                st.layers.sensors.add ? null : null; // no-op
+            });
+        }
+        // Instead, since sensors layer is already populated in initMap, we re-create popups by walking the layerGroup directly.
+        (function rebindSensorPopups() {
+            [1, 2].forEach(id => {
+                const state = mapState[id];
+                if (!state) return;
+                // Access the underlying L.layerGroup via re-adding; collect markers via internal reference
+                // Easier: iterate sensorsAll filtered by mapId and find matching markers by lat/lng on the map
+                const targetLabels = sensorsAll.filter(s => s.mapId === id).map(s => s.label);
+                state.map.eachLayer(layer => {
+                    if (!(layer instanceof L.CircleMarker)) return;
+                    // Find which sensor this marker belongs to
+                    const ll = layer.getLatLng();
+                    const match = sensorsAll.find(s =>
+                        s.mapId === id &&
+                        Math.abs(s.lat - ll.lat) < 1e-6 &&
+                        Math.abs(s.lng - ll.lng) < 1e-6
+                    );
+                    if (!match) return;
+                    const file = sensorToFile[match.label];
+                    const popupHtml =
+                        '<div style="font-family: Source Sans 3, sans-serif; min-width: 220px;">' +
+                        '<strong style="color: #1a2f1a; font-size: 14px;">' + match.label + '</strong><br>' +
+                        '<span style="font-family: JetBrains Mono, monospace; font-size: 12px; color: #4a6741;">TOMST ' + match.type + '</span><br>' +
+                        '<span style="font-size: 12px;">' + match.treatment + ' | ' + match.plot + '</span><br>' +
+                        '<span style="font-family: JetBrains Mono, monospace; font-size: 11px; color: #6b5344;">' + match.lat.toFixed(6) + ', ' + match.lng.toFixed(6) + '</span><br>' +
+                        (file
+                            ? '<button type="button" class="popup-chart-btn" onclick="openSensorModal(\'' + match.label + '\')">📊 Zobrazit graf naměřených hodnot</button>'
+                            : '<span style="font-size: 11px; color: #c45c3b;">Bez datového souboru</span>') +
+                        '</div>';
+                    layer.unbindPopup();
+                    layer.bindPopup(popupHtml);
+                });
+            });
+        })();
     </script>
 </body>
 </html>
