@@ -4182,7 +4182,7 @@
                             <td><strong>2022_10_F</strong></td>
                             <td><span class="treatment-freza">Fréza 2022</span></td>
                             <td><span class="sensor-type-badge sensor-type-std">Standard 10 cm</span></td>
-                            <td class="sensor-gps-code">49.362158, 14.299185</td>
+                            <td class="sensor-gps-code">49.362581, 14.299215</td>
                             <td>41Ca0</td>
                             <td>3K4</td>
                             <td>463 m</td>
@@ -4191,7 +4191,7 @@
                             <td><strong>2022_48_F</strong></td>
                             <td><span class="treatment-freza">Fréza 2022</span></td>
                             <td><span class="sensor-type-badge sensor-type-long">Oštěp 48 cm</span></td>
-                            <td class="sensor-gps-code">49.362581, 14.299215</td>
+                            <td class="sensor-gps-code">49.362158, 14.299185</td>
                             <td>41Ca1</td>
                             <td>–</td>
                             <td>463 m</td>
@@ -4958,12 +4958,13 @@
             '41Ca0': {
                 name: '41Ca0 – Frézovaný 2022',
                 color: '#dc3232',
+                // Sever = T10-F2022 (49.362581, na kopci) + 5 m, Jih = T48-F2022 (49.362158, ve svahu) − 8 m
                 coords: [
-                    [49.3624025666667, 14.2994830666667],
-                    [49.3628212166667, 14.2995420055556],
-                    [49.3628414611111, 14.2989140027778],
-                    [49.3624129861111, 14.2989995722222],
-                    [49.3624025666667, 14.2994830666667]
+                    [49.362086, 14.2995420055556],  // SE
+                    [49.362626, 14.2995420055556],  // NE (5 m severně od T10 na kopci)
+                    [49.362626, 14.2989140027778],  // NW
+                    [49.362086, 14.2989140027778],  // SW (8 m jižně od T48 ve svahu)
+                    [49.362086, 14.2995420055556]   // close
                 ],
                 area: '0.190 ha',
                 info: 'Frézováno 12. 2. 2022 | Dub 230 ks + Modřín 495 ks | 3K4 | LVS 3 / HS 433'
@@ -4984,12 +4985,13 @@
             '41Ca8': {
                 name: '41Ca8 – Jaro 2026',
                 color: '#dca532',
+                // Sever = T10-NF2026 (49.362533) + 5 m, Jih beze změny
                 coords: [
-                    [49.3625504611111, 14.2989144],
-                    [49.3624500333333, 14.2984597861111],
-                    [49.3622748472222, 14.2985827222222],
-                    [49.3622994861111, 14.2989603666667],
-                    [49.3625504611111, 14.2989144]
+                    [49.362578, 14.2989144],            // NE (5 m severně od linie T10-2026 / T10-NF2026)
+                    [49.362578, 14.2984597861111],      // NW
+                    [49.3622748472222, 14.2985827222222], // SW (beze změny)
+                    [49.3622994861111, 14.2989603666667], // SE (beze změny)
+                    [49.362578, 14.2989144]             // close
                 ],
                 area: '0.076 ha',
                 info: 'Rozděleno na fréza + kontrola jaro 2026 | SM 45%, BO 55%'
@@ -4999,8 +5001,8 @@
         // Sensors with display labels per user spec
         const sensorsAll = [
             // Map 1 – Lokalita A (41Ca0 + 41Ca8)
-            { label: 'T10-F2022',  type: 'Standard 10cm', treatment: 'Fréza 2022',   lat: 49.362158, lng: 14.299185, plot: '41Ca0', mapId: 1 },
-            { label: 'T48-F2022',  type: 'Oštěp 48cm',    treatment: 'Fréza 2022',   lat: 49.362581, lng: 14.299215, plot: '41Ca0', mapId: 1 },
+            { label: 'T10-F2022',  type: 'Standard 10cm', treatment: 'Fréza 2022',   lat: 49.362581, lng: 14.299215, plot: '41Ca0', mapId: 1 },
+            { label: 'T48-F2022',  type: 'Oštěp 48cm',    treatment: 'Fréza 2022',   lat: 49.362158, lng: 14.299185, plot: '41Ca0', mapId: 1 },
             { label: 'T10-F2026',  type: 'Standard 10cm', treatment: 'Fréza 2026',   lat: 49.362491, lng: 14.298674, plot: '41Ca8', mapId: 1 },
             { label: 'T48-F2026',  type: 'Oštěp 48cm',    treatment: 'Fréza 2026',   lat: 49.362354, lng: 14.298777, plot: '41Ca8', mapId: 1 },
             { label: 'T10-NF2026', type: 'Standard 10cm', treatment: 'Nefréza 2026', lat: 49.362533, lng: 14.298873, plot: '41Ca8', mapId: 1 },
@@ -5062,19 +5064,22 @@
                 zoomSnap: 0.1,
                 zoomDelta: 0.1,
                 wheelPxPerZoomLevel: 120,
-                maxZoom: 23,
+                maxZoom: 22,
                 minZoom: 10
             });
 
+            // ESRI Maxar má pro Českou republiku (les. lokality) reálně dlaždice jen do zoom 18.
+            // Nastavíme maxNativeZoom = 18 a maxZoom = 22 → Leaflet upscaluje (digital zoom)
+            // místo aby vracel 404 a mapa zmizela.
             L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
                 attribution: '&copy; Esri, Maxar, Earthstar Geographics',
-                maxZoom: 23,
-                maxNativeZoom: 19,
+                maxZoom: 22,
+                maxNativeZoom: 18,
                 tileSize: 256
             }).addTo(map);
             L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}', {
-                maxZoom: 23,
-                maxNativeZoom: 19,
+                maxZoom: 22,
+                maxNativeZoom: 16,
                 opacity: 0.6
             }).addTo(map);
 
@@ -5128,7 +5133,8 @@
                     '<span style="font-family: JetBrains Mono, monospace; font-size: 11px; color: #6b5344;">' + s.lat.toFixed(6) + ', ' + s.lng.toFixed(6) + '</span></div>'
                 );
                 marker.bindTooltip(s.label, {
-                    permanent: true,
+                    permanent: false,
+                    sticky: true,
                     direction: 'right',
                     offset: [8, 0],
                     className: 'sensor-label'
