@@ -7,6 +7,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Source+Sans+3:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/esri-leaflet@3.0.12/dist/esri-leaflet.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
     <style>
@@ -1730,6 +1731,362 @@
             font-weight: 600;
             cursor: pointer;
             transition: background 0.2s ease;
+        }
+
+        /* === Base-layer toggle row === */
+        .map-controls-base {
+            margin-top: 0.4rem;
+            padding: 0.65rem 0.85rem;
+            background: rgba(36, 53, 36, 0.55);
+            border: 1px solid var(--forest-mid);
+            border-radius: 50px;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .map-controls-base-wrap {
+            display: flex;
+            justify-content: center;
+            margin-top: 1rem;
+        }
+
+        .map-controls-base .base-label {
+            color: var(--leaf-light);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-right: 0.25rem;
+        }
+
+        .map-btn-base {
+            padding: 0.45rem 0.95rem;
+            font-size: 0.85rem;
+        }
+
+        /* === Geology profile cards === */
+        .geo-profile-section {
+            margin-top: 3rem;
+            padding-top: 2.5rem;
+            border-top: 1px solid var(--forest-mid);
+        }
+
+        .geo-profile-section .geo-profile-intro {
+            text-align: center;
+            max-width: 880px;
+            margin: 0 auto 2rem;
+            color: var(--cream-dark);
+            line-height: 1.75;
+            font-size: 1rem;
+        }
+
+        .geo-profile-section .geo-profile-section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.6rem;
+            color: var(--cream);
+            text-align: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .geo-profile-section .geo-profile-section-tag {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--leaf-light);
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            text-align: center;
+            display: block;
+            margin-bottom: 0.75rem;
+        }
+
+        .geo-profile-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+
+        @media (min-width: 900px) {
+            .geo-profile-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .geo-profile-card {
+            background: var(--forest-deep);
+            border: 1px solid var(--forest-mid);
+            border-radius: 16px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: border-color 0.3s ease;
+        }
+
+        .geo-profile-card:hover {
+            border-color: var(--leaf-light);
+        }
+
+        .geo-profile-card-header {
+            padding: 1.1rem 1.5rem;
+            background: linear-gradient(135deg, var(--forest-dark) 0%, var(--moss) 100%);
+        }
+
+        .geo-profile-card-subtitle {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            color: var(--leaf-light);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 0.25rem;
+        }
+
+        .geo-profile-card-header h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.2rem;
+            color: var(--cream);
+            margin: 0;
+        }
+
+        .geo-profile-card-image {
+            width: 100%;
+            height: auto;
+            display: block;
+            cursor: zoom-in;
+            transition: opacity 0.3s ease;
+            background: #0d150d;
+        }
+
+        .geo-profile-card-image:hover {
+            opacity: 0.88;
+        }
+
+        .geo-profile-card-body {
+            padding: 1.25rem 1.5rem;
+            color: var(--cream-dark);
+            font-size: 0.92rem;
+            line-height: 1.65;
+            flex: 1;
+        }
+
+        .geo-profile-card-body p {
+            margin-bottom: 0.6rem;
+        }
+
+        .geo-profile-card-body p:last-child {
+            margin-bottom: 0;
+        }
+
+        .geo-profile-card-body strong {
+            color: var(--amber);
+        }
+
+        .geo-profile-meta {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            color: var(--leaf-light);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 0.25rem 0.75rem;
+            border: 1px solid var(--forest-mid);
+            border-radius: 50px;
+            display: inline-block;
+            margin-bottom: 0.6rem;
+        }
+
+        /* === Geology identify popup === */
+        .leaflet-popup.geo-identify-popup .leaflet-popup-content-wrapper {
+            border-radius: 12px;
+            background: #243524;
+            color: #f5f1e8;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.55);
+            border: 1px solid #4a6741;
+        }
+
+        .leaflet-popup.geo-identify-popup .leaflet-popup-tip {
+            background: #243524;
+            border: 1px solid #4a6741;
+        }
+
+        .leaflet-popup.geo-identify-popup .leaflet-popup-content {
+            margin: 14px 18px;
+            font-family: 'Source Sans 3', sans-serif;
+            min-width: 240px;
+            max-width: 340px;
+        }
+
+        .geo-popup-header {
+            margin-bottom: 0.65rem;
+            padding-bottom: 0.55rem;
+            border-bottom: 1px solid #4a6741;
+        }
+
+        .geo-popup-rock {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.15rem;
+            color: #e8c9a0;
+            font-weight: 700;
+            margin-bottom: 0.15rem;
+        }
+
+        .geo-popup-type {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            color: #8cb369;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+
+        .geo-popup-row {
+            display: grid;
+            grid-template-columns: 100px 1fr;
+            gap: 0.5rem;
+            font-size: 0.82rem;
+            padding: 0.18rem 0;
+        }
+
+        .geo-popup-row .label {
+            color: #8cb369;
+            font-weight: 600;
+        }
+
+        .geo-popup-row .value {
+            color: #f5f1e8;
+        }
+
+        .geo-popup-footer {
+            margin-top: 0.65rem;
+            padding-top: 0.55rem;
+            border-top: 1px solid #4a6741;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.65rem;
+            color: #8cb369;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* === Geology legend control === */
+        .geo-legend-control {
+            background: rgba(36, 53, 36, 0.95);
+            border: 1px solid #4a6741;
+            border-radius: 12px;
+            box-shadow: 0 6px 24px rgba(0,0,0,0.45);
+            color: #f5f1e8;
+            backdrop-filter: blur(6px);
+            font-family: 'Source Sans 3', sans-serif;
+            max-width: 320px;
+            min-width: 220px;
+            overflow: hidden;
+        }
+
+        .geo-legend-toggle {
+            width: 100%;
+            background: transparent;
+            border: none;
+            color: #f5f1e8;
+            padding: 0.6rem 0.85rem;
+            font-family: 'Source Sans 3', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.5rem;
+            text-align: left;
+        }
+
+        .geo-legend-toggle:hover {
+            background: rgba(74, 103, 65, 0.45);
+        }
+
+        .geo-legend-toggle .chev {
+            font-size: 0.7rem;
+            transition: transform 0.3s ease;
+            color: #d4a574;
+        }
+
+        .geo-legend-control.open .geo-legend-toggle .chev {
+            transform: rotate(180deg);
+        }
+
+        .geo-legend-body {
+            display: none;
+            padding: 0.85rem;
+            border-top: 1px solid #4a6741;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .geo-legend-control.open .geo-legend-body {
+            display: block;
+        }
+
+        .geo-legend-item {
+            display: grid;
+            grid-template-columns: 18px 1fr;
+            gap: 0.55rem;
+            padding: 0.4rem 0;
+            border-bottom: 1px solid rgba(74, 103, 65, 0.3);
+            font-size: 0.78rem;
+        }
+
+        .geo-legend-item:last-child {
+            border-bottom: none;
+        }
+
+        .geo-legend-swatch {
+            width: 18px;
+            height: 18px;
+            border-radius: 3px;
+            border: 1px solid rgba(0,0,0,0.35);
+            margin-top: 2px;
+        }
+
+        .geo-legend-rock {
+            font-weight: 700;
+            color: #e8c9a0;
+            font-family: 'Playfair Display', serif;
+            font-size: 0.9rem;
+            margin-bottom: 0.1rem;
+        }
+
+        .geo-legend-meta {
+            color: #d6cfbf;
+            font-size: 0.73rem;
+            line-height: 1.45;
+        }
+
+        .geo-legend-meta strong {
+            color: #8cb369;
+        }
+
+        .geo-legend-hint {
+            font-size: 0.7rem;
+            color: #d4a574;
+            padding: 0.45rem 0;
+            font-style: italic;
+            line-height: 1.4;
+        }
+
+        .geo-legend-link {
+            display: block;
+            margin-top: 0.5rem;
+            padding: 0.45rem 0.7rem;
+            background: rgba(74, 103, 65, 0.4);
+            color: #e8c9a0;
+            text-decoration: none;
+            border-radius: 6px;
+            font-size: 0.78rem;
+            text-align: center;
+            border: 1px solid rgba(140, 179, 105, 0.3);
+            transition: background 0.2s ease;
+        }
+
+        .geo-legend-link:hover {
+            background: rgba(74, 103, 65, 0.7);
         }
 
         .popup-chart-btn:hover {
@@ -3704,6 +4061,15 @@
                         <button type="button" class="map-btn" onclick="zoomToPlot(1, '41Ca0')">41Ca0</button>
                         <button type="button" class="map-btn" onclick="zoomToPlot(1, '41Ca8')">41Ca8</button>
                     </div>
+
+                    <div class="map-controls-base-wrap">
+                        <div class="map-controls-base">
+                            <span class="base-label">Podklad</span>
+                            <button type="button" class="map-btn map-btn-base active" onclick="setMapBase(1, 'satellite', this)">🛰️ Satelit</button>
+                            <button type="button" class="map-btn map-btn-base" onclick="setMapBase(1, 'geology', this)">🗻 Geologie 1:50 000</button>
+                            <button type="button" class="map-btn map-btn-base" onclick="setMapBase(1, 'hybrid', this)">🔀 Hybrid</button>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- ===== MAP 2: Lokalita B – pozemek 41Ka0 ===== -->
@@ -3757,6 +4123,15 @@
                         <button type="button" class="map-btn" onclick="toggleView(this, 2, 'flat')">Plochý pohled</button>
                         <button type="button" class="map-btn" onclick="zoomToPlot(2, 'all')">Zobrazit plochu</button>
                     </div>
+
+                    <div class="map-controls-base-wrap">
+                        <div class="map-controls-base">
+                            <span class="base-label">Podklad</span>
+                            <button type="button" class="map-btn map-btn-base active" onclick="setMapBase(2, 'satellite', this)">🛰️ Satelit</button>
+                            <button type="button" class="map-btn map-btn-base" onclick="setMapBase(2, 'geology', this)">🗻 Geologie 1:50 000</button>
+                            <button type="button" class="map-btn map-btn-base" onclick="setMapBase(2, 'hybrid', this)">🔀 Hybrid</button>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -3798,7 +4173,47 @@
                 </div>
                 <div class="map-info-card">
                     <div class="map-info-value">Celkem: 0.415 ha</div>
-                    <div class="map-info-label">ESRI Maxar satelitní podklad</div>
+                    <div class="map-info-label">ESRI Maxar / ČGS GEOCR50</div>
+                </div>
+            </div>
+
+            <!-- Geologický profil lokalit -->
+            <div class="geo-profile-section">
+                <span class="geo-profile-section-tag">02b · Geologický profil</span>
+                <h3 class="geo-profile-section-title">Geologické podloží testovacích lokalit</h3>
+                <p class="geo-profile-intro">
+                    Tlačítkem <strong>Podklad → Geologie 1:50 000</strong> přepnete satelit na živou geologickou mapu z databáze
+                    <strong>GEOCR50</strong> (Česká geologická služba). V režimu <strong>Hybrid</strong> uvidíte oba podklady
+                    překryté přes sebe. Níže jsou statické snímky z geoportálu ČGS pro každou lokalitu s vyznačenou geologickou jednotkou
+                    &ndash; jako rychlý referenční přehled bez nutnosti orientace v živé mapě.
+                </p>
+
+                <div class="geo-profile-grid">
+                    <div class="geo-profile-card">
+                        <div class="geo-profile-card-header">
+                            <div class="geo-profile-card-subtitle">Lokalita A · 49.3624 N, 14.2992 E</div>
+                            <h3>Geologie pozemků 41Ca0 + 41Ca8</h3>
+                        </div>
+                        <img class="geo-profile-card-image" src="assets/images/Geologická mapa_41Ca.png" alt="Geologická mapa lokality A (41Ca0 a 41Ca8)" onclick="openLightbox(this.src)" loading="lazy">
+                        <div class="geo-profile-card-body">
+                            <span class="geo-profile-meta">Měřítko 1:50 000 · ČGS GEOCR50</span>
+                            <p>Snímek z geoportálu ČGS s vyznačenou geologickou jednotkou pro <strong>frézované pozemky 41Ca0 (výsadba 2022) a 41Ca8 (jaro 2026)</strong>. Pop-up v mapě zobrazuje litologický popis horniny a chronostratigrafické zařazení.</p>
+                            <p>Pro detailní popis matečné horniny, půdotvorných procesů, fyzikálně-chemických vlastností profilu a vlivu podloží na dostupnost živin pro kořenový systém otevřete <strong>PDF Alcedo Geologické analýzy</strong> v sekci &bdquo;První analýzy dat&ldquo; výše.</p>
+                        </div>
+                    </div>
+
+                    <div class="geo-profile-card">
+                        <div class="geo-profile-card-header">
+                            <div class="geo-profile-card-subtitle">Lokalita B · 49.3562 N, 14.3309 E · ~2,5 km</div>
+                            <h3>Geologie pozemku 41Ka0</h3>
+                        </div>
+                        <img class="geo-profile-card-image" src="assets/images/Geologická mapa_41Ka.png" alt="Geologická mapa lokality B (41Ka0)" onclick="openLightbox(this.src)" loading="lazy">
+                        <div class="geo-profile-card-body">
+                            <span class="geo-profile-meta">Měřítko 1:50 000 · ČGS GEOCR50</span>
+                            <p>Snímek z geoportálu ČGS pro <strong>nefrézovaný kontrolní pozemek 41Ka0 (výsadba 2022)</strong>. Lokalita B leží na <em>odlišném geologickém podloží</em> než pozemky 41Ca &ndash; tento kontrast je metodicky klíčový pro správnou interpretaci dat ze senzorů.</p>
+                            <p>Bez znalosti geologie podloží by se rozdíly v teplotně-vlhkostním režimu mezi lokalitami nedaly jednoznačně přisoudit frézování vs. kontrole &ndash; mohly by být dány stanovištěm. Detail v <strong>PDF Alcedo Geologické analýzy</strong>.</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -5068,6 +5483,48 @@
 
         const mapState = {};
 
+        // Build HTML for geology identify popup. Accepts raw GeoJSON properties from L.esri.identifyFeatures.
+        function buildGeoIdentifyPopup(p) {
+            const pick = (keys) => {
+                for (const k of keys) {
+                    const v = p[k];
+                    if (v !== undefined && v !== null && String(v).trim() !== '' && String(v).trim().toLowerCase() !== 'null') {
+                        return String(v).trim();
+                    }
+                }
+                return null;
+            };
+            const hornina  = pick(['hor_karto', 'Hornina']) || '?';
+            const hor_typ  = pick(['hor_typ', 'Horninový typ']);
+            const era      = pick(['era', 'Éra']);
+            const soustava = pick(['soustava', 'Soustava']);
+            const oblast   = pick(['oblast', 'Oblast']);
+            const region   = pick(['reg_subjed', 'Subregionální jednotka', 'reg_jed', 'Regionální jednotka', 'vyvoj', 'Vývoj']);
+            const utvar    = pick(['utvar', 'Útvar']);
+            const mineral  = pick(['mineralni_slozeni', 'Mineralní složení']);
+            const trad     = pick(['trad_nazev', 'Tradiční název']);
+            const mapid    = pick(['mapid', 'Číslo mapového listu']);
+
+            let html = '<div class="geo-popup-header">' +
+                '<div class="geo-popup-rock">' + hornina + '</div>';
+            if (hor_typ) html += '<div class="geo-popup-type">' + hor_typ + '</div>';
+            html += '</div>';
+            const rows = [
+                ['Éra', era],
+                ['Útvar', utvar],
+                ['Soustava', soustava],
+                ['Oblast', oblast],
+                ['Region', region],
+                ['Trad. název', trad],
+                ['Minerály', mineral]
+            ];
+            rows.forEach(([lbl, val]) => {
+                if (val) html += '<div class="geo-popup-row"><span class="label">' + lbl + '</span><span class="value">' + val + '</span></div>';
+            });
+            if (mapid) html += '<div class="geo-popup-footer">List ' + mapid + ' · ČGS GEOCR50</div>';
+            return html;
+        }
+
         function haversine(lat1, lng1, lat2, lng2) {
             const toRad = d => d * Math.PI / 180;
             const R = 6371000;
@@ -5093,17 +5550,74 @@
             // ESRI Maxar má pro Českou republiku (les. lokality) reálně dlaždice jen do zoom 18.
             // Nastavíme maxNativeZoom = 18 a maxZoom = 22 → Leaflet upscaluje (digital zoom)
             // místo aby vracel 404 a mapa zmizela.
-            L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+            const esriImagery = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
                 attribution: '&copy; Esri, Maxar, Earthstar Geographics',
                 maxZoom: 22,
                 maxNativeZoom: 18,
                 tileSize: 256
-            }).addTo(map);
-            L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}', {
+            });
+            const esriLabels = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}', {
                 maxZoom: 22,
                 maxNativeZoom: 16,
                 opacity: 0.6
-            }).addTo(map);
+            });
+
+            // ČGS Geologická mapa 1:50 000 (GEOCR50) – dynamický overlay přes Esri Leaflet
+            const GEO_SERVICE_URL = 'https://mapy.geology.cz/arcgis/rest/services/Geologie/geologicka_mapa50/MapServer';
+            const geoLayer = L.esri.dynamicMapLayer({
+                url: GEO_SERVICE_URL,
+                attribution: '&copy; Česká geologická služba (ČGS) · GEOCR50',
+                opacity: 1,
+                f: 'image'
+            });
+
+            // === Identify-on-click pro geologickou vrstvu ===
+            map.on('click', function (e) {
+                const base = mapState[id] && mapState[id].currentBase;
+                if (base !== 'geology' && base !== 'hybrid') return;
+                L.esri.identifyFeatures({ url: GEO_SERVICE_URL })
+                    .layers('visible:2')
+                    .on(map)
+                    .at(e.latlng)
+                    .tolerance(3)
+                    .run(function (error, fc) {
+                        if (error || !fc || !fc.features || !fc.features.length) return;
+                        const p = fc.features[0].properties || {};
+                        const html = buildGeoIdentifyPopup(p);
+                        L.popup({ className: 'geo-identify-popup', maxWidth: 360 })
+                            .setLatLng(e.latlng)
+                            .setContent(html)
+                            .openOn(map);
+                    });
+            });
+
+            // === Legenda jako Leaflet control (zobrazí se jen při geo/hybrid podkladu) ===
+            const legendControl = L.control({ position: 'bottomright' });
+            legendControl.onAdd = function () {
+                const div = L.DomUtil.create('div', 'geo-legend-control');
+                div.innerHTML =
+                    '<button type="button" class="geo-legend-toggle" onclick="this.parentElement.classList.toggle(\'open\')">' +
+                    '🗻 Geologická legenda <span class="chev">▼</span></button>' +
+                    '<div class="geo-legend-body">' +
+                    '<div class="geo-legend-item">' +
+                    '<div class="geo-legend-swatch" style="background:#e8a5a5;"></div>' +
+                    '<div><div class="geo-legend-rock">Ortorula</div>' +
+                    '<div class="geo-legend-meta"><strong>Lokalita A · 41Ca0+41Ca8</strong> · metamorfit · Gföhlská sk. · Proterozoikum–Paleozoikum</div></div></div>' +
+                    '<div class="geo-legend-item">' +
+                    '<div class="geo-legend-swatch" style="background:#f0c4a8;"></div>' +
+                    '<div><div class="geo-legend-rock">Migmatit</div>' +
+                    '<div class="geo-legend-meta"><strong>Lokalita B · 41Ka0</strong> · krystalinikum · Český masiv</div></div></div>' +
+                    '<div class="geo-legend-hint">Klikněte do mapy pro detail horniny v daném bodě.</div>' +
+                    '<a class="geo-legend-link" href="https://mapy.geology.cz/geocr50/" target="_blank" rel="noopener">Plná legenda na geoportálu ČGS ↗</a>' +
+                    '</div>';
+                L.DomEvent.disableClickPropagation(div);
+                L.DomEvent.disableScrollPropagation(div);
+                return div;
+            };
+
+            // Default base = satellite
+            esriImagery.addTo(map);
+            esriLabels.addTo(map);
 
             // === Layer (a): plot polygons ===
             const plotsLayer = L.layerGroup();
@@ -5237,7 +5751,35 @@
                     distances_t10t48:   { add: () => distancesLayers.t10t48.addTo(map), remove: () => map.removeLayer(distancesLayers.t10t48) },
                     distances_fnf:      { add: () => distancesLayers.fnf.addTo(map),    remove: () => map.removeLayer(distancesLayers.fnf) },
                     geology:            { add: () => map.addControl(geoControl),        remove: () => map.removeControl(geoControl) }
-                }
+                },
+                setBaseLayer: function (mode) {
+                    map.removeLayer(esriImagery);
+                    map.removeLayer(esriLabels);
+                    map.removeLayer(geoLayer);
+                    if (mode === 'satellite') {
+                        esriImagery.setOpacity(1).addTo(map);
+                        esriLabels.setOpacity(0.6).addTo(map);
+                    } else if (mode === 'geology') {
+                        geoLayer.setOpacity(1).addTo(map);
+                    } else if (mode === 'hybrid') {
+                        esriImagery.setOpacity(1).addTo(map);
+                        geoLayer.setOpacity(0.55).addTo(map);
+                    }
+                    this.currentBase = mode;
+                    // Toggle legend control visibility
+                    const wantsLegend = (mode === 'geology' || mode === 'hybrid');
+                    if (wantsLegend && !this._legendOnMap) {
+                        legendControl.addTo(map);
+                        this._legendOnMap = true;
+                    } else if (!wantsLegend && this._legendOnMap) {
+                        map.removeControl(legendControl);
+                        this._legendOnMap = false;
+                    }
+                    // Close geology identify popup when switching to satellite
+                    if (mode === 'satellite') map.closePopup();
+                },
+                currentBase: 'satellite',
+                _legendOnMap: false
             };
 
             setTimeout(() => map.invalidateSize(), 500);
@@ -5328,6 +5870,16 @@
             if (!state) return;
             if (plotKey === 'all') state.map.fitBounds(state.allBounds.pad(0.25));
             else if (state.plotLayers[plotKey]) state.map.fitBounds(state.plotLayers[plotKey].getBounds().pad(0.35));
+        }
+
+        // Base layer (Satelit / Geologie / Hybrid) switcher
+        function setMapBase(id, mode, btn) {
+            const state = mapState[id];
+            if (!state) return;
+            state.setBaseLayer(mode);
+            const row = btn.parentElement;
+            row.querySelectorAll('.map-btn-base').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
         }
 
         // Lightbox
