@@ -5525,6 +5525,31 @@
             return html;
         }
 
+        // Plynulý scale faktor 0.4–1.0 podle zoomu 14..18.
+        // Při geologickém zoomu (15-16) jsou markery menší než hranice pozemku.
+        function getZoomScale(z) {
+            return Math.max(0.4, Math.min(1.0, (z - 13) / 5));
+        }
+
+        function applyZoomStyles(state) {
+            const scale = getZoomScale(state.map.getZoom());
+            if (state.rawLayers.sensors) {
+                state.rawLayers.sensors.eachLayer(function (layer) {
+                    if (layer.setRadius && layer._baseRadius) {
+                        layer.setRadius(Math.max(2, layer._baseRadius * scale));
+                        layer.setStyle({ weight: Math.max(1, (layer._baseWeight || 2) * scale) });
+                    }
+                });
+            }
+            if (state.rawLayers.plots) {
+                state.rawLayers.plots.eachLayer(function (layer) {
+                    if (layer.setStyle && layer._baseWeight) {
+                        layer.setStyle({ weight: Math.max(0.8, layer._baseWeight * scale) });
+                    }
+                });
+            }
+        }
+
         function haversine(lat1, lng1, lat2, lng2) {
             const toRad = d => d * Math.PI / 180;
             const R = 6371000;
@@ -5632,6 +5657,7 @@
                     fillColor: plot.color,
                     fillOpacity: 0.2
                 });
+                polygon._baseWeight = 3;
                 polygon.bindPopup(
                     '<div style="font-family: Source Sans 3, sans-serif; font-size: 14px; min-width: 220px;">' +
                     '<strong style="color: #1a2f1a;">' + plot.name + '</strong><br>' +
@@ -5639,6 +5665,7 @@
                     '<span style="font-size: 12px; color: #6b5344;">' + plot.info + '</span></div>'
                 );
                 const border = L.polyline(plot.coords, { color: plot.color, weight: 4, opacity: 0.9 });
+                border._baseWeight = 4;
                 plotsLayer.addLayer(polygon);
                 plotsLayer.addLayer(border);
                 plotLayers[key] = polygon;
@@ -5661,7 +5688,10 @@
                     weight: 2,
                     opacity: 1,
                     fillOpacity: 0.9
-                }).bindPopup(
+                });
+                marker._baseRadius = radius;
+                marker._baseWeight = 2;
+                marker.bindPopup(
                     '<div style="font-family: Source Sans 3, sans-serif; min-width: 200px;">' +
                     '<strong style="color: #1a2f1a; font-size: 14px;">' + s.label + '</strong><br>' +
                     '<span style="font-family: JetBrains Mono, monospace; font-size: 12px; color: #4a6741;">TOMST ' + s.type + '</span><br>' +
@@ -5745,6 +5775,10 @@
                 map: map,
                 plotLayers: plotLayers,
                 allBounds: allBounds,
+                rawLayers: {
+                    plots: plotsLayer,
+                    sensors: sensorsLayer
+                },
                 layers: {
                     plots:              { add: () => plotsLayer.addTo(map),             remove: () => map.removeLayer(plotsLayer) },
                     sensors:            { add: () => sensorsLayer.addTo(map),           remove: () => map.removeLayer(sensorsLayer) },
@@ -5753,6 +5787,7 @@
                     geology:            { add: () => map.addControl(geoControl),        remove: () => map.removeControl(geoControl) }
                 },
                 setBaseLayer: function (mode) {
+                    const prevMode = this.currentBase;
                     map.removeLayer(esriImagery);
                     map.removeLayer(esriLabels);
                     map.removeLayer(geoLayer);
@@ -5766,6 +5801,7 @@
                         geoLayer.setOpacity(0.55).addTo(map);
                     }
                     this.currentBase = mode;
+
                     // Toggle legend control visibility
                     const wantsLegend = (mode === 'geology' || mode === 'hybrid');
                     if (wantsLegend && !this._legendOnMap) {
@@ -5777,10 +5813,28 @@
                     }
                     // Close geology identify popup when switching to satellite
                     if (mode === 'satellite') map.closePopup();
+
+                    // Auto-zoom: geologická mapa 1:50 000 je čitelná do ~zoom 16. Při přepnutí
+                    // ze satelitu (kde uživatel typicky zoomuje na 18+) na geo/hybrid mapu
+                    // se mapa oddálí, ať je geologie čitelná. Při návratu obnovíme původní zoom.
+                    const switchingToGeo = (prevMode === 'satellite' && (mode === 'geology' || mode === 'hybrid'));
+                    const switchingToSat = ((prevMode === 'geology' || prevMode === 'hybrid') && mode === 'satellite');
+                    if (switchingToGeo) {
+                        this._satelliteZoom = map.getZoom();
+                        if (map.getZoom() > 16) map.setZoom(15.5);
+                    } else if (switchingToSat && this._satelliteZoom != null) {
+                        map.setZoom(this._satelliteZoom);
+                        this._satelliteZoom = null;
+                    }
                 },
                 currentBase: 'satellite',
-                _legendOnMap: false
+                _legendOnMap: false,
+                _satelliteZoom: null
             };
+
+            // Dynamické škálování markerů a hran polygonů podle zoomu
+            map.on('zoomend', function () { applyZoomStyles(mapState[id]); });
+            applyZoomStyles(mapState[id]);
 
             setTimeout(() => map.invalidateSize(), 500);
         }
