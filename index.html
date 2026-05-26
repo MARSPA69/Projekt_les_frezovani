@@ -1329,10 +1329,223 @@
             transform: rotateX(0deg) scale(1);
         }
 
-        #satellite-map {
+        #satellite-map,
+        .satellite-map {
             width: 100%;
-            height: 600px;
+            height: 560px;
             z-index: 1;
+        }
+
+        .map-split-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 3rem;
+            margin-bottom: 2rem;
+        }
+
+        .map-card {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .map-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            flex-wrap: wrap;
+            gap: 1rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid var(--forest-mid);
+        }
+
+        .map-card-titles {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .map-card-subtitle {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--leaf-light);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .map-card-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.4rem;
+            color: var(--cream);
+        }
+
+        /* Animace dropdown */
+        .animace-dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .animace-toggle {
+            background: var(--amber);
+            border: 1px solid var(--amber);
+            color: var(--forest-dark);
+            padding: 0.65rem 1.25rem;
+            border-radius: 50px;
+            font-family: 'Source Sans 3', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .animace-toggle:hover {
+            background: var(--amber-light);
+            border-color: var(--amber-light);
+        }
+
+        .animace-toggle .chevron {
+            transition: transform 0.3s ease;
+            font-size: 0.65rem;
+        }
+
+        .animace-dropdown.open .animace-toggle .chevron {
+            transform: rotate(180deg);
+        }
+
+        .animace-panel {
+            display: none;
+            position: absolute;
+            top: calc(100% + 0.5rem);
+            right: 0;
+            background: var(--forest-deep);
+            border: 1px solid var(--forest-mid);
+            border-radius: 12px;
+            padding: 0.5rem;
+            min-width: 280px;
+            z-index: 1000;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .animace-dropdown.open .animace-panel {
+            display: block;
+        }
+
+        .animace-option {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.65rem;
+            padding: 0.55rem 0.65rem;
+            border-radius: 6px;
+            cursor: pointer;
+            color: var(--cream);
+            font-size: 0.9rem;
+            transition: background 0.2s ease;
+        }
+
+        .animace-option:hover {
+            background: var(--forest-mid);
+        }
+
+        .animace-option input[type="checkbox"] {
+            margin-top: 3px;
+            accent-color: var(--leaf-light);
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+
+        .animace-option-label {
+            flex: 1;
+            line-height: 1.35;
+        }
+
+        .animace-option-letter {
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--amber);
+            font-weight: 700;
+            margin-right: 0.35rem;
+        }
+
+        .animace-suboptions {
+            margin: 0 0 0.25rem 1.4rem;
+            border-left: 2px solid var(--forest-mid);
+            padding-left: 0.25rem;
+        }
+
+        .animace-option.animace-suboption {
+            padding: 0.4rem 0.55rem;
+            font-size: 0.85rem;
+            color: var(--cream-dark);
+        }
+
+        .animace-option.animace-suboption .animace-option-label {
+            color: var(--cream-dark);
+        }
+
+        .animace-suboption-bullet {
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--leaf-light);
+            font-weight: 600;
+            margin-right: 0.35rem;
+        }
+
+        /* Sensor + distance labels */
+        .leaflet-tooltip.sensor-label {
+            background: rgba(26, 47, 26, 0.92);
+            color: #f5f1e8;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            font-weight: 600;
+            border: 1px solid #8cb369;
+            white-space: nowrap;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+        }
+
+        .leaflet-tooltip.sensor-label::before {
+            border: none !important;
+        }
+
+        .leaflet-div-icon.distance-label {
+            background: rgba(212, 165, 116, 0.95);
+            color: #1a2f1a;
+            padding: 1px 5px;
+            border-radius: 3px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            font-weight: 700;
+            border: 1px solid #4a3728;
+            white-space: nowrap;
+            width: auto !important;
+            height: auto !important;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.3);
+        }
+
+        .geo-placeholder {
+            background: rgba(74, 103, 65, 0.95);
+            color: #f5f1e8;
+            padding: 10px 14px;
+            border-radius: 8px;
+            font-family: 'Source Sans 3', sans-serif;
+            font-size: 12px;
+            max-width: 280px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            border-left: 3px solid var(--amber);
+            line-height: 1.45;
+        }
+
+        .geo-placeholder strong {
+            display: block;
+            margin-bottom: 4px;
+            font-family: 'Playfair Display', serif;
+            font-size: 13px;
         }
 
         .map-controls {
@@ -1649,8 +1862,16 @@
             .soil-layer-row {
                 flex-direction: column;
             }
-            #satellite-map {
-                height: 400px;
+            #satellite-map,
+            .satellite-map {
+                height: 380px;
+            }
+            .map-card-header {
+                align-items: flex-start;
+            }
+            .animace-panel {
+                right: auto;
+                left: 0;
             }
             .map-3d {
                 transform: rotateX(15deg) scale(1.02);
@@ -3194,21 +3415,118 @@
                 <p class="section-subtitle">ESRI Maxar World Imagery – GPS polygony 4 testovacích pozemků s vyznačenými rohy a nadmořskými výškami</p>
             </div>
 
-            <div class="map-wrapper">
-                <div class="map-perspective-container">
-                    <div class="map-3d" id="map3dContainer">
-                        <div id="satellite-map"></div>
+            <div class="map-split-grid">
+                <!-- ===== MAP 1: Lokalita A – pozemky 41Ca0 + 41Ca8 ===== -->
+                <div class="map-card">
+                    <div class="map-card-header">
+                        <div class="map-card-titles">
+                            <div class="map-card-subtitle">Lokalita A</div>
+                            <div class="map-card-title">Pozemky 41Ca0 + 41Ca8 (frézované varianty)</div>
+                        </div>
+                        <div class="animace-dropdown" id="animaceDropdown1">
+                            <button type="button" class="animace-toggle" onclick="toggleAnimaceDropdown(event, 1)">
+                                Animace <span class="chevron">▼</span>
+                            </button>
+                            <div class="animace-panel">
+                                <label class="animace-option">
+                                    <input type="checkbox" data-layer="plots" data-map="1" checked>
+                                    <span class="animace-option-label"><span class="animace-option-letter">(a)</span>Plocha testovacích pozemků</span>
+                                </label>
+                                <label class="animace-option">
+                                    <input type="checkbox" data-layer="sensors" data-map="1" checked>
+                                    <span class="animace-option-label"><span class="animace-option-letter">(b)</span>Označení senzorů</span>
+                                </label>
+                                <label class="animace-option">
+                                    <input type="checkbox" data-layer="distances" data-map="1">
+                                    <span class="animace-option-label"><span class="animace-option-letter">(c)</span>Vzdálenosti mezi senzory</span>
+                                </label>
+                                <div class="animace-suboptions">
+                                    <label class="animace-option animace-suboption">
+                                        <input type="checkbox" data-sublayer="t10t48" data-map="1">
+                                        <span class="animace-option-label"><span class="animace-suboption-bullet">›</span>T10 ↔ T48 (na ploše)</span>
+                                    </label>
+                                    <label class="animace-option animace-suboption">
+                                        <input type="checkbox" data-sublayer="fnf" data-map="1">
+                                        <span class="animace-option-label"><span class="animace-suboption-bullet">›</span>F ↔ NF (Fréza vs Nefréza)</span>
+                                    </label>
+                                </div>
+                                <label class="animace-option">
+                                    <input type="checkbox" data-layer="geology" data-map="1">
+                                    <span class="animace-option-label"><span class="animace-option-letter">(e)</span>Geologické a půdní informace</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="map-wrapper">
+                        <div class="map-perspective-container">
+                            <div class="map-3d" id="map3dContainer1">
+                                <div id="satellite-map-1" class="satellite-map"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="map-controls">
+                        <button type="button" class="map-btn active" onclick="toggleView(this, 1, 'perspective')">Semi-3D pohled</button>
+                        <button type="button" class="map-btn" onclick="toggleView(this, 1, 'flat')">Plochý pohled</button>
+                        <button type="button" class="map-btn" onclick="zoomToPlot(1, 'all')">Zobrazit obě plochy</button>
+                        <button type="button" class="map-btn" onclick="zoomToPlot(1, '41Ca0')">41Ca0</button>
+                        <button type="button" class="map-btn" onclick="zoomToPlot(1, '41Ca8')">41Ca8</button>
                     </div>
                 </div>
-            </div>
 
-            <div class="map-controls">
-                <button type="button" class="map-btn active" onclick="toggleView(this, 'perspective')" title="Semi-3D pohled">Semi-3D pohled</button>
-                <button type="button" class="map-btn" onclick="toggleView(this, 'flat')" title="Plochý pohled">Plochý pohled</button>
-                <button type="button" class="map-btn" onclick="zoomToPlot('all')" title="Zobrazit vše">Zobrazit vše</button>
-                <button type="button" class="map-btn" onclick="zoomToPlot('41Ca0')" title="41Ca0">41Ca0</button>
-                <button type="button" class="map-btn" onclick="zoomToPlot('41Ka0')" title="41Ka0">41Ka0</button>
-                <button type="button" class="map-btn" onclick="zoomToPlot('41Ca8')" title="41Ca8">41Ca8</button>
+                <!-- ===== MAP 2: Lokalita B – pozemek 41Ka0 ===== -->
+                <div class="map-card">
+                    <div class="map-card-header">
+                        <div class="map-card-titles">
+                            <div class="map-card-subtitle">Lokalita B · cca 2,5 km</div>
+                            <div class="map-card-title">Pozemek 41Ka0 (zalesněný, bez frézy)</div>
+                        </div>
+                        <div class="animace-dropdown" id="animaceDropdown2">
+                            <button type="button" class="animace-toggle" onclick="toggleAnimaceDropdown(event, 2)">
+                                Animace <span class="chevron">▼</span>
+                            </button>
+                            <div class="animace-panel">
+                                <label class="animace-option">
+                                    <input type="checkbox" data-layer="plots" data-map="2" checked>
+                                    <span class="animace-option-label"><span class="animace-option-letter">(a)</span>Plocha testovacích pozemků</span>
+                                </label>
+                                <label class="animace-option">
+                                    <input type="checkbox" data-layer="sensors" data-map="2" checked>
+                                    <span class="animace-option-label"><span class="animace-option-letter">(b)</span>Označení senzorů</span>
+                                </label>
+                                <label class="animace-option">
+                                    <input type="checkbox" data-layer="distances" data-map="2">
+                                    <span class="animace-option-label"><span class="animace-option-letter">(c)</span>Vzdálenosti mezi senzory</span>
+                                </label>
+                                <div class="animace-suboptions">
+                                    <label class="animace-option animace-suboption">
+                                        <input type="checkbox" data-sublayer="t10t48" data-map="2">
+                                        <span class="animace-option-label"><span class="animace-suboption-bullet">›</span>T10 ↔ T48 (na ploše)</span>
+                                    </label>
+                                </div>
+                                <label class="animace-option">
+                                    <input type="checkbox" data-layer="geology" data-map="2">
+                                    <span class="animace-option-label"><span class="animace-option-letter">(e)</span>Geologické a půdní informace</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="map-wrapper">
+                        <div class="map-perspective-container">
+                            <div class="map-3d" id="map3dContainer2">
+                                <div id="satellite-map-2" class="satellite-map"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="map-controls">
+                        <button type="button" class="map-btn active" onclick="toggleView(this, 2, 'perspective')">Semi-3D pohled</button>
+                        <button type="button" class="map-btn" onclick="toggleView(this, 2, 'flat')">Plochý pohled</button>
+                        <button type="button" class="map-btn" onclick="zoomToPlot(2, 'all')">Zobrazit plochu</button>
+                    </div>
+                </div>
             </div>
 
             <div class="map-legend">
@@ -3654,7 +3972,7 @@
                             <td><strong>2022_10_F</strong></td>
                             <td><span class="treatment-freza">Fréza 2022</span></td>
                             <td><span class="sensor-type-badge sensor-type-std">Standard 10 cm</span></td>
-                            <td class="sensor-gps-code">49.362758, 14.299185</td>
+                            <td class="sensor-gps-code">49.362158, 14.299185</td>
                             <td>41Ca0</td>
                             <td>3K4</td>
                             <td>463 m</td>
@@ -4423,14 +4741,13 @@
             card.style.transitionDelay = `${index * 0.1}s`;
         });
 
-        // ===== SATELLITE MAP WITH REAL PLOT POLYGONS =====
+        // ===== TWO SATELLITE MAPS WITH ANIMATION LAYERS =====
 
-        // Plot GPS data
-        const plots = {
+        // Shared plot definitions
+        const plotsAll = {
             '41Ca0': {
                 name: '41Ca0 – Frézovaný 2022',
                 color: '#dc3232',
-                fillColor: '#dc3232',
                 coords: [
                     [49.3624025666667, 14.2994830666667],
                     [49.3628212166667, 14.2995420055556],
@@ -4438,14 +4755,12 @@
                     [49.3624129861111, 14.2989995722222],
                     [49.3624025666667, 14.2994830666667]
                 ],
-                altitudes: [466, 468, 470, 466],
                 area: '0.190 ha',
                 info: 'Frézováno 12. 2. 2022 | Dub 230 ks + Modřín 495 ks | 3K4 | LVS 3 / HS 433'
             },
             '41Ka0': {
                 name: '41Ka0 – Zalesněný 2022',
                 color: '#3278dc',
-                fillColor: '#3278dc',
                 coords: [
                     [49.3558988805556, 14.3310777861111],
                     [49.3564269583333, 14.3309996305556],
@@ -4453,14 +4768,12 @@
                     [49.3559314472222, 14.3306776916667],
                     [49.3558988805556, 14.3310777861111]
                 ],
-                altitudes: [486, 485, 485, 491],
                 area: '0.149 ha',
                 info: 'Zalesněno 2022 (bez frézy) | Dub 1070 ks + Modřín 60 ks | 3K4 | LVS 4 / HS 471'
             },
             '41Ca8': {
                 name: '41Ca8 – Jaro 2026',
                 color: '#dca532',
-                fillColor: '#dca532',
                 coords: [
                     [49.3625504611111, 14.2989144],
                     [49.3624500333333, 14.2984597861111],
@@ -4468,157 +4781,316 @@
                     [49.3622994861111, 14.2989603666667],
                     [49.3625504611111, 14.2989144]
                 ],
-                altitudes: [467, 469, 471, 465],
                 area: '0.076 ha',
-                info: 'Připraveno k frézování jaro 2026 | Rozděleno na dvě poloviny: fréza + kontrola | SM 45%, BO 55%'
+                info: 'Rozděleno na fréza + kontrola jaro 2026 | SM 45%, BO 55%'
             }
         };
 
-        // Calculate overall center for initial view
-        let allLats = [], allLngs = [];
-        Object.values(plots).forEach(p => {
-            p.coords.forEach(c => { allLats.push(c[0]); allLngs.push(c[1]); });
-        });
-        const centerLat = (Math.min(...allLats) + Math.max(...allLats)) / 2;
-        const centerLng = (Math.min(...allLngs) + Math.max(...allLngs)) / 2;
-
-        // Initialize Leaflet map with fractional zoom
-        const map = L.map('satellite-map', {
-            center: [centerLat, centerLng],
-            zoom: 14,
-            zoomSnap: 0.1,
-            zoomDelta: 0.1,
-            wheelPxPerZoomLevel: 120,
-            maxZoom: 23,
-            minZoom: 10
-        });
-
-        // ESRI World Imagery (Maxar) tile layer with overzoom
-        L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-            attribution: '&copy; Esri, Maxar, Earthstar Geographics',
-            maxZoom: 23,
-            maxNativeZoom: 19,
-            tileSize: 256
-        }).addTo(map);
-
-        // Add ESRI labels overlay
-        L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}', {
-            maxZoom: 23,
-            maxNativeZoom: 19,
-            opacity: 0.6
-        }).addTo(map);
-
-        // Draw all plot polygons and corner markers
-        const plotLayers = {};
-        const allBounds = L.latLngBounds([]);
-
-        Object.entries(plots).forEach(([key, plot]) => {
-            // Polygon fill
-            const polygon = L.polygon(plot.coords, {
-                color: plot.color,
-                weight: 3,
-                fillColor: plot.fillColor,
-                fillOpacity: 0.2,
-                dashArray: null
-            }).addTo(map);
-
-            // Polyline border (thicker, solid red-ish)
-            L.polyline(plot.coords, {
-                color: plot.color,
-                weight: 4,
-                opacity: 0.9
-            }).addTo(map);
-
-            // Popup on polygon
-            polygon.bindPopup(
-                '<div style="font-family: Source Sans 3, sans-serif; font-size: 14px; min-width: 220px;">' +
-                '<strong style="color: #1a2f1a;">' + plot.name + '</strong><br>' +
-                '<span style="font-family: JetBrains Mono, monospace; font-size: 12px; color: #4a6741;">Plocha: ' + plot.area + '</span><br>' +
-                '<span style="font-size: 12px; color: #6b5344;">' + plot.info + '</span></div>'
-            );
-
-            // Corner altitude tooltips (no circle markers - clean polygon corners)
-
-            plotLayers[key] = polygon;
-            allBounds.extend(polygon.getBounds());
-        });
-
-        // Fit to all polygons initially
-        map.fitBounds(allBounds.pad(0.15));
-
-        // ===== TOMST SENSOR MARKERS =====
-        const sensors = [
-            { code: '2022_10_F', type: 'Standard 10cm', treatment: 'Fréza 2022', lat: 49.362758, lng: 14.299185, plot: '41Ca0', alt: 463 },
-            { code: '2022_48_F', type: 'Oštěp 48cm', treatment: 'Fréza 2022', lat: 49.362581, lng: 14.299215, plot: '41Ca0', alt: 463 },
-            { code: '2026_10_F', type: 'Standard 10cm', treatment: 'Fréza 2026', lat: 49.362491, lng: 14.298674, plot: '41Ca8', alt: 467 },
-            { code: '2026_48_F', type: 'Oštěp 48cm', treatment: 'Fréza 2026', lat: 49.362354, lng: 14.298777, plot: '41Ca8', alt: 466 },
-            { code: '2026_10_NF', type: 'Standard 10cm', treatment: 'Nefréza 2026', lat: 49.362533, lng: 14.298873, plot: '41Ca8', alt: 464 },
-            { code: '2026_48_NF', type: 'Oštěp 48cm', treatment: 'Nefréza 2026', lat: 49.362357, lng: 14.298919, plot: '41Ca8', alt: 464 },
-            { code: '2022_10_NF', type: 'Standard 10cm', treatment: 'Nefréza 2022', lat: 49.356000, lng: 14.330828, plot: '41Ka0', alt: 486 },
-            { code: '2022_48_NF', type: 'Oštěp 48cm', treatment: 'Nefréza 2022', lat: 49.356236, lng: 14.330911, plot: '41Ka0', alt: 485 }
+        // Sensors with display labels per user spec
+        const sensorsAll = [
+            // Map 1 – Lokalita A (41Ca0 + 41Ca8)
+            { label: 'T10-F2022',  type: 'Standard 10cm', treatment: 'Fréza 2022',   lat: 49.362158, lng: 14.299185, plot: '41Ca0', mapId: 1 },
+            { label: 'T48-F2022',  type: 'Oštěp 48cm',    treatment: 'Fréza 2022',   lat: 49.362581, lng: 14.299215, plot: '41Ca0', mapId: 1 },
+            { label: 'T10-F2026',  type: 'Standard 10cm', treatment: 'Fréza 2026',   lat: 49.362491, lng: 14.298674, plot: '41Ca8', mapId: 1 },
+            { label: 'T48-F2026',  type: 'Oštěp 48cm',    treatment: 'Fréza 2026',   lat: 49.362354, lng: 14.298777, plot: '41Ca8', mapId: 1 },
+            { label: 'T10-NF2026', type: 'Standard 10cm', treatment: 'Nefréza 2026', lat: 49.362533, lng: 14.298873, plot: '41Ca8', mapId: 1 },
+            { label: 'T48-NF2026', type: 'Oštěp 48cm',    treatment: 'Nefréza 2026', lat: 49.362357, lng: 14.298919, plot: '41Ca8', mapId: 1 },
+            // Map 2 – Lokalita B (41Ka0)
+            { label: 'T10-NF2022', type: 'Standard 10cm', treatment: 'Nefréza 2022', lat: 49.356000, lng: 14.330828, plot: '41Ka0', mapId: 2 },
+            { label: 'T48-NF2022', type: 'Oštěp 48cm',    treatment: 'Nefréza 2022', lat: 49.356236, lng: 14.330911, plot: '41Ka0', mapId: 2 }
         ];
 
-        sensors.forEach(s => {
-            const isStd = s.type.includes('Standard');
-            const color = isStd ? '#5a8fa8' : '#d4a574';
-            const radius = isStd ? 5 : 7;
-            L.circleMarker([s.lat, s.lng], {
-                radius: radius,
-                fillColor: color,
-                color: '#1a2f1a',
-                weight: 2,
-                opacity: 1,
-                fillOpacity: 0.85
-            }).addTo(map).bindPopup(
-                '<div style="font-family: Source Sans 3, sans-serif; min-width: 200px;">' +
-                '<strong style="color: #1a2f1a; font-size: 14px;">TOMST ' + s.type + '</strong><br>' +
-                '<span style="font-family: JetBrains Mono, monospace; font-size: 12px; color: #4a6741;">' + s.code + '</span><br>' +
-                '<span style="font-size: 12px;">' + s.treatment + ' | ' + s.plot + ' | ' + s.alt + ' m n.m.</span><br>' +
-                '<span style="font-family: JetBrains Mono, monospace; font-size: 11px; color: #6b5344;">' + s.lat + ', ' + s.lng + '</span></div>'
-            );
-        });
-
-        // Zoom display
-        const zoomDisplay = L.control({position: 'topright'});
-        zoomDisplay.onAdd = function() {
-            const div = L.DomUtil.create('div', 'zoom-display');
-            div.style.cssText = 'background: rgba(26,47,26,0.9); color: #f5f1e8; padding: 8px 14px; border-radius: 8px; font-family: JetBrains Mono, monospace; font-size: 13px; backdrop-filter: blur(10px);';
-            div.innerHTML = 'Zoom: ' + map.getZoom().toFixed(1);
-            return div;
+        // Logical sensor pairs to draw distance lines between (split into sub-groups)
+        const sensorPairsByMap = {
+            1: {
+                t10t48: [
+                    ['T10-F2022',  'T48-F2022'],   // 41Ca0 std↔oštěp
+                    ['T10-F2026',  'T48-F2026'],   // 41Ca8 fréza std↔oštěp
+                    ['T10-NF2026', 'T48-NF2026']   // 41Ca8 nefréza std↔oštěp
+                ],
+                fnf: [
+                    ['T10-F2026',  'T10-NF2026'],  // 41Ca8 fréza↔nefréza (T10)
+                    ['T48-F2026',  'T48-NF2026']   // 41Ca8 fréza↔nefréza (T48)
+                ]
+            },
+            2: {
+                t10t48: [
+                    ['T10-NF2022', 'T48-NF2022']   // 41Ka0 std↔oštěp
+                ],
+                fnf: []  // jen NF varianta na 41Ka0
+            }
         };
-        zoomDisplay.addTo(map);
 
-        map.on('zoomend', function() {
-            document.querySelector('.zoom-display').innerHTML = 'Zoom: ' + map.getZoom().toFixed(1);
+        // Different colors for the two distance sub-types
+        const distanceStyles = {
+            t10t48: { color: '#d4a574', dash: '6,5' },   // amber (uvnitř páru)
+            fnf:    { color: '#8cb369', dash: '2,4' }    // leaf-light (mezi variantami)
+        };
+
+        const mapConfigs = {
+            1: { plotKeys: ['41Ca0', '41Ca8'] },
+            2: { plotKeys: ['41Ka0'] }
+        };
+
+        const mapState = {};
+
+        function haversine(lat1, lng1, lat2, lng2) {
+            const toRad = d => d * Math.PI / 180;
+            const R = 6371000;
+            const dLat = toRad(lat2 - lat1);
+            const dLng = toRad(lng2 - lng1);
+            const a = Math.sin(dLat / 2) ** 2 +
+                      Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLng / 2) ** 2;
+            return 2 * R * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        }
+
+        function initMap(id) {
+            const cfg = mapConfigs[id];
+
+            const map = L.map('satellite-map-' + id, {
+                zoom: 18,
+                zoomSnap: 0.1,
+                zoomDelta: 0.1,
+                wheelPxPerZoomLevel: 120,
+                maxZoom: 23,
+                minZoom: 10
+            });
+
+            L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+                attribution: '&copy; Esri, Maxar, Earthstar Geographics',
+                maxZoom: 23,
+                maxNativeZoom: 19,
+                tileSize: 256
+            }).addTo(map);
+            L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}', {
+                maxZoom: 23,
+                maxNativeZoom: 19,
+                opacity: 0.6
+            }).addTo(map);
+
+            // === Layer (a): plot polygons ===
+            const plotsLayer = L.layerGroup();
+            const plotLayers = {};
+            const allBounds = L.latLngBounds([]);
+
+            cfg.plotKeys.forEach(key => {
+                const plot = plotsAll[key];
+                const polygon = L.polygon(plot.coords, {
+                    color: plot.color,
+                    weight: 3,
+                    fillColor: plot.color,
+                    fillOpacity: 0.2
+                });
+                polygon.bindPopup(
+                    '<div style="font-family: Source Sans 3, sans-serif; font-size: 14px; min-width: 220px;">' +
+                    '<strong style="color: #1a2f1a;">' + plot.name + '</strong><br>' +
+                    '<span style="font-family: JetBrains Mono, monospace; font-size: 12px; color: #4a6741;">Plocha: ' + plot.area + '</span><br>' +
+                    '<span style="font-size: 12px; color: #6b5344;">' + plot.info + '</span></div>'
+                );
+                const border = L.polyline(plot.coords, { color: plot.color, weight: 4, opacity: 0.9 });
+                plotsLayer.addLayer(polygon);
+                plotsLayer.addLayer(border);
+                plotLayers[key] = polygon;
+                allBounds.extend(polygon.getBounds());
+            });
+
+            // === Layer (b): sensor markers ===
+            const sensorsLayer = L.layerGroup();
+            const sensorByLabel = {};
+            const mapSensors = sensorsAll.filter(s => s.mapId === id);
+
+            mapSensors.forEach(s => {
+                const isStd = s.type.includes('Standard');
+                const color = isStd ? '#5a8fa8' : '#d4a574';
+                const radius = isStd ? 6 : 8;
+                const marker = L.circleMarker([s.lat, s.lng], {
+                    radius: radius,
+                    fillColor: color,
+                    color: '#1a2f1a',
+                    weight: 2,
+                    opacity: 1,
+                    fillOpacity: 0.9
+                }).bindPopup(
+                    '<div style="font-family: Source Sans 3, sans-serif; min-width: 200px;">' +
+                    '<strong style="color: #1a2f1a; font-size: 14px;">' + s.label + '</strong><br>' +
+                    '<span style="font-family: JetBrains Mono, monospace; font-size: 12px; color: #4a6741;">TOMST ' + s.type + '</span><br>' +
+                    '<span style="font-size: 12px;">' + s.treatment + ' | ' + s.plot + '</span><br>' +
+                    '<span style="font-family: JetBrains Mono, monospace; font-size: 11px; color: #6b5344;">' + s.lat.toFixed(6) + ', ' + s.lng.toFixed(6) + '</span></div>'
+                );
+                marker.bindTooltip(s.label, {
+                    permanent: true,
+                    direction: 'right',
+                    offset: [8, 0],
+                    className: 'sensor-label'
+                });
+                sensorsLayer.addLayer(marker);
+                sensorByLabel[s.label] = s;
+            });
+
+            // === Layer (c): pairwise distances – two sub-groups ===
+            const distancesLayers = { t10t48: L.layerGroup(), fnf: L.layerGroup() };
+            ['t10t48', 'fnf'].forEach(kind => {
+                const style = distanceStyles[kind];
+                const pairs = (sensorPairsByMap[id] && sensorPairsByMap[id][kind]) || [];
+                pairs.forEach(([labA, labB]) => {
+                    const a = sensorByLabel[labA], b = sensorByLabel[labB];
+                    if (!a || !b) return;
+                    const dist = haversine(a.lat, a.lng, b.lat, b.lng);
+                    const line = L.polyline([[a.lat, a.lng], [b.lat, b.lng]], {
+                        color: style.color,
+                        weight: 2,
+                        opacity: 0.85,
+                        dashArray: style.dash
+                    });
+                    const midLat = (a.lat + b.lat) / 2;
+                    const midLng = (a.lng + b.lng) / 2;
+                    const label = L.marker([midLat, midLng], {
+                        icon: L.divIcon({
+                            className: 'distance-label',
+                            html: dist.toFixed(1) + ' m',
+                            iconSize: null,
+                            iconAnchor: [18, 8]
+                        }),
+                        interactive: false
+                    });
+                    distancesLayers[kind].addLayer(line);
+                    distancesLayers[kind].addLayer(label);
+                });
+            });
+
+            // === Layer (e): geology placeholder (Leaflet control) ===
+            const geoControl = L.control({ position: 'topleft' });
+            geoControl.onAdd = function () {
+                const div = L.DomUtil.create('div', 'geo-placeholder');
+                div.innerHTML = '<strong>Geologické a půdní informace</strong>' +
+                                'Data budou doplněna – zdroj geologického podkladu bude upřesněn (např. ČGS / VÚLHM).';
+                L.DomEvent.disableClickPropagation(div);
+                return div;
+            };
+
+            // Default visible layers
+            plotsLayer.addTo(map);
+            sensorsLayer.addTo(map);
+
+            // Fit bounds
+            map.fitBounds(allBounds.pad(0.25));
+
+            // Zoom indicator
+            const zoomDisplay = L.control({ position: 'topright' });
+            zoomDisplay.onAdd = function () {
+                const div = L.DomUtil.create('div', 'zoom-display zoom-display-' + id);
+                div.style.cssText = 'background: rgba(26,47,26,0.9); color: #f5f1e8; padding: 6px 10px; border-radius: 8px; font-family: JetBrains Mono, monospace; font-size: 12px; backdrop-filter: blur(10px);';
+                div.innerHTML = 'Zoom: ' + map.getZoom().toFixed(1);
+                return div;
+            };
+            zoomDisplay.addTo(map);
+            map.on('zoomend', function () {
+                const el = document.querySelector('.zoom-display-' + id);
+                if (el) el.innerHTML = 'Zoom: ' + map.getZoom().toFixed(1);
+            });
+
+            mapState[id] = {
+                map: map,
+                plotLayers: plotLayers,
+                allBounds: allBounds,
+                layers: {
+                    plots:              { add: () => plotsLayer.addTo(map),             remove: () => map.removeLayer(plotsLayer) },
+                    sensors:            { add: () => sensorsLayer.addTo(map),           remove: () => map.removeLayer(sensorsLayer) },
+                    distances_t10t48:   { add: () => distancesLayers.t10t48.addTo(map), remove: () => map.removeLayer(distancesLayers.t10t48) },
+                    distances_fnf:      { add: () => distancesLayers.fnf.addTo(map),    remove: () => map.removeLayer(distancesLayers.fnf) },
+                    geology:            { add: () => map.addControl(geoControl),        remove: () => map.removeControl(geoControl) }
+                }
+            };
+
+            setTimeout(() => map.invalidateSize(), 500);
+        }
+
+        initMap(1);
+        initMap(2);
+
+        // Animace dropdown toggle
+        function toggleAnimaceDropdown(e, id) {
+            if (e) e.stopPropagation();
+            const dd = document.getElementById('animaceDropdown' + id);
+            // close any other open dropdown
+            document.querySelectorAll('.animace-dropdown').forEach(other => {
+                if (other !== dd) other.classList.remove('open');
+            });
+            dd.classList.toggle('open');
+        }
+        document.addEventListener('click', function (e) {
+            document.querySelectorAll('.animace-dropdown').forEach(dd => {
+                if (!dd.contains(e.target)) dd.classList.remove('open');
+            });
         });
 
-        // Map control functions
-        function toggleView(btn, mode) {
-            document.querySelectorAll('.map-btn').forEach(b => {
-                if (b.onclick && b.getAttribute('title') && (b.getAttribute('title') === 'Semi-3D pohled' || b.getAttribute('title') === 'Plochý pohled')) {
-                    b.classList.remove('active');
-                }
+        // Layer checkboxes wire-up (skip 'distances' master – handled separately by subs)
+        document.querySelectorAll('.animace-option input[type="checkbox"][data-layer]').forEach(cb => {
+            cb.addEventListener('change', function () {
+                const id = parseInt(this.dataset.map, 10);
+                const name = this.dataset.layer;
+                if (name === 'distances') return; // master, no direct layer
+                const state = mapState[id];
+                if (!state) return;
+                const layer = state.layers[name];
+                if (!layer) return;
+                if (this.checked) layer.add();
+                else layer.remove();
+            });
+        });
+
+        // Master 'distances' checkbox cascades to its sub-checkboxes
+        document.querySelectorAll('input[data-layer="distances"]').forEach(mainCb => {
+            mainCb.addEventListener('change', function () {
+                const id = this.dataset.map;
+                const subs = document.querySelectorAll('input[data-sublayer][data-map="' + id + '"]');
+                subs.forEach(s => {
+                    if (s.checked !== mainCb.checked) {
+                        s.checked = mainCb.checked;
+                        s.dispatchEvent(new Event('change'));
+                    }
+                });
+            });
+        });
+
+        // Sub-layer checkboxes toggle their layer and keep the master in sync (OR of subs)
+        document.querySelectorAll('input[data-sublayer]').forEach(cb => {
+            cb.addEventListener('change', function () {
+                const id = parseInt(this.dataset.map, 10);
+                const sub = this.dataset.sublayer;
+                const state = mapState[id];
+                if (!state) return;
+                const layer = state.layers['distances_' + sub];
+                if (!layer) return;
+                if (this.checked) layer.add();
+                else layer.remove();
+                // Sync master
+                const mainCb = document.querySelector('input[data-layer="distances"][data-map="' + id + '"]');
+                const subs = document.querySelectorAll('input[data-sublayer][data-map="' + id + '"]');
+                if (mainCb) mainCb.checked = Array.from(subs).some(s => s.checked);
+            });
+        });
+
+        // Map control: perspective / flat
+        function toggleView(btn, id, mode) {
+            const container = document.getElementById('map3dContainer' + id);
+            btn.parentElement.querySelectorAll('.map-btn').forEach(b => {
+                const t = (b.textContent || '').trim();
+                if (t === 'Semi-3D pohled' || t === 'Plochý pohled') b.classList.remove('active');
             });
             btn.classList.add('active');
-            const container = document.getElementById('map3dContainer');
-            if (mode === 'flat') {
-                container.classList.add('flat-view');
-            } else {
-                container.classList.remove('flat-view');
-            }
-            setTimeout(() => map.invalidateSize(), 700);
+            if (mode === 'flat') container.classList.add('flat-view');
+            else container.classList.remove('flat-view');
+            setTimeout(() => mapState[id].map.invalidateSize(), 700);
         }
 
-        function zoomToPlot(plotKey) {
-            if (plotKey === 'all') {
-                map.fitBounds(allBounds.pad(0.15));
-            } else if (plotLayers[plotKey]) {
-                map.fitBounds(plotLayers[plotKey].getBounds().pad(0.3));
-            }
+        // Zoom-to-plot helper
+        function zoomToPlot(id, plotKey) {
+            const state = mapState[id];
+            if (!state) return;
+            if (plotKey === 'all') state.map.fitBounds(state.allBounds.pad(0.25));
+            else if (state.plotLayers[plotKey]) state.map.fitBounds(state.plotLayers[plotKey].getBounds().pad(0.35));
         }
-
-        // Fix map rendering in perspective container
-        setTimeout(() => map.invalidateSize(), 500);
 
         // Lightbox
         function openLightbox(src) {
