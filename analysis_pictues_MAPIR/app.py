@@ -33,8 +33,19 @@ from calibration import (
 )
 from indices import INDICES
 from interpretation import VEG_PROFILES, interpret, interpret_all_indices
+from mapir_raw import is_raw_filename, load_mapir_raw
 from ndvi_processor import index_to_rgb, ndvi_to_rgb, process_image
-from report_generator import build_csv_summary, build_html_report
+from physiology_scale import (
+    MEANINGFUL_SPREAD_OSAVI,
+    SCALE_INDEX,
+    assign_categories,
+    score_raw_bytes,
+)
+from report_generator import (
+    build_csv_summary,
+    build_html_report,
+    build_pdf_report,
+)
 
 
 # -------------------------------------------------------------------- konfigurace UI
@@ -85,9 +96,14 @@ st.markdown(CUSTOM_CSS, unsafe_allow_html=True)
 
 def init_state() -> None:
     defaults = {
+        "app_mode": "single",          # "single" | "batch"
+        "batch_result": None,          # BatchResult z davkove skaly
         "step": 1,
-        "uploaded_image": None,        # np.ndarray BGR
+        "uploaded_image": None,        # np.ndarray BGR (RAW nosic nebo JPG)
         "uploaded_name": None,
+        "is_raw": False,               # True = platny NIR/Red z RAW
+        "is_night": False,             # True = nocni snimek (NDVI neplatne)
+        "raw_meta": None,              # RawLoad (den/noc, dark konstanta)
         "metadata": {},
         "patch_points": [],            # [(x,y), ...] for manual calibration
         "calibration": None,           # CalibrationBundle
@@ -104,14 +120,25 @@ init_state()
 
 # -------------------------------------------------------------------- helpers
 
-def load_image(file) -> np.ndarray:
-    """Nacte uploadovany soubor jako BGR np.uint8."""
+def load_image(file) -> tuple[np.ndarray, bool, "object"]:
+    """
+    Nacte uploadovany soubor jako BGR np.uint8.
+
+    Vraci (img_bgr, is_raw, raw_meta). Pro MAPIR RAW (.RAW) rozbali 12-bit
+    Bayer a postavi synteticky co-registrovany nosic (R=NIR, B=Red) -> NDVI
+    je platne; `raw_meta` je RawLoad s den/noc a dark konstantou. Pro JPG/PNG
+    dekoduje bezne (raw_meta=None); POZOR: JPG z MAPIRu ma slite kanaly a NDVI
+    z nej neni platne (viz varovani v kroku 1).
+    """
     data = file.read()
+    if is_raw_filename(getattr(file, "name", "")):
+        raw = load_mapir_raw(data)
+        return raw.carrier_bgr, True, raw
     arr = np.frombuffer(data, dtype=np.uint8)
     img = cv2.imdecode(arr, cv2.IMREAD_COLOR)
     if img is None:
         raise ValueError("Nelze dekodovat obrazek.")
-    return img
+    return img, False, None
 
 
 def bgr_to_rgb(img_bgr: np.ndarray) -> np.ndarray:
@@ -123,6 +150,9 @@ def reset_workflow() -> None:
               "patch_points", "calibration", "analysis", "qr_detected"]:
         st.session_state[k] = None if k != "patch_points" else []
     st.session_state["metadata"] = {}
+    st.session_state["is_raw"] = False
+    st.session_state["is_night"] = False
+    st.session_state["raw_meta"] = None
     st.session_state["step"] = 1
 
 
@@ -140,35 +170,166 @@ st.markdown(
 # -------------------------------------------------------------------- sidebar nav
 
 with st.sidebar:
-    st.markdown("### Postup analyzy")
-    steps = [
-        "1. Nahrani snimku",
-        "2. Metadata snimku",
-        "3. Kalibrace tercku",
-        "4. Vysledky NDVI",
-        "5. Report & export",
-    ]
-    for idx, label in enumerate(steps, start=1):
-        if idx == st.session_state.step:
-            st.markdown(f"**▶ {label}**")
-        elif idx < st.session_state.step:
-            st.markdown(f"✅ {label}")
-        else:
-            st.markdown(f"<span style='color:#9aa0a6'>{label}</span>",
-                        unsafe_allow_html=True)
-
-    st.divider()
-    if st.button("🔄 Nova analyza (reset)", use_container_width=True):
-        reset_workflow()
+    st.markdown("### Rezim")
+    mode_label = st.radio(
+        "Vyber rezim prace",
+        options=["Jednotliva analyza", "Davkova fyziologicka skala"],
+        index=0 if st.session_state.app_mode == "single" else 1,
+        label_visibility="collapsed",
+    )
+    new_mode = "single" if mode_label == "Jednotliva analyza" else "batch"
+    if new_mode != st.session_state.app_mode:
+        st.session_state.app_mode = new_mode
         st.rerun()
+    st.divider()
+
+    if st.session_state.app_mode == "single":
+        st.markdown("### Postup analyzy")
+        steps = [
+            "1. Nahrani snimku",
+            "2. Metadata snimku",
+            "3. Kalibrace tercku",
+            "4. Vysledky NDVI",
+            "5. Report & export",
+        ]
+        for idx, label in enumerate(steps, start=1):
+            if idx == st.session_state.step:
+                st.markdown(f"**▶ {label}**")
+            elif idx < st.session_state.step:
+                st.markdown(f"✅ {label}")
+            else:
+                st.markdown(f"<span style='color:#9aa0a6'>{label}</span>",
+                            unsafe_allow_html=True)
+
+        st.divider()
+        if st.button("🔄 Nova analyza (reset)", use_container_width=True):
+            reset_workflow()
+            st.rerun()
+    else:
+        st.markdown("### Davkova skala")
+        st.caption(
+            "Nahraj vic RAW najednou. Aplikace spocita index vitality "
+            "**OSAVI** na kazdy a rozdeli je RELATIVNE do 4-6 kategorii "
+            "podle poradi v davce. Bez terciku."
+        )
 
     st.divider()
     st.caption(
-        "Survey 3N mapping:\n"
-        "- R kanal = NIR (850 nm)\n"
-        "- B kanal = Red (660 nm)\n"
-        "- NDVI = (NIR - Red) / (NIR + Red)"
+        "Survey 3N — zdroj dat: **RAW**\n"
+        "- sude sloupce = NIR (850 nm)\n"
+        "- liche sloupce = Red (660 nm)\n"
+        "- nosic: R kanal = NIR, B kanal = Red\n"
+        "- NDVI = (NIR - Red) / (NIR + Red)\n"
+        "\nJPG z MAPIRu ma slite kanaly -> NDVI neplatne."
     )
+
+
+# ==================================================================== BATCH MODE
+
+if st.session_state.app_mode == "batch":
+    st.subheader("Davkova fyziologicka skala — relativni kategorizace")
+    st.markdown(
+        "Nahraj **vic RAW snimku** stejne serie (idealne za difuzniho svetla). "
+        "Aplikace spocita index vitality **OSAVI** na kazdy a rozdeli je "
+        "relativne do kategorii. Terck se neresi, NDVI je indikativni."
+    )
+
+    c1, c2 = st.columns(2)
+    with c1:
+        n_cat = st.slider("Pocet kategorii", 4, 6, 5)
+    with c2:
+        mode_cz = st.radio(
+            "Zpusob deleni",
+            ["Podle rozsahu (interval)", "Stejny pocet (kvantily)"],
+            help="Interval = deli rozsah min-max na stejna pasma (zachova "
+                 "rozestupy). Kvantily = stejny pocet snimku v kazde kategorii.",
+        )
+    bin_mode = "interval" if mode_cz.startswith("Podle") else "quantile"
+
+    files = st.file_uploader(
+        "Nahraj RAW snimky (vic najednou)",
+        type=["raw"], accept_multiple_files=True,
+    )
+
+    if files and st.button("Sestavit skalu", type="primary"):
+        prog = st.progress(0.0, "Pocitam OSAVI...")
+        scores = []
+        for i, f in enumerate(files):
+            try:
+                scores.append(score_raw_bytes(f.name, f.read()))
+            except Exception as e:
+                st.warning(f"{f.name}: chyba nacteni ({e})")
+            prog.progress((i + 1) / len(files), f"Zpracovano {i+1}/{len(files)}")
+        prog.empty()
+        st.session_state.batch_result = assign_categories(scores, n_cat, bin_mode)
+
+    br = st.session_state.get("batch_result")
+    if br is not None:
+        if br.meaningful:
+            st.success(br.message)
+        else:
+            st.warning("⚠️ " + br.message)
+
+        day = sorted([s for s in br.scores if not s.is_night],
+                     key=lambda x: -x.scale_value)
+        night = [s for s in br.scores if s.is_night]
+
+        if day:
+            # Prehledova tabulka
+            rows = []
+            for rank, s in enumerate(day, 1):
+                rows.append({
+                    "poradi": rank,
+                    "snimek": s.name,
+                    f"{SCALE_INDEX}": round(s.scale_value, 3),
+                    "pokryv %": round(s.veg_cover * 100, 1),
+                    "rel. pozice": round(s.rel_position, 2),
+                    "kategorie": s.category_label,
+                })
+            df = pd.DataFrame(rows)
+            st.markdown("#### Poradi podle vitality (OSAVI)")
+
+            def _row_style(r):
+                sc = next(x for x in day if x.name == r["snimek"])
+                return [f"background-color: {sc.category_color}33"] * len(r)
+            st.dataframe(df.style.apply(_row_style, axis=1),
+                         hide_index=True, use_container_width=True)
+
+            # Rozdeleni do kategorii (od nejlepsi po nejhorsi)
+            st.markdown("#### Kategorie")
+            by_cat: dict[int, list] = {}
+            for s in day:
+                by_cat.setdefault(s.category_index, []).append(s)
+            for cat in sorted(by_cat, reverse=True):
+                members = by_cat[cat]
+                color = members[0].category_color
+                label = members[0].category_label
+                names = ", ".join(m.name for m in members)
+                st.markdown(
+                    f"<div style='border-left:6px solid {color};"
+                    f"padding:6px 12px;margin:4px 0;background:{color}18'>"
+                    f"<b>{label}</b> — {len(members)} snimku: {names}</div>",
+                    unsafe_allow_html=True,
+                )
+
+            # Export CSV
+            csv_lines = ["poradi,snimek,osavi,pokryv_pct,rel_pozice,kategorie"]
+            for rank, s in enumerate(day, 1):
+                csv_lines.append(
+                    f"{rank},{s.name},{s.scale_value:.4f},"
+                    f"{s.veg_cover*100:.1f},{s.rel_position:.3f},{s.category_label}")
+            st.download_button(
+                "⬇️ Export skaly (CSV)",
+                data="\n".join(csv_lines).encode("utf-8"),
+                file_name="fyziologicka_skala.csv", mime="text/csv",
+            )
+
+        if night:
+            st.caption(f"Vynechano {len(night)} nocnich snimku "
+                       f"(neosvetlene Red pasmo): "
+                       f"{', '.join(s.name for s in night)}")
+
+    st.stop()
 
 
 # ==================================================================== STEP 1
@@ -179,22 +340,41 @@ if st.session_state.step == 1:
     col1, col2 = st.columns([2, 1])
     with col1:
         uploaded = st.file_uploader(
-            "Vyber JPG/PNG/TIFF z MAPIR Survey 3N",
-            type=["jpg", "jpeg", "png", "tif", "tiff"],
-            help="Snimek po-export z MAPIR kamery. RAW JPG je idealni."
+            "Vyber RAW (.RAW) z MAPIR Survey 3N — nebo JPG/PNG/TIFF",
+            type=["raw", "jpg", "jpeg", "png", "tif", "tiff"],
+            help="RAW je NUTNY pro platne NDVI. JPG z MAPIRu ma slite "
+                 "spektralni kanaly a NDVI z nej vyjde chybne (~0)."
         )
         if uploaded is not None:
             try:
-                img = load_image(uploaded)
+                img, is_raw, raw_meta = load_image(uploaded)
                 st.session_state.uploaded_image = img
                 st.session_state.uploaded_name = uploaded.name
+                st.session_state.is_raw = is_raw
+                st.session_state.raw_meta = raw_meta
+                st.session_state.is_night = bool(
+                    raw_meta.is_night) if raw_meta else False
 
                 # Auto-detekce QR tercku
                 qr = detect_calibration_target(img)
                 st.session_state.qr_detected = qr
 
-                st.success(f"Nactenc: {uploaded.name}  "
-                           f"({img.shape[1]} × {img.shape[0]} px)")
+                st.success(f"Nacteno: {uploaded.name}  "
+                           f"({img.shape[1]} × {img.shape[0]} px)"
+                           + ("  — RAW, NIR/Red oddeleny" if is_raw else ""))
+                if not is_raw:
+                    st.error(
+                        "⚠️ Nahral jsi JPG/PNG. MAPIR JPG ma vsechny kanaly "
+                        "temer identicke (korelace ~0.998) — spektralni "
+                        "informace NIR vs Red je slita a NDVI z nej vyjde "
+                        "chybne (~0, falesny 'vazny stres'). Pro platne NDVI "
+                        "nahraj odpovidajici .RAW soubor z kamery."
+                    )
+                elif raw_meta is not None:
+                    if raw_meta.is_night:
+                        st.warning(f"🌙 {raw_meta.note}")
+                    else:
+                        st.info(f"☀️ {raw_meta.note}")
                 if qr is not None:
                     st.info(
                         f"🎯 Kalibracni QR tercik detekovan automaticky "
@@ -637,10 +817,12 @@ elif st.session_state.step == 4:
 
                 st.markdown("---")
                 st.markdown("**Interpretace tohoto snimku**")
-                st.success(ii.biological_meaning) if ii.color == "#2e7d32" else (
-                    st.warning(ii.biological_meaning) if ii.color == "#f9a825"
-                    else st.error(ii.biological_meaning)
-                )
+                if ii.color == "#2e7d32":
+                    st.success(ii.biological_meaning)
+                elif ii.color == "#f9a825":
+                    st.warning(ii.biological_meaning)
+                else:
+                    st.error(ii.biological_meaning)
                 if info.caveats:
                     st.caption(f"**Omezeni:** {info.caveats}")
                 if ii.flags:
@@ -732,37 +914,78 @@ elif st.session_state.step == 5:
     )
     csv = build_csv_summary(meta_for_report, result, interp)
 
+    # Vizualizace: RAW->PNG (false-color NIR nosic) a NDVI heatmapa (barevna)
+    raw_png_rgb = bgr_to_rgb(img_bgr)
+    ndvi_heatmap_rgb = ndvi_to_rgb(result.ndvi)
+
+    # Sjednoceny PDF report
+    pdf_bytes = build_pdf_report(
+        metadata=meta_for_report,
+        ndvi_result=result,
+        interpretation=interp,
+        calibration=cal,
+        raw_png_rgb=raw_png_rgb,
+        ndvi_heatmap_rgb=ndvi_heatmap_rgb,
+        index_interpretations=index_interps,
+        index_heatmaps=index_heatmaps,
+        raw_meta=st.session_state.get("raw_meta"),
+    )
+
     stem = Path(md.get("soubor", "snimek")).stem
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
 
+    def _png_bytes(rgb: np.ndarray) -> bytes:
+        buf = io.BytesIO()
+        Image.fromarray(rgb.astype(np.uint8)).save(buf, format="PNG")
+        return buf.getvalue()
+
+    if st.session_state.get("is_night"):
+        st.warning("🌙 Nocni snimek — NDVI v reportu je NEPLATNE "
+                   "(Red pasmo neni osvetleno). Pouzij denni snimek.")
+
+    st.markdown("#### Reporty")
     col1, col2, col3 = st.columns(3)
     with col1:
         st.download_button(
-            "⬇️ Stahnout HTML report",
-            data=html.encode("utf-8"),
-            file_name=f"NDVI_report_{stem}_{timestamp}.html",
-            mime="text/html",
+            "⬇️ PDF report (sjednoceny)",
+            data=pdf_bytes,
+            file_name=f"NDVI_report_{stem}_{timestamp}.pdf",
+            mime="application/pdf",
             use_container_width=True,
             type="primary",
         )
     with col2:
         st.download_button(
-            "⬇️ Stahnout CSV souhrn",
+            "⬇️ HTML report",
+            data=html.encode("utf-8"),
+            file_name=f"NDVI_report_{stem}_{timestamp}.html",
+            mime="text/html",
+            use_container_width=True,
+        )
+    with col3:
+        st.download_button(
+            "⬇️ CSV souhrn",
             data=csv.encode("utf-8"),
             file_name=f"NDVI_summary_{stem}_{timestamp}.csv",
             mime="text/csv",
             use_container_width=True,
         )
-    with col3:
-        # NDVI raster jako 8-bit PNG (mapovany na 0-255 z [-1..+1])
-        ndvi_norm = ((np.nan_to_num(result.ndvi, nan=-1.0) + 1) * 127.5).astype(np.uint8)
-        pil_img = Image.fromarray(ndvi_norm)
-        buf = io.BytesIO()
-        pil_img.save(buf, format="PNG")
+
+    st.markdown("#### Vizualizace (PNG)")
+    col4, col5 = st.columns(2)
+    with col4:
         st.download_button(
-            "⬇️ NDVI raster (PNG)",
-            data=buf.getvalue(),
-            file_name=f"NDVI_raster_{stem}_{timestamp}.png",
+            "⬇️ RAW → PNG (false-color NIR)",
+            data=_png_bytes(raw_png_rgb),
+            file_name=f"RAW_falsecolor_{stem}_{timestamp}.png",
+            mime="image/png",
+            use_container_width=True,
+        )
+    with col5:
+        st.download_button(
+            "⬇️ NDVI heatmapa (PNG)",
+            data=_png_bytes(ndvi_heatmap_rgb),
+            file_name=f"NDVI_heatmap_{stem}_{timestamp}.png",
             mime="image/png",
             use_container_width=True,
         )

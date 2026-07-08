@@ -22,8 +22,22 @@ from interpretation import IndexInterpretation, Interpretation
 from ndvi_processor import NDVIResult
 
 
+def _downscale(arr: np.ndarray, max_w: int = 1600) -> np.ndarray:
+    """Zmensi obrazek na max sirku (kvuli velikosti reportu). Print kvalita
+    ~1600 px bohate staci; plne 4000 px by nafouklo report na desitky MB."""
+    from PIL import Image as _PImage
+    h, w = arr.shape[:2]
+    if w <= max_w:
+        return arr
+    new_h = int(round(h * max_w / w))
+    img = _PImage.fromarray(arr.astype(np.uint8)).resize(
+        (max_w, new_h), _PImage.LANCZOS)
+    return np.asarray(img)
+
+
 def _img_to_b64(arr: np.ndarray) -> str:
-    """Konverze numpy HxWx3 uint8 na base64 PNG."""
+    """Konverze numpy HxWx3 uint8 na base64 PNG (zmenseno kvuli velikosti)."""
+    arr = _downscale(arr)
     if arr.dtype != np.uint8:
         arr = arr.astype(np.uint8)
     img = Image.fromarray(arr)
@@ -347,6 +361,297 @@ def build_html_report(metadata: dict[str, Any],
 </body>
 </html>"""
     return html
+
+
+# =========================================================================
+# PDF report (reportlab) - sjednoceny vystup vc. vizualizace RAW -> PNG
+# =========================================================================
+
+def _register_pdf_font() -> tuple[str, str]:
+    """
+    Zaregistruje Unicode font (DejaVuSans z matplotlibu) pro spravne
+    zobrazeni ceskych znaku v PDF. Vraci (regular, bold) nazvy fontu.
+    Fallback na Helvetica, pokud DejaVu neni k dispozici.
+    """
+    from reportlab.pdfbase import pdfmetrics
+    from reportlab.pdfbase.ttfonts import TTFont
+
+    try:
+        import os
+        import matplotlib
+        base = os.path.join(os.path.dirname(matplotlib.__file__),
+                            "mpl-data", "fonts", "ttf")
+        reg = os.path.join(base, "DejaVuSans.ttf")
+        bold = os.path.join(base, "DejaVuSans-Bold.ttf")
+        if os.path.exists(reg) and "DejaVu" not in pdfmetrics.getRegisteredFontNames():
+            pdfmetrics.registerFont(TTFont("DejaVu", reg))
+            pdfmetrics.registerFont(TTFont("DejaVu-Bold", bold))
+        if os.path.exists(reg):
+            return "DejaVu", "DejaVu-Bold"
+    except Exception:
+        pass
+    return "Helvetica", "Helvetica-Bold"
+
+
+def _np_to_rl_image(arr: np.ndarray, width_mm: float):
+    """Konvertuje numpy RGB uint8 na reportlab Image o dane sirce (mm),
+    vyska dopoctena podle pomeru stran."""
+    from reportlab.lib.units import mm
+    from reportlab.platypus import Image as RLImage
+
+    arr = _downscale(arr, max_w=1400)
+    if arr.dtype != np.uint8:
+        arr = arr.astype(np.uint8)
+    img = Image.fromarray(arr)
+    buf = io.BytesIO()
+    img.save(buf, format="PNG", optimize=True)
+    buf.seek(0)
+    h, w = arr.shape[:2]
+    width = width_mm * mm
+    height = width * (h / w)
+    return RLImage(buf, width=width, height=height)
+
+
+def build_pdf_report(metadata: dict[str, Any],
+                     ndvi_result: NDVIResult,
+                     interpretation: Interpretation,
+                     calibration: CalibrationBundle,
+                     raw_png_rgb: np.ndarray,
+                     ndvi_heatmap_rgb: np.ndarray,
+                     index_interpretations: dict[str, IndexInterpretation] | None = None,
+                     index_heatmaps: dict[str, np.ndarray] | None = None,
+                     raw_meta: Any = None,
+                     ) -> bytes:
+    """
+    Sestavi sjednoceny PDF report a vrati ho jako bytes.
+
+    Obsahuje:
+        - hlavicku, den/noc + platnost NDVI, verdikt, souhrnne statistiky,
+        - VIZUALIZACNI SEKCI: RAW prevedeny do PNG (false-color NIR) vedle
+          NDVI heatmapy - jasne kontrasty a barevne odchylky,
+        - souhrn + sezonni kontext + cross-validaci + kvalitu,
+        - tabulku 6 vegetacnich indexu vc. jejich heatmap,
+        - metadata + kalibraci, doporuceni a upozorneni.
+    """
+    from reportlab.lib.pagesizes import A4
+    from reportlab.lib.units import mm
+    from reportlab.lib import colors
+    from reportlab.lib.styles import ParagraphStyle
+    from reportlab.platypus import (
+        SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle, HRFlowable,
+    )
+
+    font, font_b = _register_pdf_font()
+    stats = ndvi_result.stats
+    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+    def hx(c: str):
+        return colors.HexColor(c) if c and c.startswith("#") else colors.HexColor("#2e7d32")
+
+    # --- styly ---
+    body = ParagraphStyle("body", fontName=font, fontSize=9.5, leading=13)
+    small = ParagraphStyle("small", fontName=font, fontSize=8, leading=11,
+                           textColor=colors.HexColor("#5f6368"))
+    h1 = ParagraphStyle("h1", fontName=font_b, fontSize=18, leading=22,
+                        textColor=colors.HexColor("#1b5e20"), spaceAfter=2)
+    h2 = ParagraphStyle("h2", fontName=font_b, fontSize=13, leading=17,
+                        textColor=colors.HexColor("#1b5e20"), spaceBefore=14,
+                        spaceAfter=6)
+    label = ParagraphStyle("label", fontName=font, fontSize=7.5, leading=9,
+                           textColor=colors.HexColor("#5f6368"),
+                           alignment=1)
+    bignum = ParagraphStyle("bignum", fontName=font_b, fontSize=17, leading=19,
+                            alignment=1, textColor=colors.HexColor("#202124"))
+
+    story: list = []
+
+    # --- hlavicka ---
+    story.append(Paragraph("MAPIR Survey 3N — analyza fotosynteticke aktivity", h1))
+    story.append(Paragraph(
+        f"Vygenerovano: {timestamp} &nbsp;|&nbsp; Projekt Alcedo Frezovani", small))
+    story.append(Spacer(1, 6))
+
+    # --- den/noc + platnost NDVI ---
+    is_night = bool(getattr(raw_meta, "is_night", False))
+    if is_night:
+        banner_bg, banner_txt = "#5c3d99", "NOCNI SNIMEK — NDVI NEPLATNE"
+    else:
+        banner_bg, banner_txt = "#2e7d32", "DENNI SNIMEK — NDVI platne"
+    note = getattr(raw_meta, "note", "")
+    banner = Table([[Paragraph(f"<b>{banner_txt}</b>", ParagraphStyle(
+        "bn", fontName=font_b, fontSize=11, textColor=colors.white))],
+        [Paragraph(escape(note), ParagraphStyle(
+            "bn2", fontName=font, fontSize=8.5, textColor=colors.white))]]
+        if note else [[Paragraph(f"<b>{banner_txt}</b>", ParagraphStyle(
+            "bn", fontName=font_b, fontSize=11, textColor=colors.white))]],
+        colWidths=[174 * mm])
+    banner.setStyle(TableStyle([
+        ("BACKGROUND", (0, 0), (-1, -1), colors.HexColor(banner_bg)),
+        ("LEFTPADDING", (0, 0), (-1, -1), 10),
+        ("RIGHTPADDING", (0, 0), (-1, -1), 10),
+        ("TOPPADDING", (0, 0), (-1, -1), 6),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 6),
+    ]))
+    story.append(banner)
+    story.append(Spacer(1, 8))
+
+    # --- verdikt ---
+    # U nocniho snimku je NDVI neplatne, takze nezobrazujeme zavadejici
+    # verdikt "ZDRAVA" - prepiseme na jasne NEPLATNE.
+    if is_night:
+        verdict_text = "NDVI NEPLATNE — nocni snimek (bez osvetleneho Red pasma)"
+        verdict_bg = colors.HexColor("#5c3d99")
+    else:
+        verdict_text = interpretation.overall_verdict
+        verdict_bg = hx(interpretation.color_code)
+    verdict = Table([[Paragraph(
+        f"<b>{escape(verdict_text)}</b>",
+        ParagraphStyle("v", fontName=font_b, fontSize=13, textColor=colors.white))]],
+        colWidths=[174 * mm])
+    verdict.setStyle(TableStyle([
+        ("BACKGROUND", (0, 0), (-1, -1), verdict_bg),
+        ("LEFTPADDING", (0, 0), (-1, -1), 12),
+        ("TOPPADDING", (0, 0), (-1, -1), 8),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 8),
+    ]))
+    story.append(verdict)
+    story.append(Spacer(1, 8))
+
+    # --- statistiky ---
+    def stat_cell(val, lab):
+        return [Paragraph(val, bignum), Paragraph(lab, label)]
+    stat_tbl = Table([[
+        stat_cell(f"{stats.mean:.3f}", "Mean NDVI"),
+        stat_cell(f"{stats.median:.3f}", "Median"),
+        stat_cell(f"{stats.fraction_healthy*100:.0f}%", "Zdrave (>0.5)"),
+        stat_cell(f"{stats.fraction_stressed*100:.0f}%", "Stres (0.2-0.4)"),
+    ]], colWidths=[43.5 * mm] * 4)
+    stat_tbl.setStyle(TableStyle([
+        ("BACKGROUND", (0, 0), (-1, -1), colors.HexColor("#f1f3f4")),
+        ("BOX", (0, 0), (-1, -1), 0.5, colors.HexColor("#e0e0e0")),
+        ("INNERGRID", (0, 0), (-1, -1), 0.5, colors.white),
+        ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
+        ("TOPPADDING", (0, 0), (-1, -1), 8),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 8),
+    ]))
+    story.append(stat_tbl)
+    if is_night:
+        story.append(Spacer(1, 3))
+        story.append(Paragraph(
+            "Pozor: hodnoty vyse jsou u nocniho snimku NEPLATNE "
+            "(Red pasmo neni osvetleno, NDVI se falesne blizi 1.0).",
+            ParagraphStyle("nightnote", fontName=font, fontSize=8,
+                           textColor=colors.HexColor("#5c3d99"))))
+
+    # --- VIZUALIZACE: RAW->PNG + NDVI heatmapa ---
+    story.append(Paragraph("Vizualizace — RAW snimek a NDVI", h2))
+    story.append(Paragraph(
+        "Vlevo: RAW prevedeny do PNG (false-color NIR, R=NIR kanal) — "
+        "kontrasty vegetace vs. konstrukce. Vpravo: NDVI heatmapa "
+        "(cervena = bez vegetace, zelena = zdrava vegetace).", small))
+    story.append(Spacer(1, 4))
+    viz = Table([[
+        _np_to_rl_image(raw_png_rgb, 85),
+        _np_to_rl_image(ndvi_heatmap_rgb, 85),
+    ]], colWidths=[87 * mm, 87 * mm])
+    viz.setStyle(TableStyle([
+        ("VALIGN", (0, 0), (-1, -1), "TOP"),
+        ("LEFTPADDING", (0, 0), (-1, -1), 0),
+        ("RIGHTPADDING", (0, 0), (0, 0), 4),
+    ]))
+    story.append(viz)
+
+    # --- souhrn ---
+    story.append(Paragraph("Souhrn a interpretace", h2))
+    story.append(Paragraph(escape(interpretation.summary), body))
+    story.append(Spacer(1, 4))
+    story.append(Paragraph(
+        f"<b>Sezonni kontext:</b> {escape(interpretation.observed_vs_expected)}", body))
+    story.append(Paragraph(
+        f"<b>Cross-validace indexu:</b> {escape(interpretation.cross_validation)}", body))
+    story.append(Paragraph(
+        f"<b>Kvalita:</b> {escape(interpretation.quality_assessment)}", body))
+
+    # --- upozorneni ---
+    warns = list(ndvi_result.warnings) + list(calibration.warnings)
+    if warns:
+        story.append(Paragraph("Upozorneni", h2))
+        for w in warns:
+            story.append(Paragraph(f"• {escape(w)}", body))
+
+    # --- tabulka indexu ---
+    if index_interpretations:
+        story.append(Paragraph("Vegetacni indexy — souhrn", h2))
+        head = ["Index", "Mean", "Median", "σ", "Zdrave %", "Verdikt"]
+        data = [head]
+        for code in INDICES:
+            if code not in ndvi_result.index_stats:
+                continue
+            st_i = ndvi_result.index_stats[code]
+            ii = index_interpretations.get(code)
+            data.append([
+                code, f"{st_i.mean:.3f}", f"{st_i.median:.3f}",
+                f"{st_i.std:.3f}", f"{st_i.fraction_healthy*100:.1f}",
+                ii.verdict if ii else "",
+            ])
+        idx_tbl = Table(data, colWidths=[24*mm, 24*mm, 24*mm, 24*mm, 26*mm, 52*mm])
+        idx_tbl.setStyle(TableStyle([
+            ("FONTNAME", (0, 0), (-1, -1), font),
+            ("FONTNAME", (0, 0), (-1, 0), font_b),
+            ("FONTSIZE", (0, 0), (-1, -1), 8.5),
+            ("BACKGROUND", (0, 0), (-1, 0), colors.HexColor("#e8f5e9")),
+            ("LINEBELOW", (0, 0), (-1, 0), 1, colors.HexColor("#2e7d32")),
+            ("LINEBELOW", (0, 1), (-1, -1), 0.4, colors.HexColor("#ecedef")),
+            ("TOPPADDING", (0, 0), (-1, -1), 5),
+            ("BOTTOMPADDING", (0, 0), (-1, -1), 5),
+        ]))
+        story.append(idx_tbl)
+
+    # --- metadata + kalibrace ---
+    story.append(Paragraph("Metadata a kalibrace", h2))
+    meta_pairs = [[escape(str(k)), escape(str(v))] for k, v in metadata.items()]
+    if calibration.target_detected:
+        cal_info = (f"tercik detekovan ({calibration.detection_method}); "
+                    f"NIR gain={calibration.nir.gain:.5f}, "
+                    f"Red gain={calibration.red.gain:.5f}")
+    else:
+        cal_info = "tercik nedetekovan — fallback DN/255 (NDVI indikativni)"
+    meta_pairs.append(["kalibrace", escape(cal_info)])
+    meta_tbl = Table(meta_pairs, colWidths=[52 * mm, 122 * mm])
+    meta_tbl.setStyle(TableStyle([
+        ("FONTNAME", (0, 0), (-1, -1), font),
+        ("FONTSIZE", (0, 0), (-1, -1), 8.5),
+        ("TEXTCOLOR", (0, 0), (0, -1), colors.HexColor("#5f6368")),
+        ("LINEBELOW", (0, 0), (-1, -1), 0.4, colors.HexColor("#ecedef")),
+        ("VALIGN", (0, 0), (-1, -1), "TOP"),
+        ("TOPPADDING", (0, 0), (-1, -1), 4),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 4),
+    ]))
+    story.append(meta_tbl)
+
+    # --- doporuceni ---
+    story.append(Paragraph("Doporuceni", h2))
+    recs = interpretation.recommendations or ["Zadna doporuceni — vse v poradku."]
+    for r in recs:
+        story.append(Paragraph(f"• {escape(r)}", body))
+
+    story.append(Spacer(1, 12))
+    story.append(HRFlowable(width="100%", thickness=0.5,
+                            color=colors.HexColor("#c8e6c9")))
+    story.append(Paragraph(
+        "MAPIR Survey 3N NIR Analyser | CRA s.r.o. — Alcedo Frezovani | Rumburk<br/>"
+        "Zdroj dat: RAW (sude sloupce = NIR 850 nm, liche = Red 660 nm). "
+        "JPG z MAPIRu ma slite kanaly a pro NDVI je nepouzitelny.", small))
+
+    buf = io.BytesIO()
+    doc = SimpleDocTemplate(
+        buf, pagesize=A4,
+        leftMargin=18 * mm, rightMargin=18 * mm,
+        topMargin=16 * mm, bottomMargin=16 * mm,
+        title="MAPIR NIR analyza",
+    )
+    doc.build(story)
+    return buf.getvalue()
 
 
 def build_csv_summary(metadata: dict[str, Any],

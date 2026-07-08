@@ -7,3 +7,4 @@ plotly>=5.18
 pandas>=2.0
 scipy>=1.11
 pyzbar>=0.1.9
+reportlab>=4.0

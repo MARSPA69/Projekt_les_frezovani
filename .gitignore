@@ -41,3 +41,8 @@ analysis_pictues_MAPIR/*_t4_chart_preview.png
 analysis_pictues_MAPIR/NDVI_report_*.html
 analysis_pictues_MAPIR/NDVI_summary_*.csv
 analysis_pictues_MAPIR/NDVI_raster_*.png
+
+# Vstupni data MAPIR (velke RAW snimky, ~18 MB kazdy - NEcommitovat na web)
+analysis_pictues_MAPIR/INPUTS/
+*.RAW
+*.raw
