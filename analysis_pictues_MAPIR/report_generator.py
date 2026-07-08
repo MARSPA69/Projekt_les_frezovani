@@ -19,7 +19,7 @@ from PIL import Image
 from calibration import CalibrationBundle
 from indices import INDICES
 from interpretation import IndexInterpretation, Interpretation
-from ndvi_processor import NDVIResult
+from ndvi_processor import NDVI_COLOR_LEGEND, NDVIResult
 
 
 def _downscale(arr: np.ndarray, max_w: int = 1600) -> np.ndarray:
@@ -560,6 +560,34 @@ def build_pdf_report(metadata: dict[str, Any],
         ("RIGHTPADDING", (0, 0), (0, 0), 4),
     ]))
     story.append(viz)
+
+    # --- legenda barev NDVI heatmapy ---
+    story.append(Spacer(1, 6))
+    story.append(Paragraph("Legenda barev NDVI heatmapy", ParagraphStyle(
+        "legh", fontName=font_b, fontSize=10,
+        textColor=colors.HexColor("#1b5e20"), spaceAfter=3)))
+    leg_meaning_style = ParagraphStyle(
+        "legm", fontName=font, fontSize=8, leading=10)
+    leg_data = []
+    for hexc, rng, meaning in NDVI_COLOR_LEGEND:
+        leg_data.append(["", f"NDVI {rng}",
+                         Paragraph(escape(meaning), leg_meaning_style)])
+    leg_tbl = Table(leg_data, colWidths=[8 * mm, 24 * mm, 140 * mm])
+    leg_style = [
+        ("FONTNAME", (1, 0), (-1, -1), font),
+        ("FONTNAME", (1, 0), (1, -1), font_b),
+        ("FONTSIZE", (0, 0), (-1, -1), 8),
+        ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
+        ("TOPPADDING", (0, 0), (-1, -1), 2),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 2),
+        ("LEFTPADDING", (2, 0), (2, -1), 8),
+        ("LINEBELOW", (1, 0), (-1, -1), 0.3, colors.HexColor("#ecedef")),
+    ]
+    # barevny ctverecek v prvnim sloupci
+    for i, (hexc, _rng, _m) in enumerate(NDVI_COLOR_LEGEND):
+        leg_style.append(("BACKGROUND", (0, i), (0, i), colors.HexColor(hexc)))
+    leg_tbl.setStyle(TableStyle(leg_style))
+    story.append(leg_tbl)
 
     # --- souhrn ---
     story.append(Paragraph("Souhrn a interpretace", h2))

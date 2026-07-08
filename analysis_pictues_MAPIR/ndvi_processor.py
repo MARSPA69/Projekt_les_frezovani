@@ -233,3 +233,22 @@ def index_to_rgb(arr: np.ndarray, info: IndexInfo,
 def ndvi_to_rgb(ndvi: np.ndarray) -> np.ndarray:
     """Zachovano pro zpetnou kompatibilitu - delegujeme na index_to_rgb."""
     return index_to_rgb(ndvi, INDICES["NDVI"])
+
+
+# Legenda barev NDVI heatmapy (RdYlGn, rozsah -0.2 az 0.9).
+# Kazda polozka: (hex barva, popis rozsahu NDVI, biologicky vyznam).
+# Hex barvy jsou reprezentativni vzorky z colormapy RdYlGn.
+NDVI_COLOR_LEGEND = [
+    ("#006837", "0,8 – 1,0",  "Velmi vitalni, husta vegetace. U nekalibrovanych "
+                              "dat casto saturuje (NDVI se blizi 1,0)."),
+    ("#4cae4c", "0,55 – 0,8", "Zdrava, fotosynteticky aktivni vegetace."),
+    ("#c7e77f", "0,4 – 0,55", "Slabsi / mlada / ridsi vegetace (pod prahem zdravi)."),
+    ("#fef1a7", "0,3 – 0,4",  "Ridka nebo stresovana vegetace."),
+    ("#fa9a58", "0,15 – 0,3", "Prechod: prosychajici, velmi ridka vegetace, "
+                              "nebo travni suchopar."),
+    ("#ee613d", "0,0 – 0,15", "Bez vegetace: hola puda, cesty, mulc, konstrukce."),
+    ("#a50026", "< 0,0",      "Voda, hluboky stin, umele/lesle povrchy."),
+    ("#333333", "—",          "Prazdna (seda) mista = NEPLATNY pixel: prepal, "
+                              "podexpozice, nebo vylouceny kalibracni tercik. "
+                              "Bez hodnoty NDVI."),
+]

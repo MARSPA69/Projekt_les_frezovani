@@ -33,7 +33,12 @@ from calibration import (
 from indices import INDICES
 from interpretation import VEG_PROFILES, interpret, interpret_all_indices
 from mapir_raw import is_raw_filename, load_mapir_raw
-from ndvi_processor import index_to_rgb, ndvi_to_rgb, process_image
+from ndvi_processor import (
+    NDVI_COLOR_LEGEND,
+    index_to_rgb,
+    ndvi_to_rgb,
+    process_image,
+)
 from physiology_scale import (
     MEANINGFUL_SPREAD_OSAVI,
     SCALE_INDEX,
@@ -761,6 +766,27 @@ elif st.session_state.step == 4:
             st.markdown("**NDVI heatmapa (cervena = bare, zelena = vegetace)**")
             heat = ndvi_to_rgb(result.ndvi)
             st.image(heat, use_container_width=True)
+
+        # Legenda barev NDVI heatmapy
+        st.markdown("**Legenda barev**")
+        legend_rows = "".join(
+            f"<tr>"
+            f"<td style='width:26px'><div style='width:20px;height:20px;"
+            f"border-radius:4px;background:{hexc};border:1px solid #0003'></div></td>"
+            f"<td style='white-space:nowrap;padding:2px 10px;font-weight:600'>"
+            f"NDVI {rng}</td>"
+            f"<td style='padding:2px 4px;color:#c8cdd2'>{meaning}</td>"
+            f"</tr>"
+            for hexc, rng, meaning in NDVI_COLOR_LEGEND
+        )
+        st.markdown(
+            f"<table style='border-collapse:collapse;font-size:13px'>"
+            f"{legend_rows}</table>",
+            unsafe_allow_html=True,
+        )
+        st.caption("Škála RdYlGn: červená = nízké NDVI (bez vegetace) → "
+                   "žlutá = přechod → zelená = zdravá vegetace. Šedá "
+                   "(„prázdná“) místa jsou neplatné pixely.")
 
     with tab2:
         flat = result.ndvi[result.valid_mask]
