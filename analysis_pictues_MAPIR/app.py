@@ -29,7 +29,6 @@ from calibration import (
     TARGET_REFLECTANCE_PROFILE,
     calibrate_from_patches,
     default_fallback_calibration,
-    detect_calibration_target,
 )
 from indices import INDICES
 from interpretation import VEG_PROFILES, interpret, interpret_all_indices
@@ -98,6 +97,7 @@ def init_state() -> None:
     defaults = {
         "app_mode": "single",          # "single" | "batch"
         "batch_result": None,          # BatchResult z davkove skaly
+        "batch_uploader_key": 0,       # inkrement = vycisti file_uploader
         "step": 1,
         "uploaded_image": None,        # np.ndarray BGR (RAW nosic nebo JPG)
         "uploaded_name": None,
@@ -188,7 +188,7 @@ with st.sidebar:
         steps = [
             "1. Nahrani snimku",
             "2. Metadata snimku",
-            "3. Kalibrace tercku",
+            "3. Kalibrace (volitelne)",
             "4. Vysledky NDVI",
             "5. Report & export",
         ]
@@ -249,9 +249,20 @@ if st.session_state.app_mode == "batch":
     files = st.file_uploader(
         "Nahraj RAW snimky (vic najednou)",
         type=["raw"], accept_multiple_files=True,
+        key=f"batch_up_{st.session_state.batch_uploader_key}",
     )
 
-    if files and st.button("Sestavit skalu", type="primary"):
+    b1, b2 = st.columns([1, 1])
+    with b1:
+        build = st.button("Sestavit skalu", type="primary",
+                          use_container_width=True, disabled=not files)
+    with b2:
+        if st.button("🔄 Reset (nova davka)", use_container_width=True):
+            st.session_state.batch_result = None
+            st.session_state.batch_uploader_key += 1  # vycisti uploader
+            st.rerun()
+
+    if build and files:
         prog = st.progress(0.0, "Pocitam OSAVI...")
         scores = []
         for i, f in enumerate(files):
@@ -354,10 +365,9 @@ if st.session_state.step == 1:
                 st.session_state.raw_meta = raw_meta
                 st.session_state.is_night = bool(
                     raw_meta.is_night) if raw_meta else False
-
-                # Auto-detekce QR tercku
-                qr = detect_calibration_target(img)
-                st.session_state.qr_detected = qr
+                # QR auto-detekce se nepouziva: kalibracni tercik neni QR kod
+                # (byla pomala ~3s a zbar padal na nekterych snimcich).
+                st.session_state.qr_detected = None
 
                 st.success(f"Nacteno: {uploaded.name}  "
                            f"({img.shape[1]} × {img.shape[0]} px)"
@@ -375,16 +385,6 @@ if st.session_state.step == 1:
                         st.warning(f"🌙 {raw_meta.note}")
                     else:
                         st.info(f"☀️ {raw_meta.note}")
-                if qr is not None:
-                    st.info(
-                        f"🎯 Kalibracni QR tercik detekovan automaticky "
-                        f"(metoda: {qr['method']}). V dalsim kroku jen dolad patche."
-                    )
-                else:
-                    st.warning(
-                        "Tercik nedetekovan automaticky - v kroku 3 oznac manualne "
-                        "nebo zvol fallback (bez kalibrace)."
-                    )
             except Exception as e:
                 st.error(f"Chyba pri nacitani: {e}")
 
@@ -456,13 +456,16 @@ elif st.session_state.step == 2:
                 help="Vzdalenost objektu kde kamera ostri (typ. 25-30 m dle metodiky).",
             )
 
-            st.markdown("**Kalibracni tercik**")
+            st.markdown("**Kalibracni tercik T4 (volitelne)**")
             tercik_v_zaberu = st.radio(
-                "Je tercik na snimku?",
-                options=["ANO", "NE"],
-                index=0 if md.get("tercik_pritomen", "ANO") == "ANO" else 1,
+                "Mas ve snimku MAPIR reflektancni tercik T4 (4 sede patche)?",
+                options=["NE", "ANO"],
+                index=1 if md.get("tercik_pritomen", "NE") == "ANO" else 0,
                 horizontal=True,
-                help="Bez tercku bude vyhodnoceni POUZE indikativni.",
+                help="NE (doporuceno) = fallback, relativni/indikativni NDVI "
+                     "bez rucnich vstupu. ANO = kvantitativni kalibrace, ale "
+                     "vyzaduje SPRAVNY tercik T4 se 4 sedymi patchi a rucni "
+                     "zadani jejich souradnic. Cerno-bily marker T4 NENI.",
             )
             vzdalenost_tercku = st.number_input(
                 "Vzdalenost tercku od kamery [m]",
@@ -509,7 +512,7 @@ elif st.session_state.step == 2:
 # ==================================================================== STEP 3
 
 elif st.session_state.step == 3:
-    st.subheader("Krok 3 — Kalibrace (oznaceni patchu tercku)")
+    st.subheader("Krok 3 — Kalibrace")
 
     md = st.session_state.metadata
     img_bgr = st.session_state.uploaded_image
@@ -517,12 +520,14 @@ elif st.session_state.step == 3:
     if md.get("tercik_pritomen") == "NE":
         st.markdown(
             "<div class='warning-box'>"
-            "<strong>Tercik neni na snimku.</strong> Aplikace pouzije fallback "
-            "(linear DN/255). NDVI bude pouze INDIKATIVNI, ne kvantitativni."
+            "<strong>Bez kalibracniho terciku (fallback).</strong> Aplikace "
+            "pouzije linearni mapping DN/255. NDVI bude INDIKATIVNI (relativni), "
+            "coz je pro rozliseni a kategorizaci vegetace plne dostacujici. "
+            "Zadne rucni vstupy nejsou potreba."
             "</div>",
             unsafe_allow_html=True,
         )
-        if st.button("Pokracovat s fallback kalibraci →", type="primary"):
+        if st.button("Pokracovat na vysledky →", type="primary"):
             st.session_state.calibration = default_fallback_calibration()
             st.session_state.step = 4
             st.rerun()
@@ -531,6 +536,17 @@ elif st.session_state.step == 3:
             st.rerun()
 
     else:
+        st.info(
+            "Toto je VOLITELNA kvantitativni kalibrace pomoci terciku MAPIR T4 "
+            "(4 sede patche se znamou odrazivosti). Vyzaduje rucni zadani "
+            "souradnic patchu. Pokud tercik T4 nemas (napr. mas jen cerno-bily "
+            "marker), vrat se do kroku 2 a zvol 'Tercik NE'."
+        )
+        if st.button("↩ Nechci kalibrovat — pouzit fallback (bez tercku)"):
+            st.session_state.metadata["tercik_pritomen"] = "NE"
+            st.session_state.calibration = default_fallback_calibration()
+            st.session_state.step = 4
+            st.rerun()
         st.markdown(
             "Zadej **stredy 4 patchu** v poradi:  "
             f"**{' → '.join(PATCH_ORDER)}**  (od nejsvetlejsiho k nejtmavsimu)."
