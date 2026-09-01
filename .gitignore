@@ -7,6 +7,20 @@ Thumbs.db
 # Velká videa nad GitHub limit 100 MB – nepoužívaná na webu
 assets/images/Odvěr půdních vzorků_ČZÚ/VID_20260422_102801.mp4
 
+# Zdrojove casosberne videa v plne kvalite (116-229 MB, nad GitHub limit)
+# Na web jde prekodovana verze v assets/images/Data ze senzoru a kamer_.../
+Analysis_pictures_RGB/TIMELAPSEVID_*.mp4
+analysis_pictues_MAPIR/TIMELAPSEVID_*.mp4
+
+# Surove zaznamy z casosbernych kamer Brinno (AVI, 80-190 MB kazdy)
+# Zdrojova data pro analyzu, na web se nedavaji
+*.AVI
+*.avi
+DCIM/
+
+# Surova vstupni data z kamer (JPG+RAW z MAPIR, AVI z Brinno) - desitky GB
+Sběr data */kamery/
+
 # Python - virtualni prostredi a build artefakty (NIKDY necommitovat!)
 .venv/
 **/.venv/
